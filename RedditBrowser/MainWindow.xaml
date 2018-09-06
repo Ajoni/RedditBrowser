@@ -1,0 +1,28 @@
+﻿<Window x:Class="RedditBrowser.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RedditBrowser"
+        mc:Ignorable="d"
+        Title="RedditBrowser" Height="450" Width="800">
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="Menu">
+                <MenuItem Header="Select sub"/>
+                <MenuItem Header="Download current" IsEnabled="False"/>
+                <MenuItem Header="Prev"/>
+                <MenuItem Header="Next"/>
+                <MenuItem Header="Show buttons" IsCheckable="True"/>
+            </MenuItem>
+        </Menu>
+        <WrapPanel DockPanel.Dock="Top" Margin="0">
+            <Button Content="Select sub" Width="75"/>
+            <Button Content="Download" Width="75"/>
+            <Button Content="Prev" Width="75"/>
+            <Button Content="Next" Width="75"/>
+            <Button Content="Hide Buttons" Width="75"/>            
+        </WrapPanel>
+        <Image DockPanel.Dock="Bottom"/>
+    </DockPanel>
+</Window>
