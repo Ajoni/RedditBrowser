@@ -25,7 +25,8 @@ namespace RedditBrowser
     {
         public string subredditName { get; set; }
         public Subreddit subreddit { get; set; }
-        int postNr { get; set; } = -1;
+        public int postNr { get; set; } = -1;
+        Dictionary<int, bool> postWithImg {get; set;} = new Dictionary<int, bool>();
         public IEnumerator<Post> it { get; set; }
 
         public MainWindow()
@@ -60,12 +61,30 @@ namespace RedditBrowser
             statusLabel.Content = "Skipping non jpg posts";
             while (it.Current.Url.ToString().Contains(".jpg") != true)
             {
+                postWithImg[postNr] = false;
                 it.MoveNext(); postNr++;
             }
+            postWithImg[postNr] = true;
             statusLabel.Content = "Loading img";
             string source = it.Current.Url.ToString();
             meme.Source = new BitmapImage(new Uri(source, UriKind.Absolute));
             statusLabel.Content = "";
+        }
+
+        private void PrevBtn_Click(object sender, RoutedEventArgs e)
+        {
+            it.Reset();
+            int prevPos = postNr-1;
+            while (postWithImg[prevPos] != true)
+            {
+                prevPos--;
+            }
+            postNr = -1;
+            while(postNr < prevPos - 1)
+            {
+                it.MoveNext(); postNr++;
+            }
+            loadNextImg();            
         }
     }
 }
