@@ -6,6 +6,14 @@
         xmlns:local="clr-namespace:RedditBrowser"
         mc:Ignorable="d"
         Title="RedditBrowser" Height="450" Width="800">
+
+    <Window.Resources>
+        <Style x:Key="ButtonStyle" TargetType="{x:Type Button}">
+            <Setter Property="Margin" Value="5,1" />
+            <Setter Property="Padding" Value="5" />
+        </Style>
+    </Window.Resources>
+
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="Menu">
@@ -17,12 +25,12 @@
             </MenuItem>
         </Menu>
         <WrapPanel DockPanel.Dock="Top" Margin="0">
-            <Button Content="Select sub" Width="75"/>
-            <Button Content="Download" Width="75"/>
-            <Button Content="Prev" Width="75"/>
-            <Button Content="Next" Width="75"/>
-            <Button Content="Hide Buttons" Width="75"/>            
+            <Button x:Name="SelectBtn" Content="Select Sub" Width="75" Click="SelectBtn_Click" Style="{StaticResource ButtonStyle}"/>
+            <Button x:Name="DnldBtn" Content="Download" Width="75" Style="{StaticResource ButtonStyle}"/>
+            <Button x:Name="PrevBtn" Content="Prev" Width="75" Style="{StaticResource ButtonStyle}"/>
+            <Button x:Name="NextBtn" Content="Next" Width="75" Style="{StaticResource ButtonStyle}" Click="NextBtn_Click"/>
+            <Label x:Name="statusLabel" Content=""/>
         </WrapPanel>
-        <Image DockPanel.Dock="Bottom"/>
+        <Image x:Name="meme" DockPanel.Dock="Bottom"/>
     </DockPanel>
 </Window>
