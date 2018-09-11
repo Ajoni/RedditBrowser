@@ -26,7 +26,7 @@
         </Menu>
         <WrapPanel DockPanel.Dock="Top" Margin="0">
             <Button x:Name="SelectBtn" Content="Select Sub" Width="75" Click="SelectBtn_Click" Style="{StaticResource ButtonStyle}"/>
-            <Button x:Name="DnldBtn" Content="Download" Width="75" Style="{StaticResource ButtonStyle}"/>
+            <Button x:Name="DnldBtn" Content="Download" Width="75" Style="{StaticResource ButtonStyle}" Click="DnldBtn_Click"/>
             <Button x:Name="PrevBtn" Content="Prev" Width="75" Style="{StaticResource ButtonStyle}" Click="PrevBtn_Click"/>
             <Button x:Name="NextBtn" Content="Next" Width="75" Style="{StaticResource ButtonStyle}" Click="NextBtn_Click"/>
             <Label x:Name="statusLabel" Content=""/>

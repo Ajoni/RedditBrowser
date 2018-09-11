@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -85,6 +86,27 @@ namespace RedditBrowser
                 it.MoveNext(); postNr++;
             }
             loadNextImg();            
+        }
+
+        private void DnldBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (meme.Source != null)
+            {
+                var dial = new Microsoft.Win32.SaveFileDialog()
+                {
+                    Filter = "Image Files (*.jpg)|*.jpg",
+                    FileName = it.Current.Id.ToString()
+                };
+                if(dial.ShowDialog() == true)
+                {
+                    var encoder = new JpegBitmapEncoder();
+                    encoder.Frames.Add(BitmapFrame.Create((BitmapSource)meme.Source));
+                    using (FileStream stream = new FileStream(dial.FileName, FileMode.Create))
+                    {
+                        encoder.Save(stream);
+                    }
+                }
+            }
         }
     }
 }
