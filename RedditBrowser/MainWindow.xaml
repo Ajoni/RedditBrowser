@@ -17,19 +17,21 @@
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="Menu">
-                <MenuItem Header="Select sub"/>
-                <MenuItem Header="Download current" IsEnabled="False"/>
-                <MenuItem Header="Prev"/>
-                <MenuItem Header="Next"/>
-                <MenuItem Header="Show buttons" IsCheckable="True"/>
+                <MenuItem x:Name="MenuSelect" Header="Select sub"/>
+                <MenuItem x:Name="MenuDownload" Header="Download current" IsEnabled="False"/>
+                <MenuItem x:Name="MenuPrev" Header="Prev" IsEnabled="False"/>
+                <MenuItem x:Name="MenuNext" Header="Next" IsEnabled="False"/>
+                <MenuItem x:Name="MenuImgLink" Header="Image link" IsEnabled="False"/>
+                <MenuItem x:Name="MenuShowBtns" Header="Show buttons" IsCheckable="True"/>
             </MenuItem>
         </Menu>
         <WrapPanel DockPanel.Dock="Top" Margin="0">
             <Button x:Name="SelectBtn" Content="Select Sub" Width="75" Click="SelectBtn_Click" Style="{StaticResource ButtonStyle}"/>
-            <Button x:Name="DnldBtn" Content="Download" Width="75" Style="{StaticResource ButtonStyle}" Click="DnldBtn_Click"/>
-            <Button x:Name="PrevBtn" Content="Prev" Width="75" Style="{StaticResource ButtonStyle}" Click="PrevBtn_Click"/>
-            <Button x:Name="NextBtn" Content="Next" Width="75" Style="{StaticResource ButtonStyle}" Click="NextBtn_Click"/>
-            <Label x:Name="statusLabel" Content=""/>
+            <Button x:Name="DnldBtn" Content="Download" Width="75" Style="{StaticResource ButtonStyle}" Click="DnldBtn_Click" IsEnabled="False"/>
+            <Button x:Name="PrevBtn" Content="Prev" Width="75" Style="{StaticResource ButtonStyle}" Click="PrevBtn_Click" IsEnabled="False"/>
+            <Button x:Name="NextBtn" Content="Next" Width="75" Style="{StaticResource ButtonStyle}" Click="NextBtn_Click" IsEnabled="False"/>
+            <Button x:Name="imgLinkBtn" Content="Img link" Width="75" Style="{StaticResource ButtonStyle}" Click="CopyBtn_Click" IsEnabled="False"/>
+            <Label x:Name="titleLabel" Content=""/>
         </WrapPanel>
         <Image x:Name="meme" DockPanel.Dock="Bottom"/>
     </DockPanel>

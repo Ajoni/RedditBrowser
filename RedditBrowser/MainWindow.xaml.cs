@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -59,17 +60,16 @@ namespace RedditBrowser
         private void loadNextImg()
         {
             it.MoveNext(); postNr++;
-            statusLabel.Content = "Skipping non jpg posts";
             while (it.Current.Url.ToString().Contains(".jpg") != true)
             {
                 postWithImg[postNr] = false;
                 it.MoveNext(); postNr++;
             }
             postWithImg[postNr] = true;
-            statusLabel.Content = "Loading img";
             string source = it.Current.Url.ToString();
             meme.Source = new BitmapImage(new Uri(source, UriKind.Absolute));
-            statusLabel.Content = "";
+            titleLabel.Content = it.Current.Title;
+            enableBtns();
         }
 
         private void PrevBtn_Click(object sender, RoutedEventArgs e)
@@ -107,6 +107,23 @@ namespace RedditBrowser
                     }
                 }
             }
+        }
+
+        private void CopyBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Clipboard.SetText(it.Current.Url.ToString());
+        }
+
+        private void enableBtns()
+        {
+            MenuDownload.IsEnabled = true;
+            MenuImgLink.IsEnabled = true;
+            MenuNext.IsEnabled = true;
+            MenuPrev.IsEnabled = true;
+            PrevBtn.IsEnabled = true;
+            NextBtn.IsEnabled = true;
+            DnldBtn.IsEnabled = true;
+            imgLinkBtn.IsEnabled = true;
         }
     }
 }
