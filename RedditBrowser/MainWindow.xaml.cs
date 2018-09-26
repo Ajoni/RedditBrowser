@@ -36,27 +36,6 @@ namespace RedditBrowser
             InitializeComponent();
         }
 
-        private void SelectBtn_Click(object sender, RoutedEventArgs e)
-        {
-            SelectSubDialog dialog = new SelectSubDialog();
-            dialog.ShowDialog();
-            if (dialog.DialogResult != true)
-            {
-                //add some sort of msg to gui here
-                return;
-            }
-            subredditName = dialog.subName;
-            subreddit = new Reddit().GetSubreddit($"/r/{subredditName}");
-            var posts = subreddit.Posts;
-            it = posts.GetEnumerator();
-            loadNextImg();
-        }
-
-        private void NextBtn_Click(object sender, RoutedEventArgs e)
-        {
-            loadNextImg();
-        }
-
         private void loadNextImg()
         {
             it.MoveNext(); postNr++;
@@ -72,48 +51,6 @@ namespace RedditBrowser
             enableBtns();
         }
 
-        private void PrevBtn_Click(object sender, RoutedEventArgs e)
-        {
-            it.Reset();
-            int prevPos = postNr-1;
-            while (postWithImg[prevPos] != true)
-            {
-                prevPos--;
-            }
-            postNr = -1;
-            while(postNr < prevPos - 1)
-            {
-                it.MoveNext(); postNr++;
-            }
-            loadNextImg();            
-        }
-
-        private void DnldBtn_Click(object sender, RoutedEventArgs e)
-        {
-            if (meme.Source != null)
-            {
-                var dial = new Microsoft.Win32.SaveFileDialog()
-                {
-                    Filter = "Image Files (*.jpg)|*.jpg",
-                    FileName = it.Current.Id.ToString()
-                };
-                if(dial.ShowDialog() == true)
-                {
-                    var encoder = new JpegBitmapEncoder();
-                    encoder.Frames.Add(BitmapFrame.Create((BitmapSource)meme.Source));
-                    using (FileStream stream = new FileStream(dial.FileName, FileMode.Create))
-                    {
-                        encoder.Save(stream);
-                    }
-                }
-            }
-        }
-
-        private void CopyBtn_Click(object sender, RoutedEventArgs e)
-        {
-            Clipboard.SetText(it.Current.Url.ToString());
-        }
-
         private void enableBtns()
         {
             MenuDownload.IsEnabled = true;
@@ -125,5 +62,105 @@ namespace RedditBrowser
             DnldBtn.IsEnabled = true;
             imgLinkBtn.IsEnabled = true;
         }
+
+        private void OpenSub_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+
+        private void OpenSub_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            SelectSubDialog dialog = new SelectSubDialog();
+            dialog.ShowDialog();
+            if (dialog.DialogResult != true)
+            {
+                //add some sort of msg to gui here
+                return;
+            }
+            subredditName = dialog.subName;
+            subreddit = new Reddit().GetSubreddit($"/r/{subredditName}");
+            var posts = subreddit.Posts;
+            it = posts.GetEnumerator();
+            loadNextImg();
+        }
+
+        private void Download_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (meme != null)
+            {
+                e.CanExecute = meme.Source != null;
+            }
+            else
+            {
+                e.CanExecute = false;
+            }
+        }
+
+        private void Download_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            var dial = new Microsoft.Win32.SaveFileDialog()
+            {
+                Filter = "Image Files (*.jpg)|*.jpg",
+                FileName = it.Current.Id.ToString()
+            };
+            if (dial.ShowDialog() == true)
+            {
+                var encoder = new JpegBitmapEncoder();
+                encoder.Frames.Add(BitmapFrame.Create((BitmapSource)meme.Source));
+                using (FileStream stream = new FileStream(dial.FileName, FileMode.Create))
+                {
+                    encoder.Save(stream);
+                }
+            }
+        }
+
+        private void Prev_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = it != null;
+        }
+
+        private void Prev_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            it.Reset();
+            int prevPos = postNr - 1;
+            while (postWithImg[prevPos] != true)
+            {
+                prevPos--;
+            }
+            postNr = -1;
+            while (postNr < prevPos - 1)
+            {
+                it.MoveNext(); postNr++;
+            }
+            loadNextImg();
+        }
+
+        private void Next_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = it != null;
+        }
+
+        private void Next_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            loadNextImg();
+        }
+
+        private void ImgLink_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (meme != null)
+            {
+                e.CanExecute = meme.Source != null;
+            }
+            else
+            {
+                e.CanExecute = false;
+            }
+        }
+
+        private void ImgLink_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            Clipboard.SetText(it.Current.Url.ToString());
+        }
+
     }
 }

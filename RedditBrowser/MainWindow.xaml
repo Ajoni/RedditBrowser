@@ -7,6 +7,14 @@
         mc:Ignorable="d"
         Title="RedditBrowser" Height="450" Width="800">
 
+    <Window.CommandBindings>
+        <CommandBinding Command="local:CustomCommands.OpenSub" CanExecute="OpenSub_CanExecute" Executed="OpenSub_Executed" />
+        <CommandBinding Command="local:CustomCommands.Download" CanExecute="Download_CanExecute" Executed="Download_Executed" />
+        <CommandBinding Command="local:CustomCommands.Prev" CanExecute="Prev_CanExecute" Executed="Prev_Executed" />
+        <CommandBinding Command="local:CustomCommands.Next" CanExecute="Next_CanExecute" Executed="Next_Executed" />
+        <CommandBinding Command="local:CustomCommands.ImgLink" CanExecute="ImgLink_CanExecute" Executed="ImgLink_Executed" />
+    </Window.CommandBindings>
+
     <Window.Resources>
         <Style x:Key="ButtonStyle" TargetType="{x:Type Button}">
             <Setter Property="Margin" Value="5,1" />
@@ -17,20 +25,20 @@
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="Menu">
-                <MenuItem x:Name="MenuSelect" Header="Select sub"/>
-                <MenuItem x:Name="MenuDownload" Header="Download current" IsEnabled="False"/>
-                <MenuItem x:Name="MenuPrev" Header="Prev" IsEnabled="False"/>
-                <MenuItem x:Name="MenuNext" Header="Next" IsEnabled="False"/>
-                <MenuItem x:Name="MenuImgLink" Header="Image link" IsEnabled="False"/>
+                <MenuItem x:Name="MenuSelect" Header="Select sub" Command="local:CustomCommands.OpenSub"/>
+                <MenuItem x:Name="MenuDownload" Header="Download current" IsEnabled="False" Command="local:CustomCommands.Download"/>
+                <MenuItem x:Name="MenuPrev" Header="Prev" IsEnabled="False" Command="local:CustomCommands.Prev"/>
+                <MenuItem x:Name="MenuNext" Header="Next" IsEnabled="False" Command="local:CustomCommands.Next"/>
+                <MenuItem x:Name="MenuImgLink" Header="Image link" IsEnabled="False" Command="local:CustomCommands.ImgLink"/>
                 <MenuItem x:Name="MenuShowBtns" Header="Show buttons" IsCheckable="True"/>
             </MenuItem>
         </Menu>
         <WrapPanel DockPanel.Dock="Top" Margin="0">
-            <Button x:Name="SelectBtn" Content="Select Sub" Width="75" Click="SelectBtn_Click" Style="{StaticResource ButtonStyle}"/>
-            <Button x:Name="DnldBtn" Content="Download" Width="75" Style="{StaticResource ButtonStyle}" Click="DnldBtn_Click" IsEnabled="False"/>
-            <Button x:Name="PrevBtn" Content="Prev" Width="75" Style="{StaticResource ButtonStyle}" Click="PrevBtn_Click" IsEnabled="False"/>
-            <Button x:Name="NextBtn" Content="Next" Width="75" Style="{StaticResource ButtonStyle}" Click="NextBtn_Click" IsEnabled="False"/>
-            <Button x:Name="imgLinkBtn" Content="Img link" Width="75" Style="{StaticResource ButtonStyle}" Click="CopyBtn_Click" IsEnabled="False"/>
+            <Button x:Name="SelectBtn" Content="Select Sub" Command="local:CustomCommands.OpenSub" Width="75" Style="{StaticResource ButtonStyle}"/>
+            <Button x:Name="DnldBtn" Content="Download" Command="local:CustomCommands.Download" Width="75" Style="{StaticResource ButtonStyle}" IsEnabled="False"/>
+            <Button x:Name="PrevBtn" Content="Prev" Command="local:CustomCommands.Prev" Width="75" Style="{StaticResource ButtonStyle}" IsEnabled="False"/>
+            <Button x:Name="NextBtn" Content="Next" Command="local:CustomCommands.Next" Width="75" Style="{StaticResource ButtonStyle}" IsEnabled="False"/>
+            <Button x:Name="imgLinkBtn" Content="Img link" Command="local:CustomCommands.ImgLink" Width="75" Style="{StaticResource ButtonStyle}" IsEnabled="False"/>
             <Label x:Name="titleLabel" Content=""/>
         </WrapPanel>
         <Image x:Name="meme" DockPanel.Dock="Bottom"/>
