@@ -48,21 +48,8 @@ namespace RedditBrowser
             string source = it.Current.Url.ToString();
             meme.Source = new BitmapImage(new Uri(source, UriKind.Absolute));
             titleLabel.Content = it.Current.Title;
-            enableBtns();
         }
-
-        private void enableBtns()
-        {
-            MenuDownload.IsEnabled = true;
-            MenuImgLink.IsEnabled = true;
-            MenuNext.IsEnabled = true;
-            MenuPrev.IsEnabled = true;
-            PrevBtn.IsEnabled = true;
-            NextBtn.IsEnabled = true;
-            DnldBtn.IsEnabled = true;
-            imgLinkBtn.IsEnabled = true;
-        }
-
+        
         private void OpenSub_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = true;
@@ -162,5 +149,20 @@ namespace RedditBrowser
             Clipboard.SetText(it.Current.Url.ToString());
         }
 
+        private void ShowButtons_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+
+        private void ShowButtons_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            foreach (Button item in ButtonsPanel.Children.OfType<Button>())
+            {
+                if (item.IsVisible)
+                    item.Visibility = Visibility.Collapsed;
+                else
+                    item.Visibility = Visibility.Visible;
+            }
+        }
     }
 }

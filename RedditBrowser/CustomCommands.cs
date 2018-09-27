@@ -65,5 +65,17 @@ namespace RedditBrowser
             }
         );
 
+
+            public static readonly RoutedUICommand ShowButtons = new RoutedUICommand
+        (
+            "ShowButtons",
+            "ShowButtons",
+            typeof(CustomCommands),
+            new InputGestureCollection()
+            {
+                                new KeyGesture(Key.S, ModifierKeys.Alt)
+            }
+        );
+
     }
 }
