@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -25,29 +26,51 @@ namespace RedditBrowser
     /// </summary>
     public partial class MainWindow : Window
     {
-        public string subredditName { get; set; }
-        public Subreddit subreddit { get; set; }
-        public int postNr { get; set; } = -1;
-        Dictionary<int, bool> postWithImg {get; set;} = new Dictionary<int, bool>();
-        public IEnumerator<Post> it { get; set; }
+        private string subredditName { get; set; }
+        private Subreddit subreddit { get; set; }
+        private int postNr { get; set; } = -1;
+        private IEnumerator<Post> newsetPost { get; set; }
+        private List<Post> posts { get; set; } = new List<Post>();
+        private List<BitmapImage> imgs { get; set; } = new List<BitmapImage>();
+
 
         public MainWindow()
         {
             InitializeComponent();
         }
+        private void loadPrevImg()
+        {
+            postNr--;
+            meme.Source = imgs.ElementAt(postNr);
+            titleLabel.Content = posts.ElementAt(postNr).Title;
+        }
 
+        /*
+         * If currently displayed post is not the last one (being pointed to by the 'newsetPost.Current')
+         */
         private void loadNextImg()
         {
-            it.MoveNext(); postNr++;
-            while (it.Current.Url.ToString().Contains(".jpg") != true)
+            postNr++;            
+            meme.Source = imgs.ElementAt(postNr);
+            titleLabel.Content = posts.ElementAt(postNr).Title;
+        }
+
+        /*
+         * If currently displayed post is the last one (being pointed to by the 'newsetPost.Current')
+         */
+        private void loadNewImg()
+        {
+            newsetPost.MoveNext(); postNr++;
+            while (newsetPost.Current.Url.ToString().Contains(".jpg") != true)
             {
-                postWithImg[postNr] = false;
-                it.MoveNext(); postNr++;
+                newsetPost.MoveNext();
             }
-            postWithImg[postNr] = true;
-            string source = it.Current.Url.ToString();
-            meme.Source = new BitmapImage(new Uri(source, UriKind.Absolute));
-            titleLabel.Content = it.Current.Title;
+            posts.Add(newsetPost.Current);
+            string source = newsetPost.Current.Url.ToString();
+            var img = new BitmapImage(new Uri(source, UriKind.Absolute));
+            meme.Source = img;
+            imgs.Add(img);
+            titleLabel.Content = newsetPost.Current.Title;
         }
         
         private void OpenSub_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -67,8 +90,8 @@ namespace RedditBrowser
             subredditName = dialog.subName;
             subreddit = new Reddit().GetSubreddit($"/r/{subredditName}");
             var posts = subreddit.Posts;
-            it = posts.GetEnumerator();
-            loadNextImg();
+            newsetPost = posts.GetEnumerator();
+            loadNewImg();
         }
 
         private void Download_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -88,7 +111,7 @@ namespace RedditBrowser
             var dial = new Microsoft.Win32.SaveFileDialog()
             {
                 Filter = "Image Files (*.jpg)|*.jpg",
-                FileName = it.Current.Id.ToString()
+                FileName = newsetPost.Current.Id.ToString()
             };
             if (dial.ShowDialog() == true)
             {
@@ -103,33 +126,29 @@ namespace RedditBrowser
 
         private void Prev_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = it != null;
+            e.CanExecute = postNr > 0;
         }
 
         private void Prev_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            it.Reset();
-            int prevPos = postNr - 1;
-            while (postWithImg[prevPos] != true)
-            {
-                prevPos--;
-            }
-            postNr = -1;
-            while (postNr < prevPos - 1)
-            {
-                it.MoveNext(); postNr++;
-            }
-            loadNextImg();
+            loadPrevImg();
         }
 
         private void Next_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = it != null;
+            e.CanExecute = newsetPost != null;
         }
 
         private void Next_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            loadNextImg();
+            if (postNr < posts.Count-1)
+            {
+                loadNextImg();
+            }
+            else
+            {
+                loadNewImg();
+            }
         }
 
         private void ImgLink_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -146,7 +165,7 @@ namespace RedditBrowser
 
         private void ImgLink_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            Clipboard.SetText(it.Current.Url.ToString());
+            Clipboard.SetText(posts.ElementAt(postNr).Url.ToString());
         }
 
         private void ShowButtons_CanExecute(object sender, CanExecuteRoutedEventArgs e)
