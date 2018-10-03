@@ -32,11 +32,14 @@ namespace RedditBrowser
         private IEnumerator<Post> newsetPost { get; set; }
         private List<Post> posts { get; set; } = new List<Post>();
         private List<BitmapImage> imgs { get; set; } = new List<BitmapImage>();
+        private List<string> suporrtedFormats { get; set; } = new List<string>();
 
 
         public MainWindow()
         {
             InitializeComponent();
+            suporrtedFormats.Add(".jpg");
+            suporrtedFormats.Add(".png");
         }
         private void loadPrevImg()
         {
@@ -61,12 +64,14 @@ namespace RedditBrowser
         private void loadNewImg()
         {
             newsetPost.MoveNext(); postNr++;
-            while (newsetPost.Current.Url.ToString().Contains(".jpg") != true)
+
+            while (!suporrtedFormats.Any(s=>newsetPost.Current.Url.ToString().Contains(s)))
             {
                 newsetPost.MoveNext();
             }
-            posts.Add(newsetPost.Current);
+
             string source = newsetPost.Current.Url.ToString();
+            posts.Add(newsetPost.Current);
             var img = new BitmapImage(new Uri(source, UriKind.Absolute));
             meme.Source = img;
             imgs.Add(img);
