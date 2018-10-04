@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RedditBrowser"
         mc:Ignorable="d"
-        Title="RedditBrowser" Height="450" Width="800">
+        Title="RedditBrowser" Height="450" Width="800" MouseWheel="image_MouseWheel">
 
     <Window.CommandBindings>
         <CommandBinding Command="local:CustomCommands.OpenSub" CanExecute="OpenSub_CanExecute" Executed="OpenSub_Executed" />
@@ -42,6 +42,8 @@
             <Button x:Name="imgLinkBtn" Content="Img link" Command="local:CustomCommands.ImgLink" Width="75" Style="{StaticResource ButtonStyle}"/>
             <Label x:Name="titleLabel" Content=""/>
         </WrapPanel>
-        <Image x:Name="meme" DockPanel.Dock="Bottom"/>
+        <Border ClipToBounds="True" DockPanel.Dock="Bottom">
+            <Image x:Name="image" />
+        </Border>
     </DockPanel>
 </Window>

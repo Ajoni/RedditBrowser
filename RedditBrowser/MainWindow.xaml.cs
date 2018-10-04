@@ -40,11 +40,16 @@ namespace RedditBrowser
             InitializeComponent();
             suporrtedFormats.Add(".jpg");
             suporrtedFormats.Add(".png");
+            //for image zoom and pan
+            var group = new TransformGroup();
+            var st = new ScaleTransform();
+            group.Children.Add(st);
+            image.RenderTransform = group;
         }
         private void loadPrevImg()
         {
             postNr--;
-            meme.Source = imgs.ElementAt(postNr);
+            image.Source = imgs.ElementAt(postNr);
             titleLabel.Content = posts.ElementAt(postNr).Title;
         }
 
@@ -54,7 +59,7 @@ namespace RedditBrowser
         private void loadNextImg()
         {
             postNr++;            
-            meme.Source = imgs.ElementAt(postNr);
+            image.Source = imgs.ElementAt(postNr);
             titleLabel.Content = posts.ElementAt(postNr).Title;
         }
 
@@ -73,7 +78,7 @@ namespace RedditBrowser
             string source = newsetPost.Current.Url.ToString();
             posts.Add(newsetPost.Current);
             var img = new BitmapImage(new Uri(source, UriKind.Absolute));
-            meme.Source = img;
+            image.Source = img;
             imgs.Add(img);
             titleLabel.Content = newsetPost.Current.Title;
         }
@@ -101,9 +106,9 @@ namespace RedditBrowser
 
         private void Download_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            if (meme != null)
+            if (image != null)
             {
-                e.CanExecute = meme.Source != null;
+                e.CanExecute = image.Source != null;
             }
             else
             {
@@ -121,7 +126,7 @@ namespace RedditBrowser
             if (dial.ShowDialog() == true)
             {
                 var encoder = new JpegBitmapEncoder();
-                encoder.Frames.Add(BitmapFrame.Create((BitmapSource)meme.Source));
+                encoder.Frames.Add(BitmapFrame.Create((BitmapSource)image.Source));
                 using (FileStream stream = new FileStream(dial.FileName, FileMode.Create))
                 {
                     encoder.Save(stream);
@@ -158,9 +163,9 @@ namespace RedditBrowser
 
         private void ImgLink_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            if (meme != null)
+            if (image != null)
             {
-                e.CanExecute = meme.Source != null;
+                e.CanExecute = image.Source != null;
             }
             else
             {
@@ -187,6 +192,15 @@ namespace RedditBrowser
                 else
                     item.Visibility = Visibility.Visible;
             }
+        }
+
+        private void image_MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            var st = (ScaleTransform)((TransformGroup)image.RenderTransform)
+                .Children.First(x=>x is ScaleTransform);
+            double zoom = e.Delta > 0 ? .1 : -.1;
+            st.ScaleX += zoom;
+            st.ScaleY += zoom;
         }
     }
 }
