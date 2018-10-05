@@ -32,57 +32,71 @@ namespace RedditBrowser
         private IEnumerator<Post> newsetPost { get; set; }
         private List<Post> posts { get; set; } = new List<Post>();
         private List<BitmapImage> imgs { get; set; } = new List<BitmapImage>();
-        private List<string> suporrtedFormats { get; set; } = new List<string>();
+        private List<string> supportedFormats { get; set; } = new List<string>();
 
 
         public MainWindow()
         {
             InitializeComponent();
-            suporrtedFormats.Add(".jpg");
-            suporrtedFormats.Add(".png");
-            //for image zoom and pan
+
+            supportedFormats.Add(".jpg");
+            supportedFormats.Add(".png");
+
+            // For image zoom and pan.
             var group = new TransformGroup();
             var st = new ScaleTransform();
             group.Children.Add(st);
             image.RenderTransform = group;
         }
+
         private void loadPrevImg()
         {
             postNr--;
+            DisplayCachedImageAtPostNr();            
+        }
+
+        private void DisplayCachedImageAtPostNr()
+        {
             image.Source = imgs.ElementAt(postNr);
             titleLabel.Content = posts.ElementAt(postNr).Title;
         }
 
         /*
-         * If currently displayed post is not the last one (being pointed to by the 'newsetPost.Current')
+         * If currently displayed post is not the last one (being pointed to by the 'newsetPost.Current').
          */
         private void loadNextImg()
         {
-            postNr++;            
-            image.Source = imgs.ElementAt(postNr);
-            titleLabel.Content = posts.ElementAt(postNr).Title;
+            postNr++;
+            DisplayCachedImageAtPostNr();
         }
 
         /*
-         * If currently displayed post is the last one (being pointed to by the 'newsetPost.Current')
+         * If currently displayed post is the last one (being pointed to by the 'newsetPost.Current').
          */
         private void loadNewImg()
         {
-            newsetPost.MoveNext(); postNr++;
+            newsetPost.MoveNext();
+            postNr++;
 
-            while (!suporrtedFormats.Any(s=>newsetPost.Current.Url.ToString().Contains(s)))
+            while (!newsetPostHasSupportedFormat())
             {
                 newsetPost.MoveNext();
             }
 
-            string source = newsetPost.Current.Url.ToString();
             posts.Add(newsetPost.Current);
+
+            string source = newsetPost.Current.Url.ToString();            
             var img = new BitmapImage(new Uri(source, UriKind.Absolute));
-            image.Source = img;
             imgs.Add(img);
-            titleLabel.Content = newsetPost.Current.Title;
+
+            DisplayCachedImageAtPostNr();
         }
-        
+
+        private bool newsetPostHasSupportedFormat()
+        {
+            return supportedFormats.Any(s => newsetPost.Current.Url.ToString().Contains(s));
+        }
+
         private void OpenSub_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = true;
@@ -94,13 +108,15 @@ namespace RedditBrowser
             dialog.ShowDialog();
             if (dialog.DialogResult != true)
             {
-                //add some sort of msg to gui here
+                // TODO: Add some sort of msg to gui here.
                 return;
             }
+
             subredditName = dialog.subName;
             subreddit = new Reddit().GetSubreddit($"/r/{subredditName}");
             var posts = subreddit.Posts;
             newsetPost = posts.GetEnumerator();
+
             loadNewImg();
         }
 
@@ -151,7 +167,7 @@ namespace RedditBrowser
 
         private void Next_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            if (postNr < posts.Count-1)
+            if (postNr < posts.Count - 1)
             {
                 loadNextImg();
             }
