@@ -52,10 +52,10 @@ namespace RedditBrowser
         private void loadPrevImg()
         {
             postNr--;
-            LoadCachedImageAtPostNr();            
+            DisplayCachedImageAtPostNr();            
         }
 
-        private void LoadCachedImageAtPostNr()
+        private void DisplayCachedImageAtPostNr()
         {
             image.Source = imgs.ElementAt(postNr);
             titleLabel.Content = posts.ElementAt(postNr).Title;
@@ -67,7 +67,7 @@ namespace RedditBrowser
         private void loadNextImg()
         {
             postNr++;
-            LoadCachedImageAtPostNr();
+            DisplayCachedImageAtPostNr();
         }
 
         /*
@@ -75,7 +75,8 @@ namespace RedditBrowser
          */
         private void loadNewImg()
         {
-            newsetPost.MoveNext(); postNr++;
+            newsetPost.MoveNext();
+            postNr++;
 
             while (!newsetPostHasSupportedFormat())
             {
@@ -88,8 +89,7 @@ namespace RedditBrowser
             var img = new BitmapImage(new Uri(source, UriKind.Absolute));
             imgs.Add(img);
 
-            image.Source = img;            
-            titleLabel.Content = newsetPost.Current.Title;
+            DisplayCachedImageAtPostNr();
         }
 
         private bool newsetPostHasSupportedFormat()
