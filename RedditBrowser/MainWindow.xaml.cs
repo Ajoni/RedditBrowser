@@ -28,10 +28,10 @@ namespace RedditBrowser
     {
         private string subredditName { get; set; }
         private Subreddit subreddit { get; set; }
-        private int postNr { get; set; } = -1;
+        private int postIndex { get; set; } = -1;
         private IEnumerator<Post> newsetPost { get; set; }
         private List<Post> posts { get; set; } = new List<Post>();
-        private List<BitmapImage> imgs { get; set; } = new List<BitmapImage>();
+        private List<BitmapImage> images { get; set; } = new List<BitmapImage>();
         private List<string> supportedFormats { get; set; } = new List<string>();
 
 
@@ -39,26 +39,36 @@ namespace RedditBrowser
         {
             InitializeComponent();
 
+            AddSupportedFormats();
+
+            // TODO: Add pan as well
+            AddImageZoom();            
+        }        
+
+        private void AddSupportedFormats()
+        {
             supportedFormats.Add(".jpg");
             supportedFormats.Add(".png");
+        }
 
-            // For image zoom and pan.
+        private void AddImageZoom()
+        {
             var group = new TransformGroup();
             var st = new ScaleTransform();
             group.Children.Add(st);
             image.RenderTransform = group;
         }
 
-        private void loadPrevImg()
+        private void loadPreviousImg()
         {
-            postNr--;
-            DisplayCachedImageAtPostNr();            
+            postIndex--;
+            DisplayCachedImageAtPostIndex();            
         }
 
-        private void DisplayCachedImageAtPostNr()
+        private void DisplayCachedImageAtPostIndex()
         {
-            image.Source = imgs.ElementAt(postNr);
-            titleLabel.Content = posts.ElementAt(postNr).Title;
+            image.Source = images.ElementAt(postIndex);
+            titleLabel.Content = posts.ElementAt(postIndex).Title;
         }
 
         /*
@@ -66,30 +76,38 @@ namespace RedditBrowser
          */
         private void loadNextImg()
         {
-            postNr++;
-            DisplayCachedImageAtPostNr();
+            postIndex++;
+            DisplayCachedImageAtPostIndex();
         }
 
         /*
          * If currently displayed post is the last one (being pointed to by the 'newsetPost.Current').
          */
         private void loadNewImg()
+        {            
+            FindNextPostWithSupportedFormat();
+
+            AddPostAndImageToCache();
+
+            loadNextImg();
+        }        
+
+        private void FindNextPostWithSupportedFormat()
         {
             newsetPost.MoveNext();
-            postNr++;
-
             while (!newsetPostHasSupportedFormat())
             {
                 newsetPost.MoveNext();
             }
+        }
 
+        private void AddPostAndImageToCache()
+        {
             posts.Add(newsetPost.Current);
 
-            string source = newsetPost.Current.Url.ToString();            
+            string source = newsetPost.Current.Url.ToString();
             var img = new BitmapImage(new Uri(source, UriKind.Absolute));
-            imgs.Add(img);
-
-            DisplayCachedImageAtPostNr();
+            images.Add(img);
         }
 
         private bool newsetPostHasSupportedFormat()
@@ -134,16 +152,16 @@ namespace RedditBrowser
 
         private void Download_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            var dial = new Microsoft.Win32.SaveFileDialog()
+            var dialog = new Microsoft.Win32.SaveFileDialog()
             {
                 Filter = "Image Files (*.jpg)|*.jpg",
                 FileName = newsetPost.Current.Id.ToString()
             };
-            if (dial.ShowDialog() == true)
+            if (dialog.ShowDialog() == true)
             {
                 var encoder = new JpegBitmapEncoder();
                 encoder.Frames.Add(BitmapFrame.Create((BitmapSource)image.Source));
-                using (FileStream stream = new FileStream(dial.FileName, FileMode.Create))
+                using (FileStream stream = new FileStream(dialog.FileName, FileMode.Create))
                 {
                     encoder.Save(stream);
                 }
@@ -152,12 +170,12 @@ namespace RedditBrowser
 
         private void Prev_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = postNr > 0;
+            e.CanExecute = postIndex > 0;
         }
 
         private void Prev_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            loadPrevImg();
+            loadPreviousImg();
         }
 
         private void Next_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -167,7 +185,7 @@ namespace RedditBrowser
 
         private void Next_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            if (postNr < posts.Count - 1)
+            if (postIndex < posts.Count - 1)
             {
                 loadNextImg();
             }
@@ -191,7 +209,7 @@ namespace RedditBrowser
 
         private void ImgLink_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            Clipboard.SetText(posts.ElementAt(postNr).Url.ToString());
+            Clipboard.SetText(posts.ElementAt(postIndex).Url.ToString());
         }
 
         private void ShowButtons_CanExecute(object sender, CanExecuteRoutedEventArgs e)
