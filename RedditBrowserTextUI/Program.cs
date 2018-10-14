@@ -11,9 +11,9 @@ using System.Drawing;
 namespace RedditBrowserTextUI
 {
     class Program
-    {
-        // Display Frame's height and width is constant, for now.
-        private static DisplayFrame displayFrame = new DisplayFrame(new Rect(20, 0, 38, 20));
+    {        
+        private static DisplayFrame displayFrame;
+        private static Window mainWindow;
 
         private static Task displayTask = null;
 
@@ -24,12 +24,19 @@ namespace RedditBrowserTextUI
         private static IDisplayable itemToDisplay = null;
 
         static void Main(string[] args)
-        {
+        {            
             RunRedditBrowser().Wait();
         }
 
         private async static Task RunRedditBrowser()
         {
+            // Setup Console window.
+            Console.WindowHeight = Console.LargestWindowHeight - 10;
+            Console.WindowWidth = Console.LargestWindowWidth - 20;
+
+            // Display Frame's height and width is constant, for now.
+            displayFrame = new DisplayFrame(new Rect(20, 0, Console.WindowWidth - 22, Console.WindowHeight - 4));
+
             string[] formats = { ".png", ".jpg" };
             manager = new Manager(formats);
 
@@ -38,8 +45,8 @@ namespace RedditBrowserTextUI
             var top = Application.Top;
 
             // Creates the top-level window to show
-            var win = new Window(new Rect(0, 1, top.Frame.Width, top.Frame.Height - 1), "Reddit Browser");
-            top.Add(win);
+            mainWindow = new Window(new Rect(0, 1, top.Frame.Width, top.Frame.Height - 1), "Reddit Browser");
+            top.Add(mainWindow);
 
             // Creates a menubar, the item "New" has a help menu.
             var menu = new MenuBar(new MenuBarItem[] {
@@ -55,10 +62,10 @@ namespace RedditBrowserTextUI
                 })
             });
             top.Add(menu);
-            
+
             // Adding controls
             // TODO: Add viewing comments
-            win.Add(
+            mainWindow.Add(
                     new Button(3, 2, "Load Sub") { Clicked = LoadSub_Clicked },
                     new Button(3, 4, "Next") { Clicked = Next_Clicked },
                     new Button(3, 6, "Previous") { Clicked = Previous_Clicked },
@@ -82,14 +89,9 @@ namespace RedditBrowserTextUI
         {
             // TODO:
             // Make a popup ask for the sub.
+            Dialog openSubDialog = new Dialog("Open subreddit",50, 6, new Button("OK"));
+            mainWindow.Add(openSubDialog);
             // Pass sub name to manager.
-            // If Manager found the sub.
-            StopDisplaying();
-            LoadItem();
-            displayTask = DisplayTask();
-            Task.Run(() => displayTask);
-            // Else, if Manager failed to find the sub.
-
         }
 
         private static void Next_Clicked()
