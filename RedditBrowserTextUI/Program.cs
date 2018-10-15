@@ -7,6 +7,7 @@ using Terminal.Gui;
 using RedditBrowserLogic.Mock;
 using System.Windows.Media.Imaging;
 using System.Drawing;
+using System.Threading;
 
 namespace RedditBrowserTextUI
 {
@@ -14,6 +15,8 @@ namespace RedditBrowserTextUI
     {        
         private static DisplayFrame displayFrame;
         private static Window mainWindow;
+        private static Window popupWindow;
+        private static TextField targetSubTextView;
 
         private static Task displayTask = null;
 
@@ -22,7 +25,7 @@ namespace RedditBrowserTextUI
         private static Manager manager;
         
         private static IDisplayable itemToDisplay = null;
-
+        
         static void Main(string[] args)
         {            
             RunRedditBrowser().Wait();
@@ -69,7 +72,7 @@ namespace RedditBrowserTextUI
                     new Button(3, 2, "Load Sub") { Clicked = LoadSub_Clicked },
                     new Button(3, 4, "Next") { Clicked = Next_Clicked },
                     new Button(3, 6, "Previous") { Clicked = Previous_Clicked },
-                    displayFrame.ContentFrame
+                    new Button(3, 10, "Copy Link") { Clicked = CopyLink_Clicked}
                     );
 
             #endregion
@@ -87,11 +90,58 @@ namespace RedditBrowserTextUI
 
         private static void LoadSub_Clicked()
         {
+            mainWindow.Remove(displayFrame.ContentFrame);
             // TODO:
             // Make a popup ask for the sub.
-            Dialog openSubDialog = new Dialog("Open subreddit",50, 6, new Button("OK"));
-            mainWindow.Add(openSubDialog);
+            popupWindow = new Window(new Rect(22, 3, 50, 7), "Open Subreddit");
+            targetSubTextView = new TextField(0, 2, 48, "ProgrammerHumor");
+            popupWindow.Add(
+                    new Label(0, 0, "Please input a sub"),
+                    targetSubTextView,
+                    new Button(5, 4, "OK", false) { Clicked = LoadSubOK_Clicked },
+                    new Button(12, 4, "Cancel", true) { Clicked = LoadSubCancel_Clicked }
+            );
+            Application.Refresh();
+            Application.Run(popupWindow);
+        }
+
+        private static void LoadSubOK_Clicked()
+        {
+            // Get name from popupWindow.
+            string subName = targetSubTextView.Text.ToString();
             // Pass sub name to manager.
+
+            // If a sub loads successfully.
+            if (true)
+            {
+                // Draw the frame.
+                mainWindow.Add(displayFrame.ContentFrame);
+
+                StopDisplaying();
+                LoadItem();
+                displayTask = DisplayTask();
+                Task.Run(() => displayTask);
+            }
+            // Else if a sub fails to load.
+            else
+            {
+                // Return an error message to user interface,
+                // as a dialog, perhaps?
+            }
+
+            popupWindow.Running = false;
+        }
+
+        private static void LoadSubCancel_Clicked()
+        {
+            // If a manager has a sub loaded and open.
+            if (true)
+            {
+                // Draw the frame.
+                mainWindow.Add(displayFrame.ContentFrame);
+            }
+
+            popupWindow.Running = false;
         }
 
         private static void Next_Clicked()
@@ -110,6 +160,20 @@ namespace RedditBrowserTextUI
             LoadItem();
             displayTask = DisplayTask();
             Task.Run(() => displayTask);
+        }
+        
+        private static void CopyLink_Clicked()
+        {
+            Thread copyThread = new Thread(CopyLink);
+            copyThread.IsBackground = true;
+            copyThread.SetApartmentState(ApartmentState.STA);
+            copyThread.Start();            
+        }
+
+        private static void CopyLink()
+        {
+            // Ask the manager for a link here
+            System.Windows.Clipboard.SetText("Hello, clipboard");
         }
 
         private static void StopDisplaying()
