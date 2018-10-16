@@ -26,6 +26,7 @@ namespace RedditBrowser
     /// </summary>
     public partial class MainWindow : Window
     {
+        #region fields
         private string subredditName { get; set; }
         private Subreddit subreddit { get; set; }
         private int postNr { get; set; } = -1;
@@ -33,7 +34,7 @@ namespace RedditBrowser
         private List<Post> posts { get; set; } = new List<Post>();
         private List<BitmapImage> imgs { get; set; } = new List<BitmapImage>();
         private List<string> supportedFormats { get; set; } = new List<string>();
-
+        #endregion
 
         public MainWindow()
         {
