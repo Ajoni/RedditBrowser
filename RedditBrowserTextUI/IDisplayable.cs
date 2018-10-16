@@ -69,10 +69,6 @@ namespace RedditBrowserTextUI
             int frameCount = gif.GetFrameCount(dimension);
             PropertyItem item = gif.GetPropertyItem(0x5100); // FrameDelay in libgdiplus
             delay = (item.Value[0] + item.Value[1] * 256) * 10;  // Time is in milliseconds
-            if (delay < 300)
-            {
-                delay = 300;
-            }
 
             for (int index = 0; index < frameCount; index++)
             {
@@ -88,7 +84,7 @@ namespace RedditBrowserTextUI
             {
                 foreach(var frame in Contents)
                 {
-                    Task.Delay(delay);
+                    Task.Delay(delay).Wait();
                     frame.Display();
                     Application.Refresh();                    
 
