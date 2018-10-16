@@ -51,8 +51,8 @@ namespace RedditBrowserLogic.Mock
             medias = new List<Media>() { 
                 new MediaBitmapImage(new BitmapImage( new Uri(Environment.CurrentDirectory + @"/sample1.png"))),
                 new MediaBitmapImage(new BitmapImage( new Uri(Environment.CurrentDirectory + @"/sample2.jpg"))),
-                new MediaBitmapImage(new BitmapImage( new Uri("http://www.myiconfinder.com/uploads/iconsets/4e85033cfdb3da00ce01c67a4bc37cdf.png"))),
-                //new MediaGIF(Image.FromFile(Environment.CurrentDirectory.ToString() + @"/sample3.gif"))
+                new MediaBitmapImage(new BitmapImage( new Uri(Environment.CurrentDirectory + @"/sample4.jpg"))),
+                new MediaGIF(Image.FromFile(Environment.CurrentDirectory.ToString() + @"/sample3.gif"))
                 };
         }
 

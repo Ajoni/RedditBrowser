@@ -12,19 +12,8 @@ using System.Threading;
 namespace RedditBrowserTextUI
 {
     class Program
-    {        
-        private static DisplayFrame displayFrame;
-        private static Window mainWindow;
-        private static Window popupWindow;
-        private static TextField targetSubTextView;
-
-        private static Task displayTask = null;
-
-        private static SharedResources sharedResources = new SharedResources();
-
-        private static Manager manager;
-        
-        private static IDisplayable itemToDisplay = null;
+    {
+        private static SharedResources sharedResources = new SharedResources();        
         
         static void Main(string[] args)
         {            
@@ -38,18 +27,18 @@ namespace RedditBrowserTextUI
             Console.WindowWidth = Console.LargestWindowWidth - 20;
 
             // Display Frame's height and width is constant, for now.
-            displayFrame = new DisplayFrame(new Rect(20, 0, Console.WindowWidth - 22, Console.WindowHeight - 4));
+            sharedResources.displayFrame = new DisplayFrame(new Rect(20, 0, Console.WindowWidth - 22, Console.WindowHeight - 4));
 
             string[] formats = { ".png", ".jpg" };
-            manager = new Manager(formats);
+            sharedResources.manager = new Manager(formats);
 
             #region GUIsetup
             Application.Init();
             var top = Application.Top;
 
             // Creates the top-level window to show
-            mainWindow = new Window(new Rect(0, 1, top.Frame.Width, top.Frame.Height - 1), "Reddit Browser");
-            top.Add(mainWindow);
+            sharedResources.mainWindow = new Window(new Rect(0, 1, top.Frame.Width, top.Frame.Height - 1), "Reddit Browser");
+            top.Add(sharedResources.mainWindow);
 
             // Creates a menubar, the item "New" has a help menu.
             var menu = new MenuBar(new MenuBarItem[] {
@@ -68,7 +57,7 @@ namespace RedditBrowserTextUI
 
             // Adding controls
             // TODO: Add viewing comments
-            mainWindow.Add(
+            sharedResources.mainWindow.Add(
                     new Button(3, 2, "Load Sub") { Clicked = LoadSub_Clicked },
                     new Button(3, 4, "Next") { Clicked = Next_Clicked },
                     new Button(3, 6, "Previous") { Clicked = Previous_Clicked },
@@ -90,37 +79,36 @@ namespace RedditBrowserTextUI
 
         private static void LoadSub_Clicked()
         {
-            mainWindow.Remove(displayFrame.ContentFrame);
-            // TODO:
-            // Make a popup ask for the sub.
-            popupWindow = new Window(new Rect(22, 3, 50, 7), "Open Subreddit");
-            targetSubTextView = new TextField(0, 2, 48, "ProgrammerHumor");
-            popupWindow.Add(
+            sharedResources.mainWindow.Remove(sharedResources.displayFrame.ContentFrame);
+
+            sharedResources.popupWindow = new Window(new Rect(22, 3, 50, 7), "Open Subreddit");
+            sharedResources.targetSubTextView = new TextField(0, 2, 48, "ProgrammerHumor");
+            sharedResources.popupWindow.Add(
                     new Label(0, 0, "Please input a sub"),
-                    targetSubTextView,
+                    sharedResources.targetSubTextView,
                     new Button(5, 4, "OK", false) { Clicked = LoadSubOK_Clicked },
                     new Button(12, 4, "Cancel", true) { Clicked = LoadSubCancel_Clicked }
             );
             Application.Refresh();
-            Application.Run(popupWindow);
+            Application.Run(sharedResources.popupWindow);
         }
 
         private static void LoadSubOK_Clicked()
         {
             // Get name from popupWindow.
-            string subName = targetSubTextView.Text.ToString();
+            string subName = sharedResources.targetSubTextView.Text.ToString();
             // Pass sub name to manager.
 
             // If a sub loads successfully.
             if (true)
             {
                 // Draw the frame.
-                mainWindow.Add(displayFrame.ContentFrame);
+                sharedResources.mainWindow.Add(sharedResources.displayFrame.ContentFrame);
 
                 StopDisplaying();
                 LoadItem();
-                displayTask = DisplayTask();
-                Task.Run(() => displayTask);
+                sharedResources.displayTask = DisplayTask();
+                Task.Run(() => sharedResources.displayTask);
             }
             // Else if a sub fails to load.
             else
@@ -129,7 +117,7 @@ namespace RedditBrowserTextUI
                 // as a dialog, perhaps?
             }
 
-            popupWindow.Running = false;
+            sharedResources.popupWindow.Running = false;
         }
 
         private static void LoadSubCancel_Clicked()
@@ -138,28 +126,28 @@ namespace RedditBrowserTextUI
             if (true)
             {
                 // Draw the frame.
-                mainWindow.Add(displayFrame.ContentFrame);
+                sharedResources.mainWindow.Add(sharedResources.displayFrame.ContentFrame);
             }
 
-            popupWindow.Running = false;
+            sharedResources.popupWindow.Running = false;
         }
 
         private static void Next_Clicked()
         {
             StopDisplaying();
-            manager.Next();
+            sharedResources.manager.Next();
             LoadItem();
-            displayTask = DisplayTask();
-            Task.Run(() => displayTask);
+            sharedResources.displayTask = DisplayTask();
+            Task.Run(() => sharedResources.displayTask);
         }
 
         private static void Previous_Clicked()
         {
             StopDisplaying();
-            manager.Previous();
+            sharedResources.manager.Previous();
             LoadItem();
-            displayTask = DisplayTask();
-            Task.Run(() => displayTask);
+            sharedResources.displayTask = DisplayTask();
+            Task.Run(() => sharedResources.displayTask);
         }
         
         private static void CopyLink_Clicked()
@@ -178,35 +166,34 @@ namespace RedditBrowserTextUI
 
         private static void StopDisplaying()
         {
-            sharedResources.keepDisplaying = false;
-            if (displayTask != null)
+            SharedResources.keepDisplaying = false;
+            if (sharedResources.displayTask != null)
             {
-                displayTask.Wait();
+                sharedResources.displayTask.Wait();
             }
-            sharedResources.keepDisplaying = true;
+            SharedResources.keepDisplaying = true;
         }
 
         private static void LoadItem()
         {
-            Media media = manager.GetCurrent();
+            Media media = sharedResources.manager.GetCurrent();
             if (media.GetType() == typeof(MediaBitmapImage))
             {
                 MediaBitmapImage image = (MediaBitmapImage)media;
-                itemToDisplay = new ASCIIImage(displayFrame, image.image);
+                sharedResources.itemToDisplay = new ASCIIImage(sharedResources.displayFrame, image.image);
             }
             // TODO: Add support for gifs
-            /*
+            
             else if (media.GetType() == typeof(MediaGIF))
             {
                 MediaGIF gif = (MediaGIF)media;
-                itemToDisplay = new ASCIIGIF(displayFrame);
+                sharedResources.itemToDisplay = new ASCIIGIF(sharedResources.displayFrame, gif.image);
             }
-            */
         }
         
         private async static Task DisplayTask()
         {
-            Action work = () => { itemToDisplay.Display(); };
+            Action work = () => { sharedResources.itemToDisplay.Display(); };
             await Task.Run(work);
         }
     }
