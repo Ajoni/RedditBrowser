@@ -16,11 +16,6 @@ namespace RedditBrowserTextUI
         private static SharedResources sharedResources = new SharedResources();        
         
         static void Main(string[] args)
-        {            
-            RunRedditBrowser().Wait();
-        }
-
-        private async static Task RunRedditBrowser()
         {
             // Setup Console window.
             Console.WindowHeight = Console.LargestWindowHeight - 10;
@@ -61,22 +56,15 @@ namespace RedditBrowserTextUI
                     new Button(3, 2, "Load Sub") { Clicked = LoadSub_Clicked },
                     new Button(3, 4, "Next") { Clicked = Next_Clicked },
                     new Button(3, 6, "Previous") { Clicked = Previous_Clicked },
-                    new Button(3, 10, "Copy Link") { Clicked = CopyLink_Clicked}
+                    new Button(3, 10, "Copy Link") { Clicked = CopyLink_Clicked }
                     );
 
             #endregion
-                    
-            Task controlTask = ControlTask();
 
-            await Task.WhenAll(controlTask);
+            Application.Run();
+
         }
-
-        private async static Task ControlTask()
-        {
-            Action work = () => { Application.Run(); };
-            await Task.Run(work);
-        }
-
+        
         private static void LoadSub_Clicked()
         {
             sharedResources.mainWindow.Remove(sharedResources.displayFrame.ContentFrame);
@@ -104,11 +92,9 @@ namespace RedditBrowserTextUI
             {
                 // Draw the frame.
                 sharedResources.mainWindow.Add(sharedResources.displayFrame.ContentFrame);
-
-                StopDisplaying();
+                
                 LoadItem();
-                sharedResources.displayTask = DisplayTask();
-                Task.Run(() => sharedResources.displayTask);
+                sharedResources.itemToDisplay.Display();
             }
             // Else if a sub fails to load.
             else
@@ -134,22 +120,18 @@ namespace RedditBrowserTextUI
 
         private static void Next_Clicked()
         {
-            StopDisplaying();
             sharedResources.manager.Next();
             LoadItem();
-            sharedResources.displayTask = DisplayTask();
-            Task.Run(() => sharedResources.displayTask);
+            sharedResources.itemToDisplay.Display();
         }
 
         private static void Previous_Clicked()
         {
-            StopDisplaying();
             sharedResources.manager.Previous();
             LoadItem();
-            sharedResources.displayTask = DisplayTask();
-            Task.Run(() => sharedResources.displayTask);
+            sharedResources.itemToDisplay.Display();
         }
-        
+
         private static void CopyLink_Clicked()
         {
             Thread copyThread = new Thread(CopyLink);
@@ -163,17 +145,7 @@ namespace RedditBrowserTextUI
             // Ask the manager for a link here
             System.Windows.Clipboard.SetText("Hello, clipboard");
         }
-
-        private static void StopDisplaying()
-        {
-            SharedResources.keepDisplaying = false;
-            if (sharedResources.displayTask != null)
-            {
-                sharedResources.displayTask.Wait();
-            }
-            SharedResources.keepDisplaying = true;
-        }
-
+        
         private static void LoadItem()
         {
             Media media = sharedResources.manager.GetCurrent();
@@ -189,12 +161,6 @@ namespace RedditBrowserTextUI
                 MediaGIF gif = (MediaGIF)media;
                 sharedResources.itemToDisplay = new ASCIIGIF(sharedResources.displayFrame, gif.image);
             }
-        }
-        
-        private async static Task DisplayTask()
-        {
-            Action work = () => { sharedResources.itemToDisplay.Display(); };
-            await Task.Run(work);
         }
     }
 }
