@@ -14,6 +14,7 @@ namespace RedditBrowserTextUI
     interface IDisplayable
     {
         void Display();
+        void DisplayNext();
     }
 
     class ASCIIImage : IDisplayable
@@ -53,22 +54,31 @@ namespace RedditBrowserTextUI
                 displayFrame.Rows[i].Text = Contents[i];
             }
         }
+
+        public void DisplayNext()
+        {
+
+        }
     }
 
     class ASCIIGIF : IDisplayable
     {
         private DisplayFrame displayFrame;
         private int delay;
+        private int currentFrame;
 
         List<ASCIIImage> Contents = new List<ASCIIImage>();
 
         public ASCIIGIF(DisplayFrame frame, Image gif)
         {
             displayFrame = frame;
+
             FrameDimension dimension = new FrameDimension(gif.FrameDimensionsList[0]);
             int frameCount = gif.GetFrameCount(dimension);
             PropertyItem item = gif.GetPropertyItem(0x5100); // FrameDelay in libgdiplus
             delay = (item.Value[0] + item.Value[1] * 256) * 10;  // Time is in milliseconds
+
+            currentFrame = -1;
 
             for (int index = 0; index < frameCount; index++)
             {
@@ -80,25 +90,18 @@ namespace RedditBrowserTextUI
 
         public void Display()
         {
-            while (true)
-            {
-                foreach(var frame in Contents)
-                {
-                    Task.Delay(delay).Wait();
-                    frame.Display();
-                    Application.Refresh();                    
+            currentFrame = (currentFrame + 1) % Contents.Count;
+            ASCIIImage frame = Contents[currentFrame];
+            frame.Display();
+            Task.Delay(delay).Wait();
+        }
 
-                    if (!SharedResources.keepDisplaying)
-                    {
-                        return;
-                    }
-                }
-
-                if (!SharedResources.keepDisplaying)
-                {
-                    return;
-                }
-            }
+        public void DisplayNext()
+        {
+            currentFrame = (currentFrame + 1) % Contents.Count;
+            ASCIIImage frame = Contents[currentFrame];
+            frame.Display();
+            Task.Delay(delay).Wait();
         }
     }
 }

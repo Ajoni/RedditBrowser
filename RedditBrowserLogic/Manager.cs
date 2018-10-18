@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using System.Drawing;
+using RedditSharp.Things;
 
 namespace RedditBrowserLogic.Mock
 {
@@ -38,6 +39,15 @@ namespace RedditBrowserLogic.Mock
         public Media GetCurrent()
         {
             return cache.GetCurrent(current);
+        }
+
+        public List<Comment> GetTopComments(int count)
+        {
+            List<Comment> comments = new List<Comment>();
+            comments.Add(new Comment() { AuthorName = "Johnny", Body = "I eat paaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaint" });
+            comments.Add(new Comment() { AuthorName = "Bonnie", Body = "I eat bananas" });
+            comments.Add(new Comment() { AuthorName = "Sonny", Body = "I eat darling's cake" });
+            return comments;
         }
 
     }

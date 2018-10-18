@@ -11,7 +11,6 @@ namespace RedditBrowserTextUI
     // A class for resources shared between Tasks
     class SharedResources
     {
-        public static bool keepDisplaying = true;
         public DisplayFrame displayFrame;
         public Window mainWindow;
         public Window popupWindow;

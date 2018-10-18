@@ -8,6 +8,7 @@ using RedditBrowserLogic.Mock;
 using System.Windows.Media.Imaging;
 using System.Drawing;
 using System.Threading;
+using RedditSharp.Things;
 
 namespace RedditBrowserTextUI
 {
@@ -17,18 +18,40 @@ namespace RedditBrowserTextUI
         
         static void Main(string[] args)
         {
-            // Setup Console window.
-            Console.WindowHeight = Console.LargestWindowHeight - 10;
-            Console.WindowWidth = Console.LargestWindowWidth - 20;
-
-            // Display Frame's height and width is constant, for now.
-            sharedResources.displayFrame = new DisplayFrame(new Rect(20, 0, Console.WindowWidth - 22, Console.WindowHeight - 4));
-
             string[] formats = { ".png", ".jpg" };
             sharedResources.manager = new Manager(formats);
 
-            #region GUIsetup
+            Console.WindowHeight = Console.LargestWindowHeight - 2;
+            Console.WindowWidth = Console.LargestWindowWidth - 2;
+
             Application.Init();
+            SetupGUI();
+            Application.Run();
+        }
+
+        private static void SetupGUI()
+        {
+            // Display Frame's height and width is constant, for now.
+            sharedResources.displayFrame = new DisplayFrame(new Rect(20, 0, Console.WindowWidth - 22, Console.WindowHeight - 4));
+
+            CreateTop();            
+            
+            AddControls();
+
+            Application.Iteration += Iteration_listener;
+        }
+
+        private static void Iteration_listener(object sender, EventArgs e)
+        {
+            if (sharedResources.itemToDisplay != null)
+            {
+                sharedResources.itemToDisplay.Display();
+                Application.Refresh();
+            }
+        }        
+
+        private static void CreateTop()
+        {
             var top = Application.Top;
 
             // Creates the top-level window to show
@@ -49,22 +72,78 @@ namespace RedditBrowserTextUI
                 })
             });
             top.Add(menu);
+        }
 
-            // Adding controls
+        private static void AddControls()
+        {
             // TODO: Add viewing comments
             sharedResources.mainWindow.Add(
-                    new Button(3, 2, "Load Sub") { Clicked = LoadSub_Clicked },
-                    new Button(3, 4, "Next") { Clicked = Next_Clicked },
-                    new Button(3, 6, "Previous") { Clicked = Previous_Clicked },
-                    new Button(3, 10, "Copy Link") { Clicked = CopyLink_Clicked }
-                    );
-
-            #endregion
-
-            Application.Run();
-
+                                new Button(3, 2, "Load Sub") { Clicked = LoadSub_Clicked },
+                                new Button(3, 4, "Next") { Clicked = Next_Clicked },
+                                new Button(3, 6, "Previous") { Clicked = Previous_Clicked },
+                                new Button(3, 8, "Save") { Clicked = Save_Clicked },
+                                new Button(3, 10, "Copy Link") { Clicked = CopyLink_Clicked },
+                                new Button(3, 12, "View Comments") { Clicked = ViewComments_Clicked }
+                                );
         }
-        
+
+        private static void ViewComments_Clicked()
+        {
+            Window win = new Window("Top comments");
+            win.Add(new Button(1, 1, "Back", false) { Clicked = Back_Clicked });
+            const int itemsCount = 3;
+            List<Comment> comments = sharedResources.manager.GetTopComments(itemsCount);
+
+            for (int i = 0; i < itemsCount; i++)
+            {
+                Comment comment = comments[i];
+
+                string commentContent = comment.Body;
+                List<string> fragmentedComment = getFragmentedString(commentContent, Console.WindowWidth - 24 - 1);
+
+                FrameView frame = new FrameView(new Rect(20, i * ((Console.WindowHeight - 2) / 3), Console.WindowWidth - 22, ((Console.WindowHeight - 2) / 3) - 1), comment.AuthorName);
+                
+                for (int j = 0; j < Math.Min(((Console.WindowHeight - 2) / 3) - 2, fragmentedComment.Count ); j++)
+                {
+                    frame.Add(
+                        new Label(0, j, fragmentedComment[j])
+                    );
+                }
+
+                win.Add(frame);
+            }
+
+            Application.Run(win);
+        }
+
+        private static List<string> getFragmentedString(string comment, int width)
+        {
+            List<string> fragments = new List<string>();
+            for (int j=0; j<comment.Length; j++)
+            {
+                int charsToAdd = Math.Min(width, comment.Length - j);
+                fragments.Add(comment.Substring(j, charsToAdd));
+                j += charsToAdd;
+            }
+            return fragments;
+        }
+
+        private static void Back_Clicked()
+        {
+            Application.RequestStop();
+        }
+
+        private static void Save_Clicked()
+        {
+            SaveDialog dialog = new SaveDialog("Save", "Please choose a directory");
+            dialog.DirectoryPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            Application.Run(dialog);
+
+            string saveName = dialog.FileName.ToString();
+
+            // TODO: save from the source.
+        }
+
         private static void LoadSub_Clicked()
         {
             sharedResources.mainWindow.Remove(sharedResources.displayFrame.ContentFrame);
@@ -153,9 +232,7 @@ namespace RedditBrowserTextUI
             {
                 MediaBitmapImage image = (MediaBitmapImage)media;
                 sharedResources.itemToDisplay = new ASCIIImage(sharedResources.displayFrame, image.image);
-            }
-            // TODO: Add support for gifs
-            
+            }            
             else if (media.GetType() == typeof(MediaGIF))
             {
                 MediaGIF gif = (MediaGIF)media;
