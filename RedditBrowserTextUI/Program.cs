@@ -139,9 +139,11 @@ namespace RedditBrowserTextUI
             dialog.DirectoryPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             Application.Run(dialog);
 
-            string saveName = dialog.FileName.ToString();
-
-            // TODO: save from the source.
+            if (dialog.FileName != null)
+            {
+                string saveName = dialog.FileName.ToString();
+                // TODO: save from the source.
+            }
         }
 
         private static void LoadSub_Clicked()
