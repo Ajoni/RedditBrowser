@@ -45,5 +45,6 @@
         <Border ClipToBounds="True" DockPanel.Dock="Bottom">
             <Image x:Name="image" />
         </Border>
+        <MediaElement Height="373.6" VerticalAlignment="Top" Width="100"/>
     </DockPanel>
 </Window>

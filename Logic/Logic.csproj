@@ -40,6 +40,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -49,8 +50,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Cache.cs" />
-    <Compile Include="GifMedia.cs" />
-    <Compile Include="ImageMedia.cs" />
+    <Compile Include="MediaGif.cs" />
+    <Compile Include="MediaBitmapImage.cs" />
     <Compile Include="Manager.cs" />
     <Compile Include="Media.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
