@@ -4,11 +4,11 @@ namespace Logic
 {
     public class MediaBitmapImage : Media
     {
-        public BitmapImage image;
+        public BitmapImage Image { get; }
 
         public MediaBitmapImage(BitmapImage image)
         {
-            this.image = image;
+            this.Image = image;
         }
 
     }

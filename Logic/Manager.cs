@@ -24,6 +24,8 @@ namespace Logic
         public string GetUri() { return posts[postIndex].Url.ToString(); }
         public string GetSelfText() { return posts[postIndex].SelfText; }
         public string GetSubreddit() { return subreddit.Name; }
+        public bool canGetNext() { return newsetPost != null; }
+        public bool canGetPrevious() { return postIndex >0; }
 
         public bool LoadNewPost() {
             if(!FindNextPostWithSupportedFormat()) return false;
@@ -35,8 +37,8 @@ namespace Logic
         {
             try {
                 subreddit = new Reddit().GetSubreddit($"/r/{subredditName}");
+                if(subreddit == null) { return false; }
                 var posts = subreddit.Posts;
-                if(posts == null) { return false; }
                 newsetPost = posts.GetEnumerator();
             }
             catch(WebException e) { return false; }
@@ -44,14 +46,26 @@ namespace Logic
             return true;
         }
 
-        public void Next()
+        public bool Next()
         {
             postIndex++;
-            if (!cache.hasNext())
-            {
-                loadCurrentPostMedia();
+            //we are not at the end of loaded posts
+            if(postIndex < posts.Count)
+            {                
+                if (!cache.hasNext())//cache has been invalidated so we have to load uri again
+                {
+                    loadCurrentPostMedia();
+                }
+                    cache.Next();
+                return true;
             }
-            cache.Next();
+            else
+            {
+                var result = LoadNewPost();
+                if(result)
+                    cache.Next();
+                return result;
+            }
         }
 
         private void loadCurrentPostMedia()
@@ -62,17 +76,18 @@ namespace Logic
 
         public void Previous()
         {
+            postIndex--;
             if (!cache.hasPrevious())
             {
-                cache.invalidateCache();
-                loadCurrentPostMedia();
-                cache.Next();
+                cache.invalidateCache(); //index -1
+                loadCurrentPostMedia(); 
+                cache.Next(); //index 0
             }
-            if (postIndex > 0)
+            else
             {
-                postIndex--;
                 cache.Previous();
             }
+
         }
 
         private bool FindNextPostWithSupportedFormat()

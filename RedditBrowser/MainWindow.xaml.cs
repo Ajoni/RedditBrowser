@@ -15,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Logic;
 using RedditBrowser;
 using RedditSharp;
 using RedditSharp.Things;
@@ -27,6 +28,7 @@ namespace RedditBrowser
     public partial class MainWindow : Window
     {
         #region fields
+        private Manager manager = new Manager(new string[]{".jpg", ".png"});
         private string subredditName { get; set; }
         private Subreddit subreddit { get; set; }
         private int postIndex { get; set; } = -1;
@@ -46,11 +48,6 @@ namespace RedditBrowser
             AddImageZoom();            
         }        
 
-        private void AddSupportedFormats()
-        {
-            supportedFormats.Add(".jpg");
-            supportedFormats.Add(".png");
-        }
 
         private void AddImageZoom()
         {
@@ -58,6 +55,12 @@ namespace RedditBrowser
             var st = new ScaleTransform();
             group.Children.Add(st);
             image.RenderTransform = group;
+        }
+        #region now manager does this
+        private void AddSupportedFormats()
+        {
+            supportedFormats.Add(".jpg");
+            supportedFormats.Add(".png");
         }
 
         private void loadPreviousImg()
@@ -115,6 +118,7 @@ namespace RedditBrowser
         {
             return supportedFormats.Any(s => newsetPost.Current.Url.ToString().Contains(s));
         }
+        #endregion
 
         private void OpenSub_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -132,11 +136,24 @@ namespace RedditBrowser
             }
 
             subredditName = dialog.subName;
-            subreddit = new Reddit().GetSubreddit($"/r/{subredditName}");
-            var posts = subreddit.Posts;
-            newsetPost = posts.GetEnumerator();
+            var result = manager.SetSubreddit(subredditName);
+            if (!result)
+            {
+                MessageBox.Show($"Couldnt load selected reddit: {subredditName}.");
+                return;
+            }
+            //subreddit = new Reddit().GetSubreddit($"/r/{subredditName}");
+            //var posts = subreddit.Posts;
+            //newsetPost = posts.GetEnumerator();
+            manager.Next();
+            loadAndShow();
+            //loadNewImg();
+        }
 
-            loadNewImg();
+        private void loadAndShow()
+        {
+            image.Source = ((MediaBitmapImage)manager.GetCurrent()).Image;
+            titleLabel.Content = manager.GetTitle().ToString();
         }
 
         private void Download_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -171,29 +188,24 @@ namespace RedditBrowser
 
         private void Prev_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = postIndex > 0;
+            e.CanExecute = manager.canGetPrevious();
         }
 
         private void Prev_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            loadPreviousImg();
+            manager.Previous();
+            loadAndShow();
         }
 
         private void Next_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = newsetPost != null;
+            e.CanExecute = manager.canGetNext();
         }
 
         private void Next_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            if (postIndex < posts.Count - 1)
-            {
-                loadNextImg();
-            }
-            else
-            {
-                loadNewImg();
-            }
+            manager.Next();
+            loadAndShow();
         }
 
         private void ImgLink_CanExecute(object sender, CanExecuteRoutedEventArgs e)
