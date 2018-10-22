@@ -19,7 +19,8 @@ namespace Logic
 
         public Manager(string[] supportedFormats) { this.supportedFormats = supportedFormats; }
         public List<Comment> GetTopComments(int amount) { return posts[postIndex].Comments.Take(amount).ToList(); }
-        public Media GetCurrent() { return cache.GetCurrent(); }
+        public Media GetCurrentMedia() { return cache.GetCurrent(); }
+        public Post GetCurrentPost() { return posts[postIndex]; }
         public string GetTitle() { return posts[postIndex].Title; }
         public string GetUri() { return posts[postIndex].Url.ToString(); }
         public string GetSelfText() { return posts[postIndex].SelfText; }
