@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 
 namespace RedditBrowser
 {
@@ -66,7 +61,7 @@ namespace RedditBrowser
         );
 
 
-            public static readonly RoutedUICommand ShowButtons = new RoutedUICommand
+        public static readonly RoutedUICommand ShowButtons = new RoutedUICommand
         (
             "ShowButtons",
             "ShowButtons",
@@ -74,6 +69,17 @@ namespace RedditBrowser
             new InputGestureCollection()
             {
                                 new KeyGesture(Key.S, ModifierKeys.Alt)
+            }
+        );
+
+        public static readonly RoutedUICommand ResetImg = new RoutedUICommand
+        (
+            "ResetImg",
+            "ResetImg",
+            typeof(CustomCommands),
+            new InputGestureCollection()
+            {
+                                            new KeyGesture(Key.R, ModifierKeys.Control)
             }
         );
 

@@ -1,23 +1,11 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using Logic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using RedditBrowser;
-using RedditSharp;
-using RedditSharp.Things;
 
 namespace RedditBrowser
 {
@@ -26,93 +14,38 @@ namespace RedditBrowser
     /// </summary>
     public partial class MainWindow : Window
     {
-        private string subredditName { get; set; }
-        private Subreddit subreddit { get; set; }
-        private int postIndex { get; set; } = -1;
-        private IEnumerator<Post> newsetPost { get; set; }
-        private List<Post> posts { get; set; } = new List<Post>();
-        private List<BitmapImage> images { get; set; } = new List<BitmapImage>();
-        private List<string> supportedFormats { get; set; } = new List<string>();
+        #region fields
+        //handles reddit api and image cache
+        private Manager manager = new Manager(new string[]{".jpg", ".png"});
+        
+        //needed for image zoom and pan
+        private Point origin;
+        private Point start;
 
+        #endregion
 
         public MainWindow()
         {
             InitializeComponent();
 
-            AddSupportedFormats();
-
-            // TODO: Add pan as well
-            AddImageZoom();            
-        }        
-
-        private void AddSupportedFormats()
-        {
-            supportedFormats.Add(".jpg");
-            supportedFormats.Add(".png");
+            AddImageZoomAndPan();            
         }
 
-        private void AddImageZoom()
+        private void loadAndShow()
+        {
+            image.Source = ((MediaBitmapImage)manager.GetCurrentMedia()).Image;
+            titleLabel.Content = manager.GetTitle().ToString();
+        }
+
+        private void AddImageZoomAndPan()
         {
             var group = new TransformGroup();
             var st = new ScaleTransform();
             group.Children.Add(st);
+            TranslateTransform tt = new TranslateTransform();
+            group.Children.Add(tt);
             image.RenderTransform = group;
-        }
-
-        private void loadPreviousImg()
-        {
-            postIndex--;
-            DisplayCachedImageAtPostIndex();            
-        }
-
-        private void DisplayCachedImageAtPostIndex()
-        {
-            image.Source = images.ElementAt(postIndex);
-            titleLabel.Content = posts.ElementAt(postIndex).Title;
-        }
-
-        /*
-         * If currently displayed post is not the last one (being pointed to by the 'newsetPost.Current').
-         */
-        private void loadNextImg()
-        {
-            postIndex++;
-            DisplayCachedImageAtPostIndex();
-        }
-
-        /*
-         * If currently displayed post is the last one (being pointed to by the 'newsetPost.Current').
-         */
-        private void loadNewImg()
-        {            
-            FindNextPostWithSupportedFormat();
-
-            AddPostAndImageToCache();
-
-            loadNextImg();
-        }        
-
-        private void FindNextPostWithSupportedFormat()
-        {
-            newsetPost.MoveNext();
-            while (!newsetPostHasSupportedFormat())
-            {
-                newsetPost.MoveNext();
-            }
-        }
-
-        private void AddPostAndImageToCache()
-        {
-            posts.Add(newsetPost.Current);
-
-            string source = newsetPost.Current.Url.ToString();
-            var img = new BitmapImage(new Uri(source, UriKind.Absolute));
-            images.Add(img);
-        }
-
-        private bool newsetPostHasSupportedFormat()
-        {
-            return supportedFormats.Any(s => newsetPost.Current.Url.ToString().Contains(s));
+            image.RenderTransformOrigin = new Point(0.0, 0.0);
         }
 
         private void OpenSub_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -130,12 +63,15 @@ namespace RedditBrowser
                 return;
             }
 
-            subredditName = dialog.subName;
-            subreddit = new Reddit().GetSubreddit($"/r/{subredditName}");
-            var posts = subreddit.Posts;
-            newsetPost = posts.GetEnumerator();
-
-            loadNewImg();
+            string subredditName = dialog.subName;
+            var result = manager.SetSubreddit(subredditName);
+            if (!result)
+            {
+                MessageBox.Show($"Couldnt load selected reddit: {subredditName}.");
+                return;
+            }
+            manager.Next();
+            loadAndShow();
         }
 
         private void Download_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -155,7 +91,7 @@ namespace RedditBrowser
             var dialog = new Microsoft.Win32.SaveFileDialog()
             {
                 Filter = "Image Files (*.jpg)|*.jpg",
-                FileName = newsetPost.Current.Id.ToString()
+                FileName = manager.GetCurrentPost().Id.ToString()
             };
             if (dialog.ShowDialog() == true)
             {
@@ -170,29 +106,24 @@ namespace RedditBrowser
 
         private void Prev_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = postIndex > 0;
+            e.CanExecute = manager.canGetPrevious();
         }
 
         private void Prev_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            loadPreviousImg();
+            manager.Previous();
+            loadAndShow();
         }
 
         private void Next_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = newsetPost != null;
+            e.CanExecute = manager.canGetNext();
         }
 
         private void Next_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            if (postIndex < posts.Count - 1)
-            {
-                loadNextImg();
-            }
-            else
-            {
-                loadNewImg();
-            }
+            manager.Next();
+            loadAndShow();
         }
 
         private void ImgLink_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -209,7 +140,7 @@ namespace RedditBrowser
 
         private void ImgLink_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            Clipboard.SetText(posts.ElementAt(postIndex).Url.ToString());
+            Clipboard.SetText(manager.GetUri().ToString());
         }
 
         private void ShowButtons_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -228,13 +159,106 @@ namespace RedditBrowser
             }
         }
 
+        private void ResetImg_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (image != null)
+            {
+                e.CanExecute = image.Source != null;
+            }
+            else
+            {
+                e.CanExecute = false;
+            }
+        }
+
+        private void ResetImg_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            ResetImgTransform();
+        }
+
         private void image_MouseWheel(object sender, MouseWheelEventArgs e)
         {
             var st = (ScaleTransform)((TransformGroup)image.RenderTransform)
-                .Children.First(x=>x is ScaleTransform);
-            double zoom = e.Delta > 0 ? .1 : -.1;
-            st.ScaleX += zoom;
-            st.ScaleY += zoom;
+                .Children.First(x => x is ScaleTransform);
+            var tt = (TranslateTransform)((TransformGroup)image.RenderTransform)
+                .Children.First(x => x is TranslateTransform);
+
+            double zoom = e.Delta > 0 ? .2 : -.2;
+                if (!(e.Delta > 0) && (st.ScaleX < .4 || st.ScaleY < .4))
+                    return;
+
+                Point relative = e.GetPosition(image);
+                double abosuluteX;
+                double abosuluteY;
+
+                abosuluteX = relative.X * st.ScaleX + tt.X;
+                abosuluteY = relative.Y * st.ScaleY + tt.Y;
+
+                st.ScaleX += zoom;
+                st.ScaleY += zoom;
+
+                tt.X = abosuluteX - relative.X * st.ScaleX;
+                tt.Y = abosuluteY - relative.Y * st.ScaleY;
+        }
+
+        private void image_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (image != null)
+            {
+                var tt = (TranslateTransform)((TransformGroup)image.RenderTransform)
+                    .Children.First(x => x is TranslateTransform);
+                start = e.GetPosition(this);
+                origin = new Point(tt.X, tt.Y);
+                this.Cursor = Cursors.Hand;
+                image.CaptureMouse();
+            }
+        }
+
+        private void image_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (image != null)
+            {
+                image.ReleaseMouseCapture();
+                this.Cursor = Cursors.Arrow;
+            }
+        }
+
+        void image_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            ResetImgTransform();
+        }
+
+        private void image_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (image != null)
+            {
+                if (image.IsMouseCaptured)
+                {
+                    var tt = (TranslateTransform)((TransformGroup)image.RenderTransform)
+                        .Children.First(x => x is TranslateTransform);
+                    Vector v = start - e.GetPosition(this);
+                    tt.X = origin.X - v.X;
+                    tt.Y = origin.Y - v.Y;
+                }
+            }
+        }
+
+        private void ResetImgTransform()
+        {
+            if (image != null)
+            {
+                // reset zoom
+                var st = (ScaleTransform)((TransformGroup)image.RenderTransform)
+                .Children.First(x => x is ScaleTransform);
+                st.ScaleX = 1.0;
+                st.ScaleY = 1.0;
+
+                // reset pan
+                var tt = (TranslateTransform)((TransformGroup)image.RenderTransform)
+                .Children.First(x => x is TranslateTransform);
+                tt.X = 0.0;
+                tt.Y = 0.0;
+            }
         }
     }
 }
