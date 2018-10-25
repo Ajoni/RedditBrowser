@@ -2,6 +2,8 @@
 using RedditSharp.Things;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Windows.Media.Imaging;
@@ -68,10 +70,12 @@ namespace Logic
                 return result;
             }
         }
-
+        /// <summary>
+        /// If the media cache is invalidated and we're loading posts which exist in cache
+        /// </summary>
         private void loadCurrentPostMedia()
         {
-            var img = new BitmapImage(new Uri(GetUri(), UriKind.Absolute));
+            var img = downloadImage(GetUri());
             cache.addElem(new MediaBitmapImage(img));
         }
 
@@ -116,9 +120,29 @@ namespace Logic
             posts.Add(newsetPost.Current);
 
             string source = newsetPost.Current.Url.ToString();
-            var img = new BitmapImage(new Uri(source, UriKind.Absolute));
+            // TODO: Different behaviours for different formats, e.g. .png vs .gif
+            BitmapImage img;
+            img = downloadImage(source);
             cache.addElem(new MediaBitmapImage(img));
         }
 
+        private static BitmapImage downloadImage(string source)
+        {
+            BitmapImage bitmap = new BitmapImage();
+            using (var wc = new WebClient())
+            {
+                byte[] bytes = wc.DownloadData(source);
+                using (var ms = new MemoryStream(bytes))
+                {
+                    bitmap.BeginInit();
+                    bitmap.StreamSource = ms;
+                    bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                    bitmap.EndInit();
+                    bitmap.Freeze();
+                }
+            }
+
+            return bitmap;
+        }
     }
 }

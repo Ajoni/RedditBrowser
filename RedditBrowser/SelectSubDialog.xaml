@@ -19,7 +19,7 @@
         </Grid.RowDefinitions>
 
                <Label Name="lblQuestion" Grid.Column="1">Enter Sub name:</Label>
-        <TextBox Name="txtAnswer" Grid.Column="1" Grid.Row="1" MinWidth="250">Animemes</TextBox>
+        <TextBox Name="txtAnswer" Grid.Column="1" Grid.Row="1" MinWidth="250">ProgrammerHumor</TextBox>
 
         <WrapPanel Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Right" Margin="0,15,0,0">
             <Button IsDefault="True" Name="btnDialogOk" Click="btnDialogOk_Click" MinWidth="60" Margin="0,0,10,0">_Ok</Button>

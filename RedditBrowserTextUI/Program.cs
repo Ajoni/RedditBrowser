@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terminal.Gui;
-using RedditBrowserLogic.Mock;
+using Logic;
 using System.Windows.Media.Imaging;
 using System.Drawing;
 using System.Threading;
@@ -167,13 +167,14 @@ namespace RedditBrowserTextUI
             // Get name from popupWindow.
             string subName = sharedResources.targetSubTextView.Text.ToString();
             // Pass sub name to manager.
+            
 
             // If a sub loads successfully.
-            if (true)
+            if (sharedResources.manager.SetSubreddit(subName))
             {
                 // Draw the frame.
                 sharedResources.mainWindow.Add(sharedResources.displayFrame.ContentFrame);
-                
+                sharedResources.manager.Next();
                 LoadItem();
                 sharedResources.itemToDisplay.Display();
             }
@@ -229,11 +230,11 @@ namespace RedditBrowserTextUI
         
         private static void LoadItem()
         {
-            Media media = sharedResources.manager.GetCurrent();
+            Media media = sharedResources.manager.GetCurrentMedia();
             if (media.GetType() == typeof(MediaBitmapImage))
             {
                 MediaBitmapImage image = (MediaBitmapImage)media;
-                sharedResources.itemToDisplay = new ASCIIImage(sharedResources.displayFrame, image.image);
+                sharedResources.itemToDisplay = new ASCIIImage(sharedResources.displayFrame, image.Image);
             }            
             else if (media.GetType() == typeof(MediaGIF))
             {

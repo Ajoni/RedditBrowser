@@ -1,4 +1,7 @@
 ﻿using Logic;
+using System;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Windows;
@@ -19,8 +22,8 @@ namespace RedditBrowser
         private Manager manager = new Manager(new string[]{".jpg", ".png"});
         
         //needed for image zoom and pan
-        private Point origin;
-        private Point start;
+        private System.Windows.Point origin;
+        private System.Windows.Point start;
 
         #endregion
 
@@ -33,8 +36,17 @@ namespace RedditBrowser
 
         private void loadAndShow()
         {
-            image.Source = ((MediaBitmapImage)manager.GetCurrentMedia()).Image;
+            imageControl.Source = ((MediaBitmapImage)manager.GetCurrentMedia()).Image; 
             titleLabel.Content = manager.GetTitle().ToString();
+        }
+
+        public byte[] ImageToBytes(System.Drawing.Image imageIn)
+        {
+            using (var ms = new MemoryStream())
+            {
+                imageIn.Save(ms, imageIn.RawFormat);
+                return ms.ToArray();
+            }
         }
 
         private void AddImageZoomAndPan()
@@ -44,8 +56,8 @@ namespace RedditBrowser
             group.Children.Add(st);
             TranslateTransform tt = new TranslateTransform();
             group.Children.Add(tt);
-            image.RenderTransform = group;
-            image.RenderTransformOrigin = new Point(0.0, 0.0);
+            imageControl.RenderTransform = group;
+            imageControl.RenderTransformOrigin = new System.Windows.Point(0.0, 0.0);
         }
 
         private void OpenSub_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -76,9 +88,9 @@ namespace RedditBrowser
 
         private void Download_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            if (image != null)
+            if (imageControl != null)
             {
-                e.CanExecute = image.Source != null;
+                e.CanExecute = imageControl.Source != null;
             }
             else
             {
@@ -96,7 +108,7 @@ namespace RedditBrowser
             if (dialog.ShowDialog() == true)
             {
                 var encoder = new JpegBitmapEncoder();
-                encoder.Frames.Add(BitmapFrame.Create((BitmapSource)image.Source));
+                encoder.Frames.Add(BitmapFrame.Create((BitmapSource)imageControl.Source));
                 using (FileStream stream = new FileStream(dialog.FileName, FileMode.Create))
                 {
                     encoder.Save(stream);
@@ -128,9 +140,9 @@ namespace RedditBrowser
 
         private void ImgLink_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            if (image != null)
+            if (imageControl != null)
             {
-                e.CanExecute = image.Source != null;
+                e.CanExecute = imageControl.Source != null;
             }
             else
             {
@@ -161,9 +173,9 @@ namespace RedditBrowser
 
         private void ResetImg_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            if (image != null)
+            if (imageControl != null)
             {
-                e.CanExecute = image.Source != null;
+                e.CanExecute = imageControl.Source != null;
             }
             else
             {
@@ -178,16 +190,16 @@ namespace RedditBrowser
 
         private void image_MouseWheel(object sender, MouseWheelEventArgs e)
         {
-            var st = (ScaleTransform)((TransformGroup)image.RenderTransform)
+            var st = (ScaleTransform)((TransformGroup)imageControl.RenderTransform)
                 .Children.First(x => x is ScaleTransform);
-            var tt = (TranslateTransform)((TransformGroup)image.RenderTransform)
+            var tt = (TranslateTransform)((TransformGroup)imageControl.RenderTransform)
                 .Children.First(x => x is TranslateTransform);
 
             double zoom = e.Delta > 0 ? .2 : -.2;
                 if (!(e.Delta > 0) && (st.ScaleX < .4 || st.ScaleY < .4))
                     return;
 
-                Point relative = e.GetPosition(image);
+                System.Windows.Point relative = e.GetPosition(imageControl);
                 double abosuluteX;
                 double abosuluteY;
 
@@ -203,22 +215,22 @@ namespace RedditBrowser
 
         private void image_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (image != null)
+            if (imageControl != null)
             {
-                var tt = (TranslateTransform)((TransformGroup)image.RenderTransform)
+                var tt = (TranslateTransform)((TransformGroup)imageControl.RenderTransform)
                     .Children.First(x => x is TranslateTransform);
                 start = e.GetPosition(this);
-                origin = new Point(tt.X, tt.Y);
+                origin = new System.Windows.Point(tt.X, tt.Y);
                 this.Cursor = Cursors.Hand;
-                image.CaptureMouse();
+                imageControl.CaptureMouse();
             }
         }
 
         private void image_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            if (image != null)
+            if (imageControl != null)
             {
-                image.ReleaseMouseCapture();
+                imageControl.ReleaseMouseCapture();
                 this.Cursor = Cursors.Arrow;
             }
         }
@@ -230,11 +242,11 @@ namespace RedditBrowser
 
         private void image_MouseMove(object sender, MouseEventArgs e)
         {
-            if (image != null)
+            if (imageControl != null)
             {
-                if (image.IsMouseCaptured)
+                if (imageControl.IsMouseCaptured)
                 {
-                    var tt = (TranslateTransform)((TransformGroup)image.RenderTransform)
+                    var tt = (TranslateTransform)((TransformGroup)imageControl.RenderTransform)
                         .Children.First(x => x is TranslateTransform);
                     Vector v = start - e.GetPosition(this);
                     tt.X = origin.X - v.X;
@@ -245,16 +257,16 @@ namespace RedditBrowser
 
         private void ResetImgTransform()
         {
-            if (image != null)
+            if (imageControl != null)
             {
                 // reset zoom
-                var st = (ScaleTransform)((TransformGroup)image.RenderTransform)
+                var st = (ScaleTransform)((TransformGroup)imageControl.RenderTransform)
                 .Children.First(x => x is ScaleTransform);
                 st.ScaleX = 1.0;
                 st.ScaleY = 1.0;
 
                 // reset pan
-                var tt = (TranslateTransform)((TransformGroup)image.RenderTransform)
+                var tt = (TranslateTransform)((TransformGroup)imageControl.RenderTransform)
                 .Children.First(x => x is TranslateTransform);
                 tt.X = 0.0;
                 tt.Y = 0.0;

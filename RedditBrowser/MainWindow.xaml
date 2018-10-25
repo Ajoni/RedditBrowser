@@ -48,7 +48,7 @@
         <Border x:Name="ImageBorder" ClipToBounds="True" DockPanel.Dock="Bottom" 
                 MouseWheel="image_MouseWheel" MouseLeftButtonDown="image_MouseLeftButtonDown" MouseLeftButtonUp="image_MouseLeftButtonUp" PreviewMouseRightButtonDown="image_PreviewMouseRightButtonDown" MouseMove="image_MouseMove"
                 >
-            <Image x:Name="image" />
+            <Image x:Name="imageControl" />
         </Border>
     </DockPanel>
 </Window>
