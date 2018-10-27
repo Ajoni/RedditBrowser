@@ -62,6 +62,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ASCIIImage.cs" />
     <Compile Include="DisplayFrame.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="IDisplayable.cs" />
