@@ -118,7 +118,7 @@ namespace RedditBrowser
 
         private void Prev_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = manager.canGetPrevious();
+            e.CanExecute = manager.CanGetPrevious();
         }
 
         private void Prev_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -129,7 +129,7 @@ namespace RedditBrowser
 
         private void Next_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = manager.canGetNext();
+            e.CanExecute = manager.CanGetNext();
         }
 
         private void Next_Executed(object sender, ExecutedRoutedEventArgs e)

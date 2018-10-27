@@ -78,31 +78,34 @@ namespace RedditBrowserTextUI
 
         private static void ViewComments_Clicked()
         {
-            Window win = new Window("Top comments");
-            win.Add(new Button(2, 4, "Back", false) { Clicked = Back_Clicked });
-            const int itemsCount = 3;
-            List<Comment> comments = sharedResources.manager.GetTopComments(itemsCount);
-
-            for (int i = 0; i < itemsCount; i++)
+            if (sharedResources.manager.SubredditIsOpen())
             {
-                Comment comment = comments[i];
+                Window win = new Window("Top comments");
+                win.Add(new Button(2, 4, "Back", false) { Clicked = Back_Clicked });
+                const int itemsCount = 3;
+                List<Comment> comments = sharedResources.manager.GetTopComments(itemsCount);
 
-                string commentContent = WebUtility.HtmlDecode(comment.Body);
-                List<string> fragmentedComment = getFragmentedString(commentContent, Console.WindowWidth - 24 - 1);
-
-                FrameView frame = new FrameView(new Rect(20, i * ((Console.WindowHeight - 2) / 3), Console.WindowWidth - 22, ((Console.WindowHeight - 2) / 3) - 1), comment.AuthorName);
-                
-                for (int j = 0; j < Math.Min(((Console.WindowHeight - 2) / 3) - 2, fragmentedComment.Count ); j++)
+                for (int i = 0; i < itemsCount; i++)
                 {
-                    frame.Add(
-                        new Label(0, j, fragmentedComment[j])
-                    );
+                    Comment comment = comments[i];
+
+                    string commentContent = WebUtility.HtmlDecode(comment.Body);
+                    List<string> fragmentedComment = getFragmentedString(commentContent, Console.WindowWidth - 24 - 1);
+
+                    FrameView frame = new FrameView(new Rect(20, i * ((Console.WindowHeight - 2) / 3), Console.WindowWidth - 22, ((Console.WindowHeight - 2) / 3) - 1), comment.AuthorName);
+
+                    for (int j = 0; j < Math.Min(((Console.WindowHeight - 2) / 3) - 2, fragmentedComment.Count); j++)
+                    {
+                        frame.Add(
+                            new Label(0, j, fragmentedComment[j])
+                        );
+                    }
+
+                    win.Add(frame);
                 }
 
-                win.Add(frame);
+                Application.Run(win);
             }
-
-            Application.Run(win);
         }
 
         private static List<string> getFragmentedString(string comment, int width)
@@ -135,14 +138,17 @@ namespace RedditBrowserTextUI
 
         private static void Save_Clicked()
         {
-            SaveDialog dialog = new SaveDialog("Save", "Please choose a directory");
-            dialog.DirectoryPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            Application.Run(dialog);
-
-            if (dialog.FileName != null)
+            if (sharedResources.manager.SubredditIsOpen())
             {
-                string saveName = dialog.FileName.ToString();
-                // TODO: save from the source.
+                SaveDialog dialog = new SaveDialog("Save", "Please choose a directory");
+                dialog.DirectoryPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                Application.Run(dialog);
+
+                if (dialog.FileName != null)
+                {
+                    string saveName = dialog.FileName.ToString();
+                    // TODO: save from the source.
+                }
             }
         }
 
@@ -150,13 +156,13 @@ namespace RedditBrowserTextUI
         {
             sharedResources.mainWindow.Remove(sharedResources.displayFrame.ContentFrame);
 
-            sharedResources.popupWindow = new Window(new Rect(22, 3, 50, 7), "Open Subreddit");
+            sharedResources.popupWindow = new Window(new Rect(22, 3, 50, 9), "Open Subreddit");
             sharedResources.targetSubTextView = new TextField(0, 2, 48, "ProgrammerHumor");
             sharedResources.popupWindow.Add(
                     new Label(0, 0, "Please input a sub"),
                     sharedResources.targetSubTextView,
-                    new Button(5, 4, "OK", false) { Clicked = LoadSubOK_Clicked },
-                    new Button(12, 4, "Cancel", true) { Clicked = LoadSubCancel_Clicked }
+                    new Button(5, 5, "OK", false) { Clicked = LoadSubOK_Clicked },
+                    new Button(12, 5, "Cancel", true) { Clicked = LoadSubCancel_Clicked }
             );
             Application.Refresh();
             Application.Run(sharedResources.popupWindow);
@@ -167,8 +173,6 @@ namespace RedditBrowserTextUI
             // Get name from popupWindow.
             string subName = sharedResources.targetSubTextView.Text.ToString();
             // Pass sub name to manager.
-            
-
             // If a sub loads successfully.
             if (sharedResources.manager.SetSubreddit(subName))
             {
@@ -185,13 +189,13 @@ namespace RedditBrowserTextUI
                 // as a dialog, perhaps?
             }
 
-            sharedResources.popupWindow.Running = false;
+            Application.RequestStop();
         }
 
         private static void LoadSubCancel_Clicked()
         {
             // If a manager has a sub loaded and open.
-            if (true)
+            if (sharedResources.manager.SubredditIsOpen())
             {
                 // Draw the frame.
                 sharedResources.mainWindow.Add(sharedResources.displayFrame.ContentFrame);
@@ -202,24 +206,39 @@ namespace RedditBrowserTextUI
 
         private static void Next_Clicked()
         {
-            sharedResources.manager.Next();
-            LoadItem();
-            sharedResources.itemToDisplay.Display();
+            if (sharedResources.manager.SubredditIsOpen())
+            {
+                if (sharedResources.manager.CanGetNext())
+                {
+                    sharedResources.manager.Next();
+                    LoadItem();
+                    sharedResources.itemToDisplay.Display();
+                }
+            }
         }
 
         private static void Previous_Clicked()
         {
-            sharedResources.manager.Previous();
-            LoadItem();
-            sharedResources.itemToDisplay.Display();
+            if (sharedResources.manager.SubredditIsOpen())
+            {
+                if (sharedResources.manager.CanGetPrevious())
+                {
+                    sharedResources.manager.Previous();
+                    LoadItem();
+                    sharedResources.itemToDisplay.Display();
+                }
+            }
         }
 
         private static void CopyLink_Clicked()
         {
-            Thread copyThread = new Thread(CopyLink);
-            copyThread.IsBackground = true;
-            copyThread.SetApartmentState(ApartmentState.STA);
-            copyThread.Start();            
+            if (sharedResources.manager.SubredditIsOpen())
+            {
+                Thread copyThread = new Thread(CopyLink);
+                copyThread.IsBackground = true;
+                copyThread.SetApartmentState(ApartmentState.STA);
+                copyThread.Start();
+            }
         }
 
         private static void CopyLink()
@@ -234,11 +253,6 @@ namespace RedditBrowserTextUI
             {
                 MediaBitmapImage image = (MediaBitmapImage)media;
                 sharedResources.itemToDisplay = new ASCIIImage(sharedResources.displayFrame, image.Image);
-            }            
-            else if (media.GetType() == typeof(MediaGIF))
-            {
-                MediaGIF gif = (MediaGIF)media;
-                sharedResources.itemToDisplay = new ASCIIGIF(sharedResources.displayFrame, gif.image);
             }
         }
     }
