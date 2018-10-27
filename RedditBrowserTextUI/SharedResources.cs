@@ -11,15 +11,15 @@ namespace RedditBrowserTextUI
     // A class for resources shared between Tasks
     class SharedResources
     {
-        public DisplayFrame displayFrame;
-        public Window mainWindow;
-        public Window popupWindow;
-        public TextField targetSubTextView;
+        public DisplayFrame DisplayFrame;
+        public Window MainWindow;
+        public Window PopupWindow;
+        public TextField TargetSubTextView;
+        public Label SubBeingLoaded;
+        public String SubredditName = "ProgrammerHumor";
 
-        public Task displayTask = null;
+        public Manager Manager;
 
-        public Manager manager;
-
-        public IDisplayable itemToDisplay = null;
+        public IDisplayable ItemToDisplay = null;
     }
 }
