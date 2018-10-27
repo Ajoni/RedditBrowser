@@ -29,6 +29,7 @@ namespace Logic
         public string GetSubreddit() { return subreddit.Name; }
         public bool canGetNext() { return newsetPost != null; }
         public bool canGetPrevious() { return postIndex >0; }
+        public bool subredditIsOpen() { return subreddit != null; }
 
         public bool LoadNewPost() {
             if(!FindNextPostWithSupportedFormat()) return false;

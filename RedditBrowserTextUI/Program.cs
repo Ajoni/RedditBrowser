@@ -9,6 +9,7 @@ using System.Windows.Media.Imaging;
 using System.Drawing;
 using System.Threading;
 using RedditSharp.Things;
+using System.Net;
 
 namespace RedditBrowserTextUI
 {
@@ -37,18 +38,7 @@ namespace RedditBrowserTextUI
             CreateTop();            
             
             AddControls();
-
-            Application.Iteration += Iteration_listener;
         }
-
-        private static void Iteration_listener(object sender, EventArgs e)
-        {
-            if (sharedResources.itemToDisplay != null)
-            {
-                sharedResources.itemToDisplay.Display();
-                Application.Refresh();
-            }
-        }        
 
         private static void CreateTop()
         {
@@ -76,21 +66,20 @@ namespace RedditBrowserTextUI
 
         private static void AddControls()
         {
-            // TODO: Add viewing comments
             sharedResources.mainWindow.Add(
-                                new Button(3, 2, "Load Sub") { Clicked = LoadSub_Clicked },
-                                new Button(3, 4, "Next") { Clicked = Next_Clicked },
-                                new Button(3, 6, "Previous") { Clicked = Previous_Clicked },
-                                new Button(3, 8, "Save") { Clicked = Save_Clicked },
-                                new Button(3, 10, "Copy Link") { Clicked = CopyLink_Clicked },
-                                new Button(3, 12, "View Comments") { Clicked = ViewComments_Clicked }
+                                new Button(2, 2, "Load Sub") { Clicked = LoadSub_Clicked },
+                                new Button(2, 4, "Next") { Clicked = Next_Clicked },
+                                new Button(2, 6, "Previous") { Clicked = Previous_Clicked },
+                                new Button(2, 8, "Save") { Clicked = Save_Clicked },
+                                new Button(2, 10, "Copy Link") { Clicked = CopyLink_Clicked },
+                                new Button(2, 12, "View Comments") { Clicked = ViewComments_Clicked }
                                 );
         }
 
         private static void ViewComments_Clicked()
         {
             Window win = new Window("Top comments");
-            win.Add(new Button(1, 1, "Back", false) { Clicked = Back_Clicked });
+            win.Add(new Button(2, 4, "Back", false) { Clicked = Back_Clicked });
             const int itemsCount = 3;
             List<Comment> comments = sharedResources.manager.GetTopComments(itemsCount);
 
@@ -98,7 +87,7 @@ namespace RedditBrowserTextUI
             {
                 Comment comment = comments[i];
 
-                string commentContent = comment.Body;
+                string commentContent = WebUtility.HtmlDecode(comment.Body);
                 List<string> fragmentedComment = getFragmentedString(commentContent, Console.WindowWidth - 24 - 1);
 
                 FrameView frame = new FrameView(new Rect(20, i * ((Console.WindowHeight - 2) / 3), Console.WindowWidth - 22, ((Console.WindowHeight - 2) / 3) - 1), comment.AuthorName);
@@ -122,8 +111,19 @@ namespace RedditBrowserTextUI
             for (int j=0; j<comment.Length; j++)
             {
                 int charsToAdd = Math.Min(width, comment.Length - j);
+                if (j < comment.IndexOf('\n', j) && comment.IndexOf('\n', j) < j + charsToAdd)
+                {
+                    charsToAdd = comment.IndexOf('\n', j) - j;
+                }
                 fragments.Add(comment.Substring(j, charsToAdd));
                 j += charsToAdd;
+                if (j < comment.Length - 1)
+                {
+                    while (comment[j + 1] == '\n')
+                    {
+                        j++;
+                    }
+                }
             }
             return fragments;
         }
@@ -224,8 +224,7 @@ namespace RedditBrowserTextUI
 
         private static void CopyLink()
         {
-            // Ask the manager for a link here
-            System.Windows.Clipboard.SetText("Hello, clipboard");
+            System.Windows.Clipboard.SetText(sharedResources.manager.GetUri());
         }
         
         private static void LoadItem()
