@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Cache.cs" />
+    <Compile Include="ISaveable.cs" />
     <Compile Include="MediaGif.cs" />
     <Compile Include="MediaBitmapImage.cs" />
     <Compile Include="Manager.cs" />

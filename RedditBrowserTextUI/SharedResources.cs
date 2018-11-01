@@ -21,5 +21,7 @@ namespace RedditBrowserTextUI
         public Manager Manager;
 
         public IDisplayable ItemToDisplay = null;
+
+        public bool CanSaveFlag = true;
     }
 }

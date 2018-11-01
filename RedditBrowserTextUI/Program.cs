@@ -10,6 +10,7 @@ using System.Drawing;
 using System.Threading;
 using RedditSharp.Things;
 using System.Net;
+using System.IO;
 
 namespace RedditBrowserTextUI
 {
@@ -114,10 +115,39 @@ namespace RedditBrowserTextUI
 
                 if (dialog.FileName != null)
                 {
-                    string saveName = dialog.FileName.ToString();
-                    // TODO: save from the source.
+                    sharedResources.CanSaveFlag = true;
+
+                    string folderName = dialog.DirectoryPath.ToString();
+                    string saveName = folderName + @"\" + dialog.FileName.ToString();                    
+                    if (File.Exists(saveName))
+                    {
+                        // Depending on the button pressed, CanSaveFlag will be modified
+                        Dialog overwriteDialog = new Dialog("Do you want to overwrite existing file?", 46, 6,
+                            new Button(10, 8,"OK", true) { Clicked = OverwriteOK_Clicked },
+                            new Button(20, 8, "Cancel", false) { Clicked = OverwriteCancel_Clicked }
+                            );
+                        Application.Run(overwriteDialog);
+                    }
+                    if (sharedResources.CanSaveFlag)
+                    {
+                        sharedResources.Manager.GetCurrentMedia().Save(saveName);
+                        Dialog saveSuccessful = new Dialog("Save successful", 21, 6, new Button("OK", true) { Clicked = DialogOK_Clicked });
+                        Application.Run(saveSuccessful);
+                    }
                 }
             }
+        }
+
+        private static void OverwriteCancel_Clicked()
+        {
+            sharedResources.CanSaveFlag = false;
+            Application.RequestStop();
+        }
+
+        private static void OverwriteOK_Clicked()
+        {
+            sharedResources.CanSaveFlag = true;
+            Application.RequestStop();
         }
 
         private static void LoadSub_Clicked()
@@ -125,15 +155,15 @@ namespace RedditBrowserTextUI
             sharedResources.MainWindow.Remove(sharedResources.DisplayFrame.ContentFrame);
             Application.Refresh();
 
-            sharedResources.PopupWindow = new Window(new Rect(22, 3, 50, 10), "Open Subreddit");
-            sharedResources.TargetSubTextView = new TextField(0, 2, 48, sharedResources.SubredditName);
-            sharedResources.SubBeingLoaded = new Label(2, 4, "                             ");
+            sharedResources.PopupWindow = new Window(new Rect(22, 3, 50, 11), null);
+            sharedResources.TargetSubTextView = new TextField(0, 3, 48, sharedResources.SubredditName);
+            sharedResources.SubBeingLoaded = new Label(0, 5, "                             ");
             sharedResources.PopupWindow.Add(
-                    new Label(0, 0, "Please input a sub"),
+                    new Label(0, 1, "Please input a sub"),
                     sharedResources.TargetSubTextView,
                     sharedResources.SubBeingLoaded,
-                    new Button(5, 6, "OK", true) { Clicked = LoadSubOK_Clicked },
-                    new Button(14, 6, "Cancel", false) { Clicked = LoadSubCancel_Clicked }
+                    new Button(12, 7, "OK", true) { Clicked = LoadSubOK_Clicked },
+                    new Button(21, 7, "Cancel", false) { Clicked = LoadSubCancel_Clicked }
             );
             Application.Run(sharedResources.PopupWindow);
         }
@@ -230,6 +260,9 @@ namespace RedditBrowserTextUI
                 copyThread.IsBackground = true;
                 copyThread.SetApartmentState(ApartmentState.STA);
                 copyThread.Start();
+
+                Dialog linkCopySuccessfulDialog = new Dialog("Link copied", 16, 6, new Button("OK", true) { Clicked = DialogOK_Clicked });
+                Application.Run(linkCopySuccessfulDialog);
             }
         }
 

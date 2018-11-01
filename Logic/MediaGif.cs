@@ -11,5 +11,9 @@ namespace Logic
             this.image = image;
         }
 
+        public override void Save(string path)
+        {
+            image.Save(path);
+        }
     }
 }
