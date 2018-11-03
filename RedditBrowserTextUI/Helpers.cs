@@ -51,5 +51,29 @@ namespace RedditBrowserTextUI
         }
 
         private static string[] _AsciiChars = { "#", "#", "@", "%", "=", "+", "*", ":", "-", ".", " " };
+
+        public static List<string> GetFragmentedString(string comment, int width)
+        {
+            List<string> fragments = new List<string>();
+            for (int j = 0; j < comment.Length; j++)
+            {
+                int charsToAdd = Math.Min(width, comment.Length - j);
+                if (j < comment.IndexOf('\n', j) && comment.IndexOf('\n', j) < j + charsToAdd)
+                {
+                    charsToAdd = comment.IndexOf('\n', j) - j;
+                }
+                fragments.Add(comment.Substring(j, charsToAdd));
+                j += charsToAdd;
+                if (j < comment.Length - 1)
+                {
+                    while (comment[j + 1] == '\n')
+                    {
+                        j++;
+                    }
+                }
+            }
+            return fragments;
+        }
+
     }
 }

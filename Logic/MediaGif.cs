@@ -13,6 +13,13 @@ namespace Logic
 
         public override void Save(string path)
         {
+            string format = GetFormat(path);
+
+            if (format != ".gif")
+            {
+                path += ".gif";
+            }
+
             image.Save(path);
         }
     }

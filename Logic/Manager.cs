@@ -39,13 +39,18 @@ namespace Logic
 
         public bool SetSubreddit(string subredditName)
         {
-            try {
+            try
+            {
+                // Media cache invalidation.
+                cache.invalidateCache();
+                InvalidatePostsCache();
+
                 subreddit = new Reddit().GetSubreddit($"/r/{subredditName}");
-                if(subreddit == null) { return false; }
+                if (subreddit == null) { return false; }
                 var posts = subreddit.Posts;
                 newsetPost = posts.GetEnumerator();
             }
-            catch(WebException e) { return false; }
+            catch (WebException e) { return false; }
             
             return true;
         }
@@ -144,6 +149,12 @@ namespace Logic
             }
 
             return bitmap;
+        }
+
+        private void InvalidatePostsCache()
+        {
+            this.posts.Clear();
+            postIndex = -1;
         }
     }
 }

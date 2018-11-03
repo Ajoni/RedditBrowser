@@ -34,29 +34,11 @@ namespace Logic
                     break;
             }
             encoder.Frames.Add(BitmapFrame.Create(Image));
-
-            // TODO: Find what happens when path already exists
+            
             using (var fileStream = new System.IO.FileStream(path, System.IO.FileMode.Create))
             {
                 encoder.Save(fileStream);
             }
-        }
-
-        // Will return format or empty string or gibberish
-        private static string GetFormat(string path)
-        {
-            string format;
-            int lastDotIndex = path.LastIndexOf('.');
-            if (lastDotIndex != -1)
-            {
-                format = path.Substring(lastDotIndex);
-            }
-            else
-            {
-                format = string.Empty;
-            }
-
-            return format;
         }
     }
 
