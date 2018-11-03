@@ -195,6 +195,7 @@ namespace RedditBrowserTextUI
             }
         }
         
+
         private static void LoadSubOK_Clicked()
         {
             sharedResources.SubBeingLoaded.Text = "Subreddit is being loaded...";
@@ -207,13 +208,22 @@ namespace RedditBrowserTextUI
             if (sharedResources.Manager.SetSubreddit(subName))
             {
                 sharedResources.MainWindow.Add(sharedResources.DisplayFrame.ContentFrame);
-                sharedResources.Manager.Next();
-                LoadItem();
-                sharedResources.ItemToDisplay.Display();
+                if (sharedResources.Manager.Next())
+                {
+                    LoadItem();
+                    sharedResources.ItemToDisplay.Display();
+                } 
+                else 
+                {
+                    sharedResources.Manager.UnsetSubreddit();
+                    sharedResources.MainWindow.Remove(sharedResources.DisplayFrame.ContentFrame);
+                    Dialog loadingSubFailed = new Dialog("Failed to load an image, try a different subreddit", 60, 6, new Button("Back", true) { Clicked = Back_Clicked });
+                    Application.Run(loadingSubFailed);
+                }
             }
             else
             {
-                Dialog loadingSubFailed = new Dialog("Given subreddit failed to load!", 50, 6, new Button("Back", true) { Clicked = DialogOK_Clicked });
+                Dialog loadingSubFailed = new Dialog("Given subreddit failed to load!", 50, 6, new Button("Back", true) { Clicked = Back_Clicked });
                 Application.Run(loadingSubFailed);
             }
 

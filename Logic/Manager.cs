@@ -41,7 +41,6 @@ namespace Logic
         {
             try
             {
-                // Media cache invalidation.
                 cache.invalidateCache();
                 InvalidatePostsCache();
 
@@ -53,6 +52,12 @@ namespace Logic
             catch (WebException e) { return false; }
             
             return true;
+        }
+
+        public void UnsetSubreddit()
+        {
+            subreddit = null;
+            newsetPost = null;
         }
 
         public bool Next()
