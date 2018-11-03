@@ -79,10 +79,6 @@
       <Project>{059d730f-b88a-4518-b4a9-fb7094d8b2d9}</Project>
       <Name>Logic</Name>
     </ProjectReference>
-    <ProjectReference Include="..\RedditBrowserLogic\RedditBrowserLogicMock.csproj">
-      <Project>{7dffe8e2-80fc-434c-81fe-52933b7c5ee2}</Project>
-      <Name>RedditBrowserLogicMock</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

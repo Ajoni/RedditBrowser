@@ -129,6 +129,12 @@ namespace RedditBrowserTextUI
                     sharedResources.CanSaveFlag = true;
 
                     string folderName = dialog.DirectoryPath.ToString();
+                    if (dialog.FileName.ToString() == String.Empty)
+                    {
+                        Dialog saveSuccessful = new Dialog("Please choose a non-empty name", 40, 6, new Button("OK", true) { Clicked = DialogOK_Clicked });
+                        Application.Run(saveSuccessful);
+                        return;
+                    }
                     string saveName = folderName + @"\" + dialog.FileName.ToString();
                     if (File.Exists(saveName))
                     {
