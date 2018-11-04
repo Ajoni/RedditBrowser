@@ -1,5 +1,6 @@
 ﻿using Logic;
 using System;
+using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -19,11 +20,14 @@ namespace RedditBrowser
     {
         #region fields
         //handles reddit api and image cache
-        private Manager manager = new Manager(new string[]{".jpg", ".png"});
+        private Manager manager = new Manager(new string[]{".jpg", ".png"}, true);
         
         //needed for image zoom and pan
         private System.Windows.Point origin;
         private System.Windows.Point start;
+
+        //Dispalys comments for current post
+        CommentsWindow commentsWindow = new CommentsWindow();
 
         #endregion
 
@@ -188,6 +192,17 @@ namespace RedditBrowser
             ResetImgTransform();
         }
 
+        private void ShowComments_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = manager.SubredditIsOpen();
+        }
+
+        private void ShowComments_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            commentsWindow.SetData(manager.GetComments());
+            commentsWindow.Show();
+        }
+
         private void image_MouseWheel(object sender, MouseWheelEventArgs e)
         {
             var st = (ScaleTransform)((TransformGroup)imageControl.RenderTransform)
@@ -272,5 +287,11 @@ namespace RedditBrowser
                 tt.Y = 0.0;
             }
         }
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            commentsWindow.Close();
+            base.OnClosing(e);
+        }
     }
+
 }

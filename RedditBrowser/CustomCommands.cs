@@ -83,5 +83,16 @@ namespace RedditBrowser
             }
         );
 
+        public static readonly RoutedUICommand ShowComments = new RoutedUICommand
+        (
+            "ShowComments",
+            "ShowComments",
+            typeof(CustomCommands),
+            new InputGestureCollection()
+            {
+                                                    new KeyGesture(Key.C, ModifierKeys.Alt)
+            }
+        );
+
     }
 }

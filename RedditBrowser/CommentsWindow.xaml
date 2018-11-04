@@ -1,0 +1,25 @@
+﻿<Window x:Name="mainWindow" x:Class="RedditBrowser.CommentsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RedditBrowser"
+        xmlns:things="clr-namespace:RedditSharp.Things;assembly=RedditSharp"
+        mc:Ignorable="d"
+        Title="CommentsWindow" Height="450" Width="800">
+    <DockPanel >
+        <TreeView Name="CommnetsTrV" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <TreeView.ItemTemplate>
+                <HierarchicalDataTemplate DataType = "{x:Type things:Comment}" ItemsSource="{Binding Path=Comments}">
+                    <WrapPanel Orientation="Horizontal">
+                        <TextBlock TextWrapping="Wrap" Text="{Binding Path=Score}" FontStyle="Italic" />
+                        <TextBlock  Width="5"/>
+                        <TextBlock TextWrapping="Wrap" Text="{Binding Path=AuthorName}" FontWeight="Bold"/>
+                        <TextBlock Text=": " Width="15"/>
+                        <TextBlock x:Name="CommentBody" TextWrapping="Wrap" Text="{Binding Path=Body}" SizeChanged="CommentBody_SizeChanged" />
+                    </WrapPanel>
+                </HierarchicalDataTemplate>
+            </TreeView.ItemTemplate>
+        </TreeView>
+    </DockPanel>
+</Window>

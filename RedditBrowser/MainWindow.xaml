@@ -15,6 +15,7 @@
         <CommandBinding Command="local:CustomCommands.ImgLink" CanExecute="ImgLink_CanExecute" Executed="ImgLink_Executed" />
         <CommandBinding Command="local:CustomCommands.ShowButtons" CanExecute="ShowButtons_CanExecute" Executed="ShowButtons_Executed" />
         <CommandBinding Command="local:CustomCommands.ResetImg" CanExecute="ResetImg_CanExecute" Executed="ResetImg_Executed" />
+        <CommandBinding Command="local:CustomCommands.ShowComments" CanExecute="ShowComments_CanExecute" Executed="ShowComments_Executed" />
     </Window.CommandBindings>
 
     <Window.Resources>
@@ -39,12 +40,13 @@
         <WrapPanel x:Name="ButtonsPanel" DockPanel.Dock="Top" Margin="0">
             <Button x:Name="SelectBtn" Content="Select Sub" Command="local:CustomCommands.OpenSub" Width="75" Style="{StaticResource ButtonStyle}"/>
             <Button x:Name="DnldBtn" Content="Download" Command="local:CustomCommands.Download" Width="75" Style="{StaticResource ButtonStyle}"/>
-            <Button x:Name="PrevBtn" Content="Prev" Command="local:CustomCommands.Prev" Width="75" Style="{StaticResource ButtonStyle}"/>
-            <Button x:Name="NextBtn" Content="Next" Command="local:CustomCommands.Next" Width="75" Style="{StaticResource ButtonStyle}"/>
             <Button x:Name="imgLinkBtn" Content="Img link" Command="local:CustomCommands.ImgLink" Width="75" Style="{StaticResource ButtonStyle}"/>
             <Button x:Name="ResetBtn" Content="Reset img" Command="local:CustomCommands.ResetImg" Width="75" Style="{StaticResource ButtonStyle}"/>
+            <Button x:Name="CommentsBtn" Content="Show comments" Command="local:CustomCommands.ShowComments" Width="75" Style="{StaticResource ButtonStyle}"/>
             <Label x:Name="titleLabel" Content=""/>
         </WrapPanel>
+        <Button DockPanel.Dock="Left" x:Name="PrevBtn" Content="&lt;" Command="local:CustomCommands.Prev" Width="20" Style="{StaticResource ButtonStyle}"/>
+        <Button DockPanel.Dock="Right" x:Name="NextBtn" Content="&gt;" Command="local:CustomCommands.Next" Width="20" Style="{StaticResource ButtonStyle}"/>
         <Border x:Name="ImageBorder" ClipToBounds="True" DockPanel.Dock="Bottom" 
                 MouseWheel="image_MouseWheel" MouseLeftButtonDown="image_MouseLeftButtonDown" MouseLeftButtonUp="image_MouseLeftButtonUp" PreviewMouseRightButtonDown="image_PreviewMouseRightButtonDown" MouseMove="image_MouseMove"
                 >

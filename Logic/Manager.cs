@@ -16,11 +16,14 @@ namespace Logic
         private Subreddit subreddit;
         private List<Post> posts = new List<Post>();
         private int postIndex = -1;
+        private bool lateMediaInit = false;
         private string[] supportedFormats;
         private IEnumerator<Post> newsetPost { get; set; }
 
         public Manager(string[] supportedFormats) { this.supportedFormats = supportedFormats; }
-        public List<Comment> GetTopComments(int amount) { return posts[postIndex].Comments.Take(amount).ToList(); }
+        public Manager(string[] supportedFormats, bool lateMediaInit) { this.supportedFormats = supportedFormats; this.lateMediaInit = lateMediaInit; }
+        public List<Comment> GetTopComments(int amount) { return posts[postIndex].Comments.OrderByDescending(x => x.Score).Take(amount).ToList(); }
+        public List<Comment> GetComments() { return posts[postIndex].Comments.OrderByDescending(x => x.Score).ToList(); }
         public Media GetCurrentMedia() { return cache.GetCurrent(); }
         public Post GetCurrentPost() { return posts[postIndex]; }
         public string GetTitle() { return posts[postIndex].Title; }
@@ -137,9 +140,14 @@ namespace Logic
             cache.addElem(new MediaBitmapImage(img));
         }
 
-        private static BitmapImage downloadImage(string source)
+        private BitmapImage downloadImage(string source)
         {
+            // let user handle init
+            if (this.lateMediaInit)
+                return new BitmapImage(new Uri(source, UriKind.Absolute));
+
             BitmapImage bitmap = new BitmapImage();
+
             using (var wc = new WebClient())
             {
                 byte[] bytes = wc.DownloadData(source);
