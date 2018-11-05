@@ -42,7 +42,7 @@
             <Button x:Name="DnldBtn" Content="Download" Command="local:CustomCommands.Download" Width="75" Style="{StaticResource ButtonStyle}"/>
             <Button x:Name="imgLinkBtn" Content="Img link" Command="local:CustomCommands.ImgLink" Width="75" Style="{StaticResource ButtonStyle}"/>
             <Button x:Name="ResetBtn" Content="Reset img" Command="local:CustomCommands.ResetImg" Width="75" Style="{StaticResource ButtonStyle}"/>
-            <Button x:Name="CommentsBtn" Content="Show comments" Command="local:CustomCommands.ShowComments" Width="75" Style="{StaticResource ButtonStyle}"/>
+            <Button x:Name="CommentsBtn" Content="Show comments" Command="local:CustomCommands.ShowComments" Width="100" Style="{StaticResource ButtonStyle}" HorizontalContentAlignment="Stretch"/>
             <Label x:Name="titleLabel" Content=""/>
         </WrapPanel>
         <Button DockPanel.Dock="Left" x:Name="PrevBtn" Content="&lt;" Command="local:CustomCommands.Prev" Width="20" Style="{StaticResource ButtonStyle}"/>

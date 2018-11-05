@@ -32,10 +32,13 @@ namespace RedditBrowser
             CommnetsTrV.ItemsSource = mComments;
         }
 
-        protected override void OnClosing(CancelEventArgs e)
+        public void exit(bool exit)
         {
-            e.Cancel = true;
-            this.Hide();
+            if (exit)
+                this.Close();
+            else
+                this.Hide();
+
         }
 
     }

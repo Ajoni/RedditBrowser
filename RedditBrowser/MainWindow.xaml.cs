@@ -289,9 +289,10 @@ namespace RedditBrowser
         }
         protected override void OnClosing(CancelEventArgs e)
         {
-            commentsWindow.Close();
+            commentsWindow.exit(true);
             base.OnClosing(e);
         }
+
     }
 
 }

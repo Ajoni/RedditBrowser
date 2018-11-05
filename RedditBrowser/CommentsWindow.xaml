@@ -7,7 +7,7 @@
         xmlns:things="clr-namespace:RedditSharp.Things;assembly=RedditSharp"
         mc:Ignorable="d"
         Title="CommentsWindow" Height="450" Width="800">
-    <DockPanel >
+    <WrapPanel >
         <TreeView Name="CommnetsTrV" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate DataType = "{x:Type things:Comment}" ItemsSource="{Binding Path=Comments}">
@@ -16,10 +16,10 @@
                         <TextBlock  Width="5"/>
                         <TextBlock TextWrapping="Wrap" Text="{Binding Path=AuthorName}" FontWeight="Bold"/>
                         <TextBlock Text=": " Width="15"/>
-                        <TextBlock x:Name="CommentBody" TextWrapping="Wrap" Text="{Binding Path=Body}" SizeChanged="CommentBody_SizeChanged" />
+                        <TextBlock x:Name="CommentBody" TextWrapping="Wrap" Text="{Binding Path=Body}"/>
                     </WrapPanel>
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
         </TreeView>
-    </DockPanel>
+    </WrapPanel>
 </Window>
