@@ -29,10 +29,10 @@
         <Menu DockPanel.Dock="Top">
             <MenuItem x:Name="MenuTab" Header="Menu">
                 <MenuItem x:Name="MenuSelect" Header="Select sub" Command="local:CustomCommands.OpenSub"/>
-                <MenuItem x:Name="MenuDownload" Header="Download current" IsEnabled="False" Command="local:CustomCommands.Download"/>
-                <MenuItem x:Name="MenuPrev" Header="Prev" IsEnabled="False" Command="local:CustomCommands.Prev"/>
-                <MenuItem x:Name="MenuNext" Header="Next" IsEnabled="False" Command="local:CustomCommands.Next"/>
-                <MenuItem x:Name="MenuImgLink" Header="Image link" IsEnabled="False" Command="local:CustomCommands.ImgLink"/>
+                <MenuItem x:Name="MenuDownload" Header="Download current" Command="local:CustomCommands.Download"/>
+                <MenuItem x:Name="MenuPrev" Header="Prev" Command="local:CustomCommands.Prev"/>
+                <MenuItem x:Name="MenuNext" Header="Next" Command="local:CustomCommands.Next"/>
+                <MenuItem x:Name="MenuImgLink" Header="Image link" Command="local:CustomCommands.ImgLink"/>
                 <MenuItem x:Name="MenuShowBtns" Header="Show buttons" IsCheckable="True" Command="local:CustomCommands.ShowButtons"/>
                 <MenuItem x:Name="MenuResetImgBtns" Header="Reset img" IsCheckable="True" Command="local:CustomCommands.ResetImg"/>
             </MenuItem>
