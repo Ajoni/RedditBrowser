@@ -178,7 +178,7 @@ namespace RedditBrowserTextUI
                 const int itemsCount = 3;
                 List<Comment> comments = sharedResources.Manager.GetTopComments(itemsCount);
 
-                for (int i = 0; i < itemsCount; i++)
+                for (int i = 0; i < comments.Count; i++)
                 {
                     Comment comment = comments[i];
 
