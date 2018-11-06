@@ -6,6 +6,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 
 namespace Logic
@@ -52,9 +53,32 @@ namespace Logic
                 var posts = subreddit.Posts;
                 newsetPost = posts.GetEnumerator();
             }
-            catch (WebException e) { return false; }
+            catch (WebException ) { return false; }
             
             return true;
+        }
+
+        public async Task<bool> SetSubredditAsync(string subredditName)
+        {
+            bool res;
+            try
+            {
+               res =  await Task.Run(() =>
+                {
+                    bool result = true;
+                    cache.invalidateCache();
+                    InvalidatePostsCache();
+
+                    subreddit = new Reddit().GetSubreddit($"/r/{subredditName}");
+                    if (subreddit == null) { result =  false; }
+                    newsetPost = subreddit.Posts.GetEnumerator();
+
+                    return result;
+                });
+            }
+            catch (WebException ) { return false; }
+
+            return res;
         }
 
         public void UnsetSubreddit()

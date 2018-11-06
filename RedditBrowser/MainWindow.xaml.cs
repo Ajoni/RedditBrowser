@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -69,23 +70,26 @@ namespace RedditBrowser
             e.CanExecute = true;
         }
 
-        private void OpenSub_Executed(object sender, ExecutedRoutedEventArgs e)
+        private async void OpenSub_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             SelectSubDialog dialog = new SelectSubDialog();
             dialog.ShowDialog();
             if (dialog.DialogResult != true)
             {
-                // TODO: Add some sort of msg to gui here.
+                MessageBox.Show($"Couldn't get entered subreddit name. Did you use some magical characters?");
                 return;
             }
 
             string subredditName = dialog.subName;
-            var result = manager.SetSubreddit(subredditName);
+            titleLabel.Content = "Loading";
+            var result = await manager.SetSubredditAsync(subredditName);
             if (!result)
             {
-                MessageBox.Show($"Couldnt load selected reddit: {subredditName}.");
+                MessageBox.Show($"Couldn't load selected reddit: {subredditName}.");
                 return;
             }
+
+            //await Task.Run(() => manager.Next());
             manager.Next();
             loadAndShow();
         }
