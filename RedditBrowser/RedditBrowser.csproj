@@ -69,6 +69,7 @@
     <Compile Include="SelectSubDialog.xaml.cs">
       <DependentUpon>SelectSubDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WidthOffsetConverter.cs" />
     <Page Include="CommentsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

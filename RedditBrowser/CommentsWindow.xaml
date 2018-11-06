@@ -7,17 +7,36 @@
         xmlns:things="clr-namespace:RedditSharp.Things;assembly=RedditSharp"
         mc:Ignorable="d"
         Title="CommentsWindow" Height="450" Width="800">
+
+    <Window.Resources>
+        <local:WidthOffsetConverter x:Key="WidthOffsetConverter" />
+    </Window.Resources>
+
     <WrapPanel >
         <TreeView Name="CommnetsTrV" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate DataType = "{x:Type things:Comment}" ItemsSource="{Binding Path=Comments}">
-                    <WrapPanel Orientation="Horizontal">
-                        <TextBlock TextWrapping="Wrap" Text="{Binding Path=Score}" FontStyle="Italic" />
-                        <TextBlock  Width="5"/>
-                        <TextBlock TextWrapping="Wrap" Text="{Binding Path=AuthorName}" FontWeight="Bold"/>
-                        <TextBlock Text=": " Width="15"/>
-                        <TextBlock x:Name="CommentBody" TextWrapping="Wrap" Text="{Binding Path=Body}"/>
-                    </WrapPanel>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="{Binding
+                            ElementName=CommnetsTrV, Path=ActualWidth, Converter={StaticResource WidthOffsetConverter} }" />
+                        </Grid.ColumnDefinitions>
+                        <WrapPanel Grid.Row="0" Grid.Column="0">
+                            <TextBlock  TextWrapping="Wrap" Text="{Binding Path=Score}" FontStyle="Italic" />
+                            <TextBlock Width="20"/>
+                            <TextBlock TextWrapping="Wrap" Text="{Binding Path=AuthorName}" FontWeight="Bold"/>
+                            <TextBlock Text=": "/>
+                        </WrapPanel>
+                        <TextBlock Grid.Row="1"  x:Name="CommentBody" TextWrapping="Wrap" Text="{Binding Path=Body}" Width="{Binding
+                            ElementName=CommnetsTrV, Path=ActualWidth, Converter={StaticResource WidthOffsetConverter} }"/>
+                        <TextBlock Grid.Row="2"/>
+                    </Grid>
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
         </TreeView>

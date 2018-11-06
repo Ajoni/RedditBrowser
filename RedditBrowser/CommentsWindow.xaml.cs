@@ -1,8 +1,6 @@
 ﻿using RedditSharp.Things;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Windows;
-using System.Windows.Controls;
 
 namespace RedditBrowser
 {
