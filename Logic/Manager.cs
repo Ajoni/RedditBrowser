@@ -61,10 +61,11 @@ namespace Logic
         public async Task<bool> SetSubredditAsync(string subredditName)
         {
             bool res;
-            try
+            res =  await Task.Run(() =>
             {
-               res =  await Task.Run(() =>
+                try
                 {
+
                     bool result = true;
                     cache.invalidateCache();
                     InvalidatePostsCache();
@@ -74,9 +75,10 @@ namespace Logic
                     newsetPost = subreddit.Posts.GetEnumerator();
 
                     return result;
-                });
-            }
-            catch (WebException ) { return false; }
+                }
+                    catch (WebException) { return false; }
+            });
+
 
             return res;
         }

@@ -1,5 +1,7 @@
 ﻿using Logic;
+using RedditSharp.Things;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -28,7 +30,7 @@ namespace RedditBrowser
         private System.Windows.Point start;
 
         //Dispalys comments for current post
-        CommentsWindow commentsWindow = new CommentsWindow();
+        CommentsWindow commentsWindow;
 
         #endregion
 
@@ -81,11 +83,12 @@ namespace RedditBrowser
             }
 
             string subredditName = dialog.subName;
-            titleLabel.Content = "Loading";
+            titleLabel.Content = "Loading...";
             var result = await manager.SetSubredditAsync(subredditName);
             if (!result)
             {
                 MessageBox.Show($"Couldn't load selected reddit: {subredditName}.");
+                titleLabel.Content = "";
                 return;
             }
 
@@ -129,10 +132,16 @@ namespace RedditBrowser
             e.CanExecute = manager.CanGetPrevious();
         }
 
-        private void Prev_Executed(object sender, ExecutedRoutedEventArgs e)
+        private async void Prev_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             manager.Previous();
             loadAndShow();
+            if (commentsWindow?.Visibility == Visibility.Visible)
+            {
+                List<Comment> comments;
+                comments = await Task.Run(() => manager.GetComments());
+                commentsWindow.SetData(comments);
+            }
         }
 
         private void Next_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -140,10 +149,16 @@ namespace RedditBrowser
             e.CanExecute = manager.CanGetNext();
         }
 
-        private void Next_Executed(object sender, ExecutedRoutedEventArgs e)
+        private async void Next_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             manager.Next();
-            loadAndShow();
+            loadAndShow();            
+            if (commentsWindow?.Visibility == Visibility.Visible)
+            {
+                List<Comment> comments;
+                comments = await Task.Run(() => manager.GetComments());
+                commentsWindow.SetData(comments);
+            }
         }
 
         private void ImgLink_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -201,9 +216,13 @@ namespace RedditBrowser
             e.CanExecute = manager.SubredditIsOpen();
         }
 
-        private void ShowComments_Executed(object sender, ExecutedRoutedEventArgs e)
+        private async void ShowComments_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            commentsWindow.SetData(manager.GetComments());
+            commentsWindow?.Close();
+            List<Comment> comments;
+            comments = await Task.Run(() => manager.GetComments());
+            commentsWindow = new CommentsWindow();
+            commentsWindow.SetData(comments);
             commentsWindow.Show();
         }
 
