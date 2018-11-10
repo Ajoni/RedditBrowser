@@ -92,9 +92,9 @@ namespace RedditBrowser
                 return;
             }
 
-            //await Task.Run(() => manager.Next());
             manager.Next();
             loadAndShow();
+            commentsWindow?.Close();
         }
 
         private void Download_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -220,9 +220,9 @@ namespace RedditBrowser
         {
             commentsWindow?.Close();
             List<Comment> comments;
-            comments = await Task.Run(() => manager.GetComments());
+            //comments = await Task.Run(() => manager.GetComments());
             commentsWindow = new CommentsWindow();
-            commentsWindow.SetData(comments);
+            commentsWindow.SetData(manager.GetComments());
             commentsWindow.Show();
         }
 
@@ -312,7 +312,7 @@ namespace RedditBrowser
         }
         protected override void OnClosing(CancelEventArgs e)
         {
-            commentsWindow.exit(true);
+            commentsWindow?.exit(true);
             base.OnClosing(e);
         }
 

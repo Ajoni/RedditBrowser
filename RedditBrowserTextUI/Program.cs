@@ -121,7 +121,7 @@ namespace RedditBrowserTextUI
             if (sharedResources.Manager.SubredditIsOpen())
             {
                 SaveDialog dialog = new SaveDialog("Save", "Please choose a directory");
-                dialog.DirectoryPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                dialog.DirectoryPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop)+"\\imgs";
                 Application.Run(dialog);
 
                 if (dialog.FileName != null)
