@@ -25,7 +25,105 @@
         </Style>
     </Window.Resources>
 
-    <DockPanel>
+    <Grid>
+				<Grid.RowDefinitions>
+						<RowDefinition Height="auto"/>
+						<RowDefinition Height="auto"/>
+						<RowDefinition Height="*"/>
+				</Grid.RowDefinitions>
+
+				<Grid Grid.Row="0" x:Name="gridHeader">
+						<Grid.RowDefinitions>
+								<RowDefinition Height="auto"/>
+								<RowDefinition Height="auto"/>
+								<RowDefinition Height="*"/>
+						</Grid.RowDefinitions>
+						<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="auto"/>
+								<ColumnDefinition Width="auto"/>
+						</Grid.ColumnDefinitions>
+
+						<Image Grid.Column="0" x:Name="imageHeader" Source="{Binding Subreddit.HeaderImage}"/>
+						<ComboBox Grid.Column="1" x:Name="comboboxSubReddit"/>
+				</Grid>
+
+				<Grid Grid.Row="1" x:Name="gridPosts">
+						<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="*"/>
+								<ColumnDefinition Width="auto"/>
+						</Grid.ColumnDefinitions>
+						<ListBox Grid.Column="0" x:Name="listboxPosts">
+								<ListBox.ItemTemplate>
+										<DataTemplate>
+												<Grid>
+														<Grid.ColumnDefinitions>
+																<ColumnDefinition Width="auto"/>
+																<ColumnDefinition Width="auto"/>
+																<ColumnDefinition Width="*"/>
+														</Grid.ColumnDefinitions>
+														<Grid Grid.Column="0">
+																<Grid.RowDefinitions>
+																		<RowDefinition Height="auto"/>
+																		<RowDefinition Height="*"/>
+																		<RowDefinition Height="auto"/>
+																</Grid.RowDefinitions>
+																<Button Grid.Row="0" x:Name="buttonUpVote"/>
+																<TextBlock Grid.Row="1" x:Name="textblockVotes"/>
+																<Button Grid.Row="2" x:Name="buttonDownVote"/>
+														</Grid>
+														<Image Grid.Column="1" x:Name="imagePost"/>
+														<Grid Grid.Column="2">
+																<Grid.RowDefinitions>
+																		<RowDefinition Height="auto"/>
+																		<RowDefinition Height="auto"/>
+																		<RowDefinition Height="*"/>
+																</Grid.RowDefinitions>
+																<Grid Grid.Row="0">
+																		<Grid.ColumnDefinitions>
+																				<ColumnDefinition Width="auto"/>
+																				<ColumnDefinition Width="auto"/>
+																		</Grid.ColumnDefinitions>
+																		<TextBlock Grid.Column="0" x:Name="textblockTitle"/>
+																		<TextBlock Grid.Column="1" x:Name="textblockLink"/>
+																</Grid>
+																<Grid Grid.Row="1">
+																		<TextBlock Text="Posted by "/>
+																		<TextBlock x:Name="textblockPosterUsername"/>
+																		<TextBlock x:Name="textblockPostDate"/>
+																</Grid>
+																<Grid Grid.Row="2">
+																		<!--machnij tu przyciski-->
+																</Grid>
+														</Grid>
+												</Grid>
+										</DataTemplate>
+								</ListBox.ItemTemplate>
+						</ListBox>
+								<Grid Grid.Column="1" x:Name="gridRightSidebar">
+								
+						</Grid>
+				</Grid>
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
         <Menu DockPanel.Dock="Top">
             <MenuItem x:Name="MenuTab" Header="Menu">
                 <MenuItem x:Name="MenuSelect" Header="Select sub" Command="local:CustomCommands.OpenSub"/>
@@ -54,5 +152,5 @@
                 >
             <Image x:Name="imageControl" />
         </Border>
-    </DockPanel>
+    </Grid>
 </Window>

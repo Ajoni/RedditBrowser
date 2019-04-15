@@ -65,7 +65,6 @@ namespace Logic
             {
                 try
                 {
-
                     bool result = true;
                     cache.invalidateCache();
                     InvalidatePostsCache();
@@ -78,7 +77,6 @@ namespace Logic
                 }
                     catch (WebException) { return false; }
             });
-
 
             return res;
         }
