@@ -7,25 +7,25 @@
         mc:Ignorable="d"
         Title="RedditBrowser" Height="450" Width="800">
 
-    <Window.CommandBindings>
-        <CommandBinding Command="local:CustomCommands.OpenSub" CanExecute="OpenSub_CanExecute" Executed="OpenSub_Executed" />
-        <CommandBinding Command="local:CustomCommands.Download" CanExecute="Download_CanExecute" Executed="Download_Executed" />
-        <CommandBinding Command="local:CustomCommands.Prev" CanExecute="Prev_CanExecute" Executed="Prev_Executed" />
-        <CommandBinding Command="local:CustomCommands.Next" CanExecute="Next_CanExecute" Executed="Next_Executed" />
-        <CommandBinding Command="local:CustomCommands.ImgLink" CanExecute="ImgLink_CanExecute" Executed="ImgLink_Executed" />
-        <CommandBinding Command="local:CustomCommands.ShowButtons" CanExecute="ShowButtons_CanExecute" Executed="ShowButtons_Executed" />
-        <CommandBinding Command="local:CustomCommands.ResetImg" CanExecute="ResetImg_CanExecute" Executed="ResetImg_Executed" />
-        <CommandBinding Command="local:CustomCommands.ShowComments" CanExecute="ShowComments_CanExecute" Executed="ShowComments_Executed" />
-    </Window.CommandBindings>
+		<Window.CommandBindings>
+				<CommandBinding Command="local:CustomCommands.OpenSub" CanExecute="OpenSub_CanExecute" Executed="OpenSub_Executed" />
+				<CommandBinding Command="local:CustomCommands.Download" CanExecute="Download_CanExecute" Executed="Download_Executed" />
+				<CommandBinding Command="local:CustomCommands.Prev" CanExecute="Prev_CanExecute" Executed="Prev_Executed" />
+				<CommandBinding Command="local:CustomCommands.Next" CanExecute="Next_CanExecute" Executed="Next_Executed" />
+				<CommandBinding Command="local:CustomCommands.ImgLink" CanExecute="ImgLink_CanExecute" Executed="ImgLink_Executed" />
+				<CommandBinding Command="local:CustomCommands.ShowButtons" CanExecute="ShowButtons_CanExecute" Executed="ShowButtons_Executed" />
+				<CommandBinding Command="local:CustomCommands.ResetImg" CanExecute="ResetImg_CanExecute" Executed="ResetImg_Executed" />
+				<CommandBinding Command="local:CustomCommands.ShowComments" CanExecute="ShowComments_CanExecute" Executed="ShowComments_Executed" />
+		</Window.CommandBindings>
 
-    <Window.Resources>
-        <Style x:Key="ButtonStyle" TargetType="{x:Type Button}">
-            <Setter Property="Margin" Value="5,1" />
-            <Setter Property="Padding" Value="5" />
-        </Style>
-    </Window.Resources>
+		<Window.Resources>
+				<Style x:Key="ButtonStyle" TargetType="{x:Type Button}">
+						<Setter Property="Margin" Value="5,1" />
+						<Setter Property="Padding" Value="5" />
+				</Style>
+		</Window.Resources>
 
-    <Grid>
+		<Grid>
 				<Grid.RowDefinitions>
 						<RowDefinition Height="auto"/>
 						<RowDefinition Height="auto"/>
@@ -44,7 +44,7 @@
 						</Grid.ColumnDefinitions>
 
 						<Image Grid.Column="0" x:Name="imageHeader" Source="{Binding Subreddit.HeaderImage}"/>
-						<ComboBox Grid.Column="1" x:Name="comboboxSubReddit"/>
+						<ComboBox Grid.Column="1" x:Name="comboboxSubReddit" ItemsSource="{Binding PossibleSubs}"/>
 				</Grid>
 
 				<Grid Grid.Row="1" x:Name="gridPosts">
@@ -68,10 +68,10 @@
 																		<RowDefinition Height="auto"/>
 																</Grid.RowDefinitions>
 																<Button Grid.Row="0" x:Name="buttonUpVote"/>
-																<TextBlock Grid.Row="1" x:Name="textblockVotes"/>
+																<TextBlock Grid.Row="1" x:Name="textblockVotes" Text="{Binding Score}"/>
 																<Button Grid.Row="2" x:Name="buttonDownVote"/>
 														</Grid>
-														<Image Grid.Column="1" x:Name="imagePost"/>
+														<Image Grid.Column="1" x:Name="imagePost" Source="{Binding Thumbnail}"/>
 														<Grid Grid.Column="2">
 																<Grid.RowDefinitions>
 																		<RowDefinition Height="auto"/>
@@ -83,13 +83,13 @@
 																				<ColumnDefinition Width="auto"/>
 																				<ColumnDefinition Width="auto"/>
 																		</Grid.ColumnDefinitions>
-																		<TextBlock Grid.Column="0" x:Name="textblockTitle"/>
-																		<TextBlock Grid.Column="1" x:Name="textblockLink"/>
+																		<TextBlock Grid.Column="0" x:Name="textblockTitle" Text="{Binding Title}"/>
+																		<TextBlock Grid.Column="1" x:Name="textblockLink" Text="{Binding Url}"/>
 																</Grid>
 																<Grid Grid.Row="1">
 																		<TextBlock Text="Posted by "/>
-																		<TextBlock x:Name="textblockPosterUsername"/>
-																		<TextBlock x:Name="textblockPostDate"/>
+																		<TextBlock x:Name="textblockPosterUsername" Text="{Binding Author.Name}"/>
+																		<!--<TextBlock x:Name="textblockPostDate" Text="{Binding }"/>			Brakuje info do tego w wrapperze-->
 																</Grid>
 																<Grid Grid.Row="2">
 																		<!--machnij tu przyciski-->
@@ -99,58 +99,9 @@
 										</DataTemplate>
 								</ListBox.ItemTemplate>
 						</ListBox>
-								<Grid Grid.Column="1" x:Name="gridRightSidebar">
-								
+						<Grid Grid.Column="1" x:Name="gridRightSidebar">
+
 						</Grid>
 				</Grid>
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-						
-        <Menu DockPanel.Dock="Top">
-            <MenuItem x:Name="MenuTab" Header="Menu">
-                <MenuItem x:Name="MenuSelect" Header="Select sub" Command="local:CustomCommands.OpenSub"/>
-                <MenuItem x:Name="MenuDownload" Header="Download current" Command="local:CustomCommands.Download"/>
-                <MenuItem x:Name="MenuPrev" Header="Prev" Command="local:CustomCommands.Prev"/>
-                <MenuItem x:Name="MenuNext" Header="Next" Command="local:CustomCommands.Next"/>
-                <MenuItem x:Name="MenuImgLink" Header="Image link" Command="local:CustomCommands.ImgLink"/>
-                <MenuItem x:Name="MenuShowBtns" Header="Show buttons" IsCheckable="True" Command="local:CustomCommands.ShowButtons"/>
-                <MenuItem x:Name="MenuResetImgBtns" Header="Reset img" IsCheckable="True" Command="local:CustomCommands.ResetImg"/>
-            </MenuItem>
-        </Menu>
-        <WrapPanel x:Name="ButtonsPanel" DockPanel.Dock="Top" Margin="0">
-            <Button x:Name="SelectBtn" Content="Select Sub" Command="local:CustomCommands.OpenSub" Width="75" Style="{StaticResource ButtonStyle}"/>
-            <Button x:Name="DnldBtn" Content="Download" Command="local:CustomCommands.Download" Width="75" Style="{StaticResource ButtonStyle}"/>
-            <Button x:Name="imgLinkBtn" Content="Img link" Command="local:CustomCommands.ImgLink" Width="75" Style="{StaticResource ButtonStyle}"/>
-            <Button x:Name="ResetBtn" Content="Reset img" Command="local:CustomCommands.ResetImg" Width="75" Style="{StaticResource ButtonStyle}"/>
-            <Button x:Name="ShowButtons" Content="Show buttons" Command="local:CustomCommands.ShowButtons" Width="75" Style="{StaticResource ButtonStyle}"/>
-            <Button x:Name="CommentsBtn" Content="Show comments" Command="local:CustomCommands.ShowComments" Width="100" Style="{StaticResource ButtonStyle}" HorizontalContentAlignment="Stretch"/>
-            <Label x:Name="titleLabel" Content=""/>
-        </WrapPanel>
-       
-        <Button DockPanel.Dock="Left" x:Name="PrevBtn" Content="&lt;" Command="local:CustomCommands.Prev" Width="20" Style="{StaticResource ButtonStyle}"/>
-        <Button DockPanel.Dock="Right" x:Name="NextBtn" Content="&gt;" Command="local:CustomCommands.Next" Width="20" Style="{StaticResource ButtonStyle}"/>
-        <Border x:Name="ImageBorder" ClipToBounds="True" DockPanel.Dock="Bottom" 
-                MouseWheel="image_MouseWheel" MouseLeftButtonDown="image_MouseLeftButtonDown" MouseLeftButtonUp="image_MouseLeftButtonUp" PreviewMouseRightButtonDown="image_PreviewMouseRightButtonDown" MouseMove="image_MouseMove"
-                >
-            <Image x:Name="imageControl" />
-        </Border>
-    </Grid>
+		</Grid>
 </Window>
