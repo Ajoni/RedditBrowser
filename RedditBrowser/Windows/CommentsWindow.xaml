@@ -8,9 +8,9 @@
         mc:Ignorable="d"
         Title="CommentsWindow" Height="450" Width="800">
 
-    <Window.Resources>
+    <!--<Window.Resources>
         <local:WidthOffsetConverter x:Key="WidthOffsetConverter" />
-    </Window.Resources>
+    </Window.Resources>-->
 
     <WrapPanel >
         <TreeView Name="CommnetsTrV" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
@@ -25,7 +25,7 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="{Binding
-                            ElementName=CommnetsTrV, Path=ActualWidth, Converter={StaticResource WidthOffsetConverter} }" />
+                            ElementName=CommnetsTrV, Path=ActualWidth }" />
                         </Grid.ColumnDefinitions>
                         <WrapPanel Grid.Row="0" Grid.Column="0">
                             <TextBlock  TextWrapping="Wrap" Text="{Binding Path=Score}" FontStyle="Italic" />
@@ -34,7 +34,7 @@
                             <TextBlock Text=": "/>
                         </WrapPanel>
                         <TextBlock Grid.Row="1"  x:Name="CommentBody" TextWrapping="Wrap" Text="{Binding Path=Body}" Width="{Binding
-                            ElementName=CommnetsTrV, Path=ActualWidth, Converter={StaticResource WidthOffsetConverter} }"/>
+                            ElementName=CommnetsTrV, Path=ActualWidth }"/>
                         <TextBlock Grid.Row="2"/>
                     </Grid>
                 </HierarchicalDataTemplate>

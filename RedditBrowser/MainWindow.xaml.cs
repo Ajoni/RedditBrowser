@@ -1,5 +1,6 @@
 ﻿using Logic;
 using RedditBrowser.VM;
+using RedditSharp;
 using RedditSharp.Things;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,7 @@ namespace RedditBrowser
         {
             InitializeComponent();
 
+												VM.Subreddit= new Reddit().GetSubreddit($"/r/ProgrammerHumor");
 												this.DataContext = VM;
         }
 

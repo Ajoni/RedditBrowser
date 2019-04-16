@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="RedditBrowser" Height="450" Width="800">
 
-		<Window.CommandBindings>
+		<!--<Window.CommandBindings>
 				<CommandBinding Command="local:CustomCommands.OpenSub" CanExecute="OpenSub_CanExecute" Executed="OpenSub_Executed" />
 				<CommandBinding Command="local:CustomCommands.Download" CanExecute="Download_CanExecute" Executed="Download_Executed" />
 				<CommandBinding Command="local:CustomCommands.Prev" CanExecute="Prev_CanExecute" Executed="Prev_Executed" />
@@ -16,12 +16,12 @@
 				<CommandBinding Command="local:CustomCommands.ShowButtons" CanExecute="ShowButtons_CanExecute" Executed="ShowButtons_Executed" />
 				<CommandBinding Command="local:CustomCommands.ResetImg" CanExecute="ResetImg_CanExecute" Executed="ResetImg_Executed" />
 				<CommandBinding Command="local:CustomCommands.ShowComments" CanExecute="ShowComments_CanExecute" Executed="ShowComments_Executed" />
-		</Window.CommandBindings>
+		</Window.CommandBindings>-->
 
 		<Window.Resources>
-				<Style x:Key="ButtonStyle" TargetType="{x:Type Button}">
+				<Style TargetType="{x:Type Button}">
 						<Setter Property="Margin" Value="5,1" />
-						<Setter Property="Padding" Value="5" />
+						<Setter Property="Padding" Value="3" />
 				</Style>
 		</Window.Resources>
 
@@ -43,16 +43,20 @@
 								<ColumnDefinition Width="auto"/>
 						</Grid.ColumnDefinitions>
 
-						<Image Grid.Column="0" x:Name="imageHeader" Source="{Binding Subreddit.HeaderImage}"/>
+						<Image Grid.Column="0" x:Name="imageHeader" Source="{Binding Subreddit.HeaderImage}" />
 						<ComboBox Grid.Column="1" x:Name="comboboxSubReddit" ItemsSource="{Binding PossibleSubs}"/>
 				</Grid>
 
 				<Grid Grid.Row="1" x:Name="gridPosts">
+						<Grid.RowDefinitions>
+								<RowDefinition Height="*" />
+								<RowDefinition Height="auto" />
+						</Grid.RowDefinitions>
 						<Grid.ColumnDefinitions>
 								<ColumnDefinition Width="*"/>
 								<ColumnDefinition Width="auto"/>
 						</Grid.ColumnDefinitions>
-						<ListBox Grid.Column="0" x:Name="listboxPosts">
+						<ListBox Grid.Row="0" Grid.Column="0" x:Name="listboxPosts" ItemsSource="{Binding Posts}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
 								<ListBox.ItemTemplate>
 										<DataTemplate>
 												<Grid>
@@ -67,28 +71,32 @@
 																		<RowDefinition Height="*"/>
 																		<RowDefinition Height="auto"/>
 																</Grid.RowDefinitions>
-																<Button Grid.Row="0" x:Name="buttonUpVote"/>
+																<Button Grid.Row="0" x:Name="buttonUpVote" FontFamily="Segoe UI Symbol" Content="&#xE110;"/>
 																<TextBlock Grid.Row="1" x:Name="textblockVotes" Text="{Binding Score}"/>
-																<Button Grid.Row="2" x:Name="buttonDownVote"/>
+																<Button Grid.Row="2" x:Name="buttonDownVote" FontFamily="Segoe UI Symbol" Content="&#xE1FD;"/>
 														</Grid>
-														<Image Grid.Column="1" x:Name="imagePost" Source="{Binding Thumbnail}"/>
+														<Image Grid.Column="1" x:Name="imagePost" Source="{Binding Thumbnail}" MaxHeight="60" MaxWidth="80"/>
 														<Grid Grid.Column="2">
 																<Grid.RowDefinitions>
 																		<RowDefinition Height="auto"/>
 																		<RowDefinition Height="auto"/>
 																		<RowDefinition Height="*"/>
 																</Grid.RowDefinitions>
-																<Grid Grid.Row="0">
+																		<Grid Grid.Row="0">
+																				<Grid.RowDefinitions>
+																						<RowDefinition Height="auto"/>
+																						<RowDefinition Height="auto"/>
+																				</Grid.RowDefinitions>
+																				<TextBlock Grid.Row="0" x:Name="textblockTitle" Text="{Binding Title}" TextWrapping="Wrap"/>
+																				<TextBlock Grid.Row="1" x:Name="textblockLink" Text="{Binding Url}" TextWrapping="Wrap" TextBlock.FontSize="12"/>
+																</Grid>
+																<Grid Grid.Row="1" Margin="3">
 																		<Grid.ColumnDefinitions>
 																				<ColumnDefinition Width="auto"/>
 																				<ColumnDefinition Width="auto"/>
 																		</Grid.ColumnDefinitions>
-																		<TextBlock Grid.Column="0" x:Name="textblockTitle" Text="{Binding Title}"/>
-																		<TextBlock Grid.Column="1" x:Name="textblockLink" Text="{Binding Url}"/>
-																</Grid>
-																<Grid Grid.Row="1">
-																		<TextBlock Text="Posted by "/>
-																		<TextBlock x:Name="textblockPosterUsername" Text="{Binding Author.Name}"/>
+																		<TextBlock Grid.Column="0" Text="Posted by "/>
+																		<TextBlock Grid.Column="1" x:Name="textblockPosterUsername" Text="{Binding Author.Name}"/>
 																		<!--<TextBlock x:Name="textblockPostDate" Text="{Binding }"/>			Brakuje info do tego w wrapperze-->
 																</Grid>
 																<Grid Grid.Row="2">
@@ -99,6 +107,9 @@
 										</DataTemplate>
 								</ListBox.ItemTemplate>
 						</ListBox>
+						<Grid Grid.Row="0" Grid.Column="0" x:Name="gridPostsPaging">
+								
+						</Grid>
 						<Grid Grid.Column="1" x:Name="gridRightSidebar">
 
 						</Grid>
