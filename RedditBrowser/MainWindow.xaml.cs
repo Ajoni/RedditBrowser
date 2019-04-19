@@ -1,5 +1,5 @@
 ﻿using Logic;
-using RedditBrowser.VM;
+using RedditBrowser.VMs;
 using RedditSharp;
 using RedditSharp.Things;
 using System;
@@ -20,7 +20,7 @@ namespace RedditBrowser
 {
     public partial class MainWindow : Window
     {
-        MainWindowVM VM = new MainWindowVM();
+								MainVM VM = new MainVM();
 
         public MainWindow()
         {
@@ -30,6 +30,10 @@ namespace RedditBrowser
 												this.DataContext = VM;
         }
 
-    }
+								private void WindowMain_Loaded(object sender, RoutedEventArgs e)
+								{
+												this.VM.Init();
+								}
+				}
 
 }

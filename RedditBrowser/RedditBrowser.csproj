@@ -62,19 +62,31 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Classes\Person.cs" />
-    <Compile Include="Windows\CommentsWindow.xaml.cs">
+    <Compile Include="Classes\User.cs" />
+    <Compile Include="Converters\ImgConverter.cs" />
+    <Compile Include="Helpers\Extensions.cs" />
+    <Compile Include="VMs\IViewModel.cs" />
+    <Compile Include="VMs\ListVM.cs" />
+    <Compile Include="VMs\MainVM.cs" />
+    <Compile Include="VMs\PostVM.cs" />
+    <Compile Include="VMs\SearchVM.cs" />
+    <Compile Include="Pages\CommentsWindow.xaml.cs">
       <DependentUpon>CommentsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="CustomCommands.cs" />
-    <Compile Include="SelectSubDialog.xaml.cs">
-      <DependentUpon>SelectSubDialog.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="VM\MainWindowVM.cs" />
-    <Compile Include="Windows\PostDetailsWindow.xaml.cs">
+    <Compile Include="Classes\CustomCommands.cs" />
+    <Compile Include="Pages\PostDetailsWindow.xaml.cs">
       <DependentUpon>PostDetailsWindow.xaml</DependentUpon>
     </Compile>
-    <Page Include="Windows\CommentsWindow.xaml">
+    <Compile Include="VMs\TopPanelVM.cs" />
+    <Page Include="Resources\Converters.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\DataTemplates.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\CommentsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -90,11 +102,15 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="SelectSubDialog.xaml">
+    <Page Include="Resources\Merged.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\PostDetailsWindow.xaml">
+    <Page Include="Resources\Styles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\PostDetailsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -132,5 +148,6 @@
       <Name>Logic</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
