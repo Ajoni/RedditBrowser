@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -34,11 +35,20 @@ namespace RedditBrowser.VMs
 
 								public async Task Init()
 								{
-												await Task.Run(async () =>
+												List<Post> posts = new List<Post>();
+												await Task.Run(() =>
 												{
-																var posts = LoadPosts(0, 10);
-																await Application.Current.Dispatcher.BeginInvoke(new Action(() => this.ListVM.Posts.AddRange(posts)));
+																posts = LoadPosts(0, 2);
 												});
+												IObservable<Post> postsToLoad = posts.ToObservable();
+												postsToLoad.Subscribe(p =>
+												{
+																Application.Current.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Background, new Action<Post>((post) => this.ListVM.Posts.Add(post)), p);
+												}, () =>
+												{
+																this.Busy = false;
+												});
+												//Application.Current.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Background, new Action(() => this.ListVM.Posts.AddRange(posts)));
 								}
 
 								private List<Post> LoadPosts(int from, int amount)

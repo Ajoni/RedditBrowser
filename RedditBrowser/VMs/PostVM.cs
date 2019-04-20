@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RedditSharp.Things;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +9,6 @@ namespace RedditBrowser.VMs
 {
 				public class PostVM
 				{
+								public Post Post { get; set; }
 				}
 }

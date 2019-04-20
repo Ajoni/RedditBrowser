@@ -27,7 +27,6 @@
 				<Grid.RowDefinitions>
 						<RowDefinition Height="auto"/>
 						<RowDefinition Height="*"/>
-						<RowDefinition Height="auto"/>
 				</Grid.RowDefinitions>
 				<UserControl Grid.Row="0" Content="{Binding TopPanel}"/>
 

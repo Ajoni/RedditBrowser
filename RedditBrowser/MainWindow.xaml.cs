@@ -30,25 +30,13 @@ namespace RedditBrowser
         {
             InitializeComponent();
 
-												VM.Subreddit= new Reddit().GetSubreddit($"/r/Animemes");
+												//VM.Subreddit= new Reddit().GetSubreddit($"/r/Animemes");
 												this.DataContext = VM;
         }
 
 								private async void WindowMain_Loaded(object sender, RoutedEventArgs e)
 								{
-												List<Post> a = new List<Post>();
-												await Task.Run(async () =>
-												{
-																a = this.VM.Subreddit.Posts.Take(10).ToList();
-												});
-												IObservable<Post> postsToLoad = a.ToObservable<Post>();
-												postsToLoad.Subscribe<Post>(p =>
-												{
-																Application.Current.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Background, new Action<Post>((post) => this.VM.ListVM.Posts.Add(post)), p);
-												}, () => { 
-																//tutaj kiedys busyIndicator na notBusy ustawic (kiedy sie go doda)
-												}
-												);
+												await this.VM.Init();
 								}
 				}
 

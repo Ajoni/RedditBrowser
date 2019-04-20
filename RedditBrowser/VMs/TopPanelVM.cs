@@ -10,5 +10,6 @@ namespace RedditBrowser.VMs
 				{
 								public string Header { get; set; }
 								public string SubredditName { get; set; }
+								public string Search { get; set; }
 				}
 }

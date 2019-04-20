@@ -10,10 +10,5 @@ namespace RedditBrowser.Helpers
 {
 				public static class Extensions
 				{
-								public static void AddRange<T>(this ObservableCollection<T> colletion, IEnumerable<T> toAdd)
-								{
-												foreach (var v in toAdd)
-																colletion.Add(v);
-								}
 				}
 }

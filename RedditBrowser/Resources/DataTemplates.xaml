@@ -1,9 +1,11 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:RedditBrowser.Resources"
+																				xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
                     xmlns:vms="clr-namespace:RedditBrowser.VMs">
 		<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="Converters.xaml"/>
+				<ResourceDictionary Source="Styles.xaml"/>
 		</ResourceDictionary.MergedDictionaries>
 
 		<DataTemplate x:Key="Post">
@@ -20,10 +22,10 @@
 										<RowDefinition Height="auto"/>
 								</Grid.RowDefinitions>
 								<Button Grid.Row="0" x:Name="buttonUpVote" FontFamily="Segoe UI Symbol" Content="&#xE110;"/>
-								<TextBlock Grid.Row="1" x:Name="textblockVotes" Text="{Binding Score}"/>
+								<TextBlock Grid.Row="1" x:Name="textblockVotes" Text="{Binding Score}" VerticalAlignment="Center"/>
 								<Button Grid.Row="2" x:Name="buttonDownVote" FontFamily="Segoe UI Symbol" Content="&#xE1FD;"/>
 						</Grid>
-						<Image Grid.Column="1" x:Name="imagePost" Source="{Binding Thumbnail}" MaxHeight="60" MaxWidth="80"/>
+						<Image Grid.Column="1" x:Name="imagePost" Source="{Binding Thumbnail}" MaxHeight="80" MaxWidth="100"  Margin="5,1"/>
 						<Grid Grid.Column="2">
 								<Grid.RowDefinitions>
 										<RowDefinition Height="auto"/>
@@ -38,22 +40,21 @@
 										<TextBlock Grid.Row="0" x:Name="textblockTitle" Text="{Binding Title}" TextWrapping="Wrap"/>
 										<TextBlock Grid.Row="1" x:Name="textblockLink" Text="{Binding Url}" TextWrapping="Wrap" TextBlock.FontSize="12"/>
 								</Grid>
-								<Grid Grid.Row="1" Margin="3">
+								<Grid Grid.Row="1">
 										<Grid.ColumnDefinitions>
 												<ColumnDefinition Width="auto"/>
 												<ColumnDefinition Width="auto"/>
 										</Grid.ColumnDefinitions>
 										<TextBlock Grid.Column="0" Text="Posted by "/>
 										<TextBlock Grid.Column="1" x:Name="textblockPosterUsername" Text="{Binding Author.Name}"/>
-										<!--<TextBlock x:Name="textblockPostDate" Text="{Binding }"/>			Brakuje info do tego w wrapperze-->
 								</Grid>
 								<Grid Grid.Row="2">
-										<!--machnij tu przyciski-->
+										<Button x:Name="buttonPostDetails" />
 								</Grid>
 						</Grid>
 				</Grid>
 		</DataTemplate>
-		
+
 		<DataTemplate DataType="{x:Type vms:ListVM}">
 				<Grid x:Name="gridPosts">
 						<Grid.RowDefinitions>
@@ -62,12 +63,10 @@
 						<Grid.ColumnDefinitions>
 								<ColumnDefinition Width="*"/>
 						</Grid.ColumnDefinitions>
-						<VirtualizingStackPanel Grid.Row="0" Grid.Column="0">
-								<ListBox x:Name="listboxPosts" ItemsSource="{Binding Posts}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto" ItemTemplate="{StaticResource Post}" VirtualizingPanel.IsVirtualizing="True"/>
-						</VirtualizingStackPanel>
+						<ListBox Grid.Row="0" Grid.Column="0" x:Name="listboxPosts" ItemsSource="{Binding Posts}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemTemplate="{StaticResource Post}" />
 				</Grid>
 		</DataTemplate>
-		
+
 		<DataTemplate DataType="{x:Type vms:TopPanelVM}">
 				<Grid x:Name="gridTopPanel">
 						<Grid.RowDefinitions>
@@ -81,7 +80,7 @@
 						</Grid.ColumnDefinitions>
 						<Image Grid.Column="0" x:Name="imageHeader" Source="{Binding Header}"/>
 						<TextBlock Grid.Column="0" x:Name="textblockSubredditName" Text="{Binding SubredditName}"/>
-						<TextBox Grid.Column="1" x:Name="texboxSearch" Text="uoifydthxgf"/>
+						<xctk:WatermarkTextBox Grid.Column="1" x:Name="texboxSearch" Text="{Binding Search}" Watermark="Search"/>
 						<Button Grid.Column="2" x:Name="buttonSearch"/>
 						<Button Grid.Column="3" x:Name="buttonLogin"/>
 				</Grid>
