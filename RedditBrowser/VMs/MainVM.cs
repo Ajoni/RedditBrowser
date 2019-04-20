@@ -32,13 +32,13 @@ namespace RedditBrowser.VMs
 
 								}
 
-								public void Init()
+								public async Task Init()
 								{
-												new Task(async () =>
+												await Task.Run(async () =>
 												{
 																var posts = LoadPosts(0, 10);
-																Application.Current.Dispatcher.BeginInvoke(new Action(() => this.ListVM.Posts.AddRange(posts)));
-												}).Start();
+																await Application.Current.Dispatcher.BeginInvoke(new Action(() => this.ListVM.Posts.AddRange(posts)));
+												});
 								}
 
 								private List<Post> LoadPosts(int from, int amount)

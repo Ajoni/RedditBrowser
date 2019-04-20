@@ -1,4 +1,5 @@
 ﻿using Logic;
+using RedditBrowser.Helpers;
 using RedditBrowser.VMs;
 using RedditSharp;
 using RedditSharp.Things;
@@ -9,6 +10,9 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Reactive;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -26,13 +30,25 @@ namespace RedditBrowser
         {
             InitializeComponent();
 
-												VM.Subreddit= new Reddit().GetSubreddit($"/r/ProgrammerHumor");
+												VM.Subreddit= new Reddit().GetSubreddit($"/r/Animemes");
 												this.DataContext = VM;
         }
 
-								private void WindowMain_Loaded(object sender, RoutedEventArgs e)
+								private async void WindowMain_Loaded(object sender, RoutedEventArgs e)
 								{
-												this.VM.Init();
+												List<Post> a = new List<Post>();
+												await Task.Run(async () =>
+												{
+																a = this.VM.Subreddit.Posts.Take(10).ToList();
+												});
+												IObservable<Post> postsToLoad = a.ToObservable<Post>();
+												postsToLoad.Subscribe<Post>(p =>
+												{
+																Application.Current.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Background, new Action<Post>((post) => this.VM.ListVM.Posts.Add(post)), p);
+												}, () => { 
+																//tutaj kiedys busyIndicator na notBusy ustawic (kiedy sie go doda)
+												}
+												);
 								}
 				}
 

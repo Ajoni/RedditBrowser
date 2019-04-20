@@ -23,7 +23,7 @@
 								<TextBlock Grid.Row="1" x:Name="textblockVotes" Text="{Binding Score}"/>
 								<Button Grid.Row="2" x:Name="buttonDownVote" FontFamily="Segoe UI Symbol" Content="&#xE1FD;"/>
 						</Grid>
-						<!--<Image Grid.Column="1" x:Name="imagePost" Source="{Binding Thumbnail, Converter={StaticResource ResourceKey=imgConverter}, IsAsync=True}" MaxHeight="60" MaxWidth="80"/>-->
+						<Image Grid.Column="1" x:Name="imagePost" Source="{Binding Thumbnail}" MaxHeight="60" MaxWidth="80"/>
 						<Grid Grid.Column="2">
 								<Grid.RowDefinitions>
 										<RowDefinition Height="auto"/>
@@ -63,7 +63,7 @@
 								<ColumnDefinition Width="*"/>
 						</Grid.ColumnDefinitions>
 						<VirtualizingStackPanel Grid.Row="0" Grid.Column="0">
-								<ListBox x:Name="listboxPosts" ItemsSource="{Binding Posts}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemTemplate="{StaticResource Post}" VirtualizingPanel.IsVirtualizing="True"/>
+								<ListBox x:Name="listboxPosts" ItemsSource="{Binding Posts}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto" ItemTemplate="{StaticResource Post}" VirtualizingPanel.IsVirtualizing="True"/>
 						</VirtualizingStackPanel>
 				</Grid>
 		</DataTemplate>
