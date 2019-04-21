@@ -1,6 +1,6 @@
 ﻿using Logic;
 using RedditBrowser.Helpers;
-using RedditBrowser.VMs;
+using RedditBrowser.ViewModel;
 using RedditSharp;
 using RedditSharp.Things;
 using System;
@@ -24,7 +24,7 @@ namespace RedditBrowser
 {
     public partial class MainWindow : Window
     {
-								MainVM VM = new MainVM();
+								MainViewModel VM = new MainViewModel();
 
         public MainWindow()
         {

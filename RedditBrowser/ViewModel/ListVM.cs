@@ -1,6 +1,6 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
 using RedditBrowser.Helpers;
-using RedditBrowser.VMs.Messages;
+using RedditBrowser.ViewModel.Messages;
 using RedditSharp.Things;
 using System;
 using System.Collections.Generic;
@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace RedditBrowser.VMs
+namespace RedditBrowser.ViewModel
 {
 				public class ListVM : IViewModel, INotifyPropertyChanged
 				{

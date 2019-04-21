@@ -113,12 +113,11 @@
     <Compile Include="Helpers\RangeObservableCollection.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
-    <Compile Include="VMs\IViewModel.cs" />
-    <Compile Include="VMs\ListVM.cs" />
-    <Compile Include="VMs\MainVM.cs" />
-    <Compile Include="VMs\Messages\GoToPageMessage.cs" />
-    <Compile Include="VMs\PostVM.cs" />
-    <Compile Include="VMs\SearchVM.cs" />
+    <Compile Include="ViewModel\IViewModel.cs" />
+    <Compile Include="ViewModel\ListVM.cs" />
+    <Compile Include="ViewModel\Messages\GoToPageMessage.cs" />
+    <Compile Include="ViewModel\PostVM.cs" />
+    <Compile Include="ViewModel\SearchVM.cs" />
     <Compile Include="Pages\CommentsWindow.xaml.cs">
       <DependentUpon>CommentsWindow.xaml</DependentUpon>
     </Compile>
@@ -126,7 +125,7 @@
     <Compile Include="Pages\PostDetailsWindow.xaml.cs">
       <DependentUpon>PostDetailsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="VMs\TopPanelVM.cs" />
+    <Compile Include="ViewModel\TopPanelVM.cs" />
     <Page Include="Resources\Converters.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

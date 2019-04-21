@@ -3,7 +3,7 @@
                     xmlns:local="clr-namespace:RedditBrowser.Resources"
 																				xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
 																				xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
-                    xmlns:vms="clr-namespace:RedditBrowser.VMs">
+                    xmlns:vms="clr-namespace:RedditBrowser.ViewModel">
 		<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="Converters.xaml"/>
 				<ResourceDictionary Source="Styles.xaml"/>

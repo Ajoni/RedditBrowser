@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RedditBrowser.VMs
+namespace RedditBrowser.ViewModel
 {
     public class TopPanelVM : IViewModel
 				{
