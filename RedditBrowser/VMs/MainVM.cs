@@ -1,5 +1,8 @@
-﻿using RedditBrowser.Classes;
+﻿using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Messaging;
+using RedditBrowser.Classes;
 using RedditBrowser.Helpers;
+using RedditBrowser.VMs.Messages;
 using RedditSharp;
 using RedditSharp.Things;
 using System;
@@ -13,7 +16,7 @@ using System.Windows;
 
 namespace RedditBrowser.VMs
 {
-				public class MainVM
+				public class MainVM : ViewModelBase
 				{
 								public IViewModel CurrentPage { get; set; }
 								public TopPanelVM TopPanel { get; set; } = new TopPanelVM();
@@ -25,8 +28,10 @@ namespace RedditBrowser.VMs
 
 								public MainVM()
 								{
+												Messenger.Default.Register<GoToPageMessage>(this,(action) => ReceiveMessage(action));
+
 												Subreddit = new Reddit().RSlashAll;
-												CurrentPage = ListVM;
+												//CurrentPage = ListVM;
 
 												TopPanel.Header = Subreddit.HeaderImage;
 												TopPanel.SubredditName = Subreddit.Name;
@@ -48,12 +53,17 @@ namespace RedditBrowser.VMs
 												{
 																this.Busy = false;
 												});
-												//Application.Current.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Background, new Action(() => this.ListVM.Posts.AddRange(posts)));
 								}
 
 								private List<Post> LoadPosts(int from, int amount)
 								{
 												return Subreddit.Posts.Skip(from).Take(amount).ToList();
+								}
+
+								private object ReceiveMessage(GoToPageMessage action)
+								{
+												this.CurrentPage = action.Page;
+												return null;
 								}
 				}
 }

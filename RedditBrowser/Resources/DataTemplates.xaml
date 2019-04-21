@@ -2,6 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:RedditBrowser.Resources"
 																				xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+																				xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
                     xmlns:vms="clr-namespace:RedditBrowser.VMs">
 		<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="Converters.xaml"/>
@@ -81,8 +82,10 @@
 						<Image Grid.Column="0" x:Name="imageHeader" Source="{Binding Header}"/>
 						<TextBlock Grid.Column="0" x:Name="textblockSubredditName" Text="{Binding SubredditName}"/>
 						<xctk:WatermarkTextBox Grid.Column="1" x:Name="texboxSearch" Text="{Binding Search}" Watermark="Search"/>
-						<Button Grid.Column="2" x:Name="buttonSearch"/>
-						<Button Grid.Column="3" x:Name="buttonLogin"/>
+						<Button Grid.Column="2" x:Name="buttonSearch" >
+								<TextBlock FontFamily="Segoe UI Symbol" Text="&#xE11A;"/>
+						</Button>
+						<Button Grid.Column="3" x:Name="buttonLogin" Content="Login"/>
 				</Grid>
 		</DataTemplate>
 

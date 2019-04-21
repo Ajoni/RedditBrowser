@@ -31,5 +31,6 @@
 				<UserControl Grid.Row="0" Content="{Binding TopPanel}"/>
 
 				<UserControl Grid.Row="1" Content="{Binding CurrentPage}"/>
+				<ListBox/>
 		</Grid>
 </Window>
