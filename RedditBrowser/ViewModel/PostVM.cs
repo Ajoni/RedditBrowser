@@ -7,8 +7,13 @@ using System.Threading.Tasks;
 
 namespace RedditBrowser.ViewModel
 {
-				public class PostVM
+				public class PostVM : IViewModel
 				{
 								public Post Post { get; set; }
+
+								public PostVM(Post post)
+								{
+												Post = post;
+								}
 				}
 }

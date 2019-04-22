@@ -36,7 +36,7 @@ namespace RedditBrowser.ViewModel
 												{
 																return new DelegateCommand((a) =>
 																		{
-																						this.MousedOverPost = null;
+																						this.MousedOverPost = (Post)a;
 																		}
 																		, (a) =>
 																		{
@@ -51,7 +51,7 @@ namespace RedditBrowser.ViewModel
 												{
 																return new DelegateCommand((a) =>
 																{
-
+																				Messenger.Default.Send(new GoToPageMessage(new PostVM(this.MousedOverPost)));
 																}
 																		, (a) =>
 																		{

@@ -6,16 +6,20 @@ using RedditSharp;
 using RedditSharp.Things;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
 
 namespace RedditBrowser.ViewModel
 {
-    public class MainViewModel : ViewModelBase
+				public class MainViewModel : ViewModelBase
 				{
-								public IViewModel CurrentPage { get; set; }
+								private IViewModel _currentPage;
+
+								public IViewModel CurrentPage { get => _currentPage; set { _currentPage = value; RaisePropertyChanged(); } }
 								public TopPanelVM TopPanel { get; set; } = new TopPanelVM();
 								public ListVM ListVM { get; set; }
 								public Subreddit Subreddit { get; set; }
@@ -29,7 +33,6 @@ namespace RedditBrowser.ViewModel
 												this.ListVM = new ListVM();
 
 												Subreddit = new Reddit().RSlashAll;
-												//CurrentPage = ListVM;
 
 												TopPanel.Header = Subreddit.HeaderImage;
 												TopPanel.SubredditName = Subreddit.Name;
@@ -58,11 +61,11 @@ namespace RedditBrowser.ViewModel
 												return Subreddit.Posts.Skip(from).Take(amount).ToList();
 								}
 
-								private object ReceiveMessage(GoToPageMessage action)
+								private object ReceiveMessage(GoToPageMessage message)
 								{
-												this.CurrentPage = action.Page;
+												this.CurrentPage = message.Page;
 												return null;
 								}
 
-    }
+				}
 }
