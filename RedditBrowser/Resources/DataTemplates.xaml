@@ -4,6 +4,7 @@
 																				xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
 																				xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
 																				xmlns:cmd="http://www.galasoft.ch/mvvmlight"
+                    xmlns:r="clr-namespace:RedditSharp.Things;assembly=RedditSharp"
                     xmlns:vms="clr-namespace:RedditBrowser.ViewModel">
 		<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="Converters.xaml"/>
@@ -57,6 +58,43 @@
 				</Grid>
 		</DataTemplate>
 
+		<HierarchicalDataTemplate x:Key="Comment" DataType="{x:Type r:Comment}" ItemsSource="{Binding Comments}">
+				<Grid>
+						<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="auto"/>
+								<ColumnDefinition Width="*"/>
+						</Grid.ColumnDefinitions>
+						<Grid Grid.Column="0">
+								<Grid.RowDefinitions>
+										<RowDefinition Height="auto"/>
+										<RowDefinition Height="auto"/>
+										<RowDefinition Height="*"/>
+								</Grid.RowDefinitions>
+								<Button Grid.Row="0" x:Name="buttonUpVote" FontFamily="Segoe UI Symbol" Content="&#xE110;"/>
+								<!--<TextBlock Grid.Row="1" x:Name="textblockVotes" Text="{Binding Score}" VerticalAlignment="Center"/>-->
+								<Button Grid.Row="2" x:Name="buttonDownVote" FontFamily="Segoe UI Symbol" Content="&#xE1FD;"/>
+						</Grid>
+
+						<Grid Grid.Column="1">
+								<Grid.RowDefinitions>
+										<RowDefinition Height="auto"/>
+										<RowDefinition Height="*"/>
+										<RowDefinition Height="auto"/>
+								</Grid.RowDefinitions>
+								<WrapPanel  Grid.Row="0" Orientation="Horizontal">
+										<TextBlock x:Name="textblockAuthorName" Text="{Binding AuthorName}" />
+										<TextBlock x:Name="textblockAuthorFlairText" Text="{Binding AuthorFlairText}" />
+										<TextBlock x:Name="textblockScore" Text="{Binding Score}" />
+										<TextBlock x:Name="textblockDate" Text="{Binding Created}" />
+								</WrapPanel>
+								<TextBlock Grid.Row="1" Text="{Binding Body}"/>
+								<Grid Grid.Row="2">
+										<Button x:Name="buttonReply" Content="Reply"/>
+								</Grid>
+						</Grid>
+				</Grid>
+		</HierarchicalDataTemplate>
+
 		<DataTemplate DataType="{x:Type vms:ListVM}">
 				<Grid x:Name="gridPosts">
 						<Grid.RowDefinitions>
@@ -75,7 +113,7 @@
                CommandParameter="{Binding}" />
 																</i:EventTrigger>
 														</i:Interaction.Triggers>
-														
+
 														<Grid.ColumnDefinitions>
 																<ColumnDefinition Width="auto"/>
 																<ColumnDefinition Width="auto"/>
@@ -155,42 +193,59 @@
 						</Grid.RowDefinitions>
 
 						<Grid>
-								<Grid.ColumnDefinitions>
-										<ColumnDefinition Width="auto"/>
-										<ColumnDefinition Width="auto"/>
-										<ColumnDefinition Width="auto"/>
-										<ColumnDefinition Width="*"/>
-								</Grid.ColumnDefinitions>
-								<Grid Grid.Column="0">
-										<Grid.RowDefinitions>
-												<RowDefinition Height="auto"/>
-												<RowDefinition Height="*"/>
-												<RowDefinition Height="auto"/>
-										</Grid.RowDefinitions>
-										<Button Grid.Row="0" x:Name="buttonUpVote"/>
-										<TextBlock Grid.Row="1" x:Name="textblockVotes"/>
-										<Button Grid.Row="2" x:Name="buttonDownVote"/>
-								</Grid>
+								<Grid.RowDefinitions>
+										<RowDefinition Height="auto"/>
+										<RowDefinition Height="auto"/>
+										<RowDefinition Height="*"/>
+								</Grid.RowDefinitions>
+
 								<Grid Grid.Column="1">
 										<Grid.RowDefinitions>
 												<RowDefinition Height="auto"/>
+												<RowDefinition Height="auto"/>
 												<RowDefinition Height="*"/>
 												<RowDefinition Height="auto"/>
 										</Grid.RowDefinitions>
+										<Grid.ColumnDefinitions>
+												<ColumnDefinition Width="auto"/>
+												<ColumnDefinition Width="*"/>
+										</Grid.ColumnDefinitions>
+										<Grid Grid.Column="0" Grid.Row="0" Grid.RowSpan="2">
+												<Grid.RowDefinitions>
+														<RowDefinition Height="auto"/>
+														<RowDefinition Height="*"/>
+														<RowDefinition Height="auto"/>
+												</Grid.RowDefinitions>
+												<Button Grid.Row="0" x:Name="buttonUpVote" FontFamily="Segoe UI Symbol" Content="&#xE110;"/>
+												<TextBlock Grid.Row="1" x:Name="textblockVotes" Text="{Binding Post.Score}" VerticalAlignment="Center"/>
+												<Button Grid.Row="2" x:Name="buttonDownVote" FontFamily="Segoe UI Symbol" Content="&#xE1FD;"/>
+										</Grid>
+										<WrapPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
+												<TextBlock x:Name="textblockSubredditName" Text="{Binding Post.Subreddit.Name}"/>
+												<TextBlock Text=" • Posted by "/>
+												<TextBlock x:Name="textblockPosterName" Text="{Binding Post.Author.Name}"/>
+												<TextBlock Text=" Date "/>
+												<TextBlock x:Name="textblockCreatedDate" Text="{Binding Post.Created}"/>
+												<!--TODO dodac date converted z DateTime.Now - Post.Created do np 4h ago-->
+										</WrapPanel>
+										<TextBlock Grid.Row="1" Grid.Column="1" x:Name="textblockTitle" Text="{Binding Post.Title}"/>
+										<Image Grid.Row="2" Grid.Column="1" x:Name="image" Source="{Binding Post.Url}"/>
 								</Grid>
-								<Grid Grid.Column="2" x:Name="gridComment">
+								<Grid Grid.Row="1" x:Name="gridComment">
 										<Grid.RowDefinitions>
 												<RowDefinition Height="*"/>
 												<RowDefinition Height="auto"/>
 										</Grid.RowDefinitions>
-										<TextBox Grid.Row="0" x:Name="textBoxComment" Text="{Binding Comment}"/>
-										<Button Grid.Row="1" x:Name="buttonAddComment" />
+										<xctk:WatermarkTextBox Grid.Row="0" x:Name="textBoxComment" Watermark="What are your thoughts?" Text="{Binding Comment}" AcceptsReturn="True"/>
+										<Button Grid.Row="1" x:Name="buttonAddComment" Content="Comment"/>
 								</Grid>
-								<Grid Grid.Column="3" x:Name="gridComments">
+								<Grid Grid.Row="2" x:Name="gridComments">
 										<Grid.RowDefinitions>
+												<RowDefinition Height="auto"/>
+												<!--sorting-->
 												<RowDefinition Height="*"/>
 										</Grid.RowDefinitions>
-										<ListBox x:Name="listboxComments" ItemsSource="{Binding Comments}"/>
+										<TreeView Grid.Row="1" x:Name="listboxComments" ItemsSource="{Binding Post.Comments}" ItemTemplate="{StaticResource Comment}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>
 								</Grid>
 
 						</Grid>
