@@ -53,7 +53,7 @@ namespace RedditBrowser.ViewModel
             List<SimplfiedPost> posts = new List<SimplfiedPost>();
             await Task.Run(() =>
             {
-                posts = LoadPosts(0, 20);
+                posts = LoadPosts(0, 1);
             });
             IObservable<SimplfiedPost> postsToLoad = posts.ToObservable();
             postsToLoad.Subscribe(p =>
