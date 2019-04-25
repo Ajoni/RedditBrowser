@@ -23,48 +23,57 @@ namespace RedditBrowser.ViewModel
 								public TopPanelVM TopPanel { get; set; } = new TopPanelVM();
 								public ListVM ListVM { get; set; }
 								public Subreddit Subreddit { get; set; }
+								public Reddit Reddit { get; set; }
 								public User User { get; set; }
 								public bool Busy { get; set; }
 
 
 								public MainViewModel()
 								{
-												Messenger.Default.Register<GoToPageMessage>(this, (action) => ReceiveMessage(action));
+												this.RegisterMessages();
 												this.ListVM = new ListVM();
 
-												Subreddit = new Reddit().RSlashAll;
+												string[] keys = System.IO.File.ReadAllText(@"C:\keys\reddit.txt").Split(',');
+												AuthProvider auth = new AuthProvider(keys[0], keys[1], keys[2]);
+												var accesToken = auth.GetOAuthToken(keys[3], keys[4]);
+												var agent = new WebAgent() { AccessToken = accesToken };
+												this.Reddit = new Reddit(agent);
+												this.Subreddit = this.Reddit.RSlashAll;
 
-												TopPanel.Header = Subreddit.HeaderImage;
-												TopPanel.SubredditName = Subreddit.Name;
+												this.TopPanel.Header = Subreddit.HeaderImage;
+												this.TopPanel.SubredditName = Subreddit.Name;
 
 								}
 
 								public async Task Init()
 								{
-												List<Post> posts = new List<Post>();
+												List<SimplfiedPost> posts = new List<SimplfiedPost>();
 												await Task.Run(() =>
 												{
-																posts = LoadPosts(0, 2);
+																posts = LoadPosts(0, 20);
 												});
-												IObservable<Post> postsToLoad = posts.ToObservable();
+												IObservable<SimplfiedPost> postsToLoad = posts.ToObservable();
 												postsToLoad.Subscribe(p =>
 												{
-																Application.Current.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Background, new Action<Post>((post) => this.ListVM.Posts.Add(post)), p);
+																Application.Current.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Background, new Action<SimplfiedPost>((post) => this.ListVM.Posts.Add(post)), p);
 												}, () =>
 												{
 																this.Busy = false;
 												});
 								}
 
-								private List<Post> LoadPosts(int from, int amount)
+								private List<SimplfiedPost> LoadPosts(int from, int amount)
 								{
-												return Subreddit.Posts.Skip(from).Take(amount).ToList();
+												return Subreddit.Posts.Skip(from).Take(amount).Select(post =>new SimplfiedPost(post)).ToList();
 								}
 
-								private object ReceiveMessage(GoToPageMessage message)
+								private void ReceiveMessage(GoToPageMessage message) => this.CurrentPage = message.Page;
+								private void ReceiveMessage(GoToListViewMessage message) => this.CurrentPage = this.ListVM;
+
+								private void RegisterMessages()
 								{
-												this.CurrentPage = message.Page;
-												return null;
+												Messenger.Default.Register<GoToPageMessage>(this, (action) => ReceiveMessage(action));
+												Messenger.Default.Register<GoToListViewMessage>(this, (action) => ReceiveMessage(action));
 								}
 
 				}

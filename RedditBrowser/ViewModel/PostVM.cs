@@ -1,4 +1,5 @@
-﻿using RedditSharp.Things;
+﻿using RedditBrowser.Classes;
+using RedditSharp.Things;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,9 @@ namespace RedditBrowser.ViewModel
 {
 				public class PostVM : IViewModel
 				{
-								public Post Post { get; set; }
+								public SimplfiedPost Post { get; set; }
 								public string Comment { get; set; }
-								public PostVM(Post post)
+								public PostVM(SimplfiedPost post)
 								{
 												Post = post;
 								}

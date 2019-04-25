@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
+using RedditBrowser.Classes;
 using RedditBrowser.Helpers;
 using RedditBrowser.ViewModel.Messages;
 using RedditSharp.Things;
@@ -15,8 +16,8 @@ namespace RedditBrowser.ViewModel
 {
 				public class ListVM : IViewModel, INotifyPropertyChanged
 				{
-								public ObservableCollection<Post> Posts { get; set; } = new ObservableCollection<Post>();
-								public Post MousedOverPost { get; set; }
+								public ObservableCollection<SimplfiedPost> Posts { get; set; } = new ObservableCollection<SimplfiedPost>();
+								public SimplfiedPost MousedOverPost { get; set; }
 
 								private void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
 								{
@@ -36,7 +37,7 @@ namespace RedditBrowser.ViewModel
 												{
 																return new DelegateCommand((a) =>
 																		{
-																						this.MousedOverPost = (Post)a;
+																						this.MousedOverPost = (SimplfiedPost)a;
 																		}
 																		, (a) =>
 																		{

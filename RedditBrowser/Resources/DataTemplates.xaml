@@ -175,7 +175,7 @@
 								<ColumnDefinition Width="auto"/>
 						</Grid.ColumnDefinitions>
 						<Image Grid.Column="0" x:Name="imageHeader" Source="{Binding Header}"/>
-						<TextBlock Grid.Column="0" x:Name="textblockSubredditName" Text="{Binding SubredditName}"/>
+						<Button Grid.Column="0" x:Name="buttonSubredditName" Content="{Binding SubredditName}" Command="{Binding GoToListView}"/>
 						<xctk:WatermarkTextBox Grid.Column="1" x:Name="texboxSearch" Text="{Binding Search}" Watermark="Search"/>
 						<Button Grid.Column="2" x:Name="buttonSearch" >
 								<TextBlock FontFamily="Segoe UI Symbol" Text="&#xE11A;"/>
@@ -242,7 +242,7 @@
 								<Grid Grid.Row="2" x:Name="gridComments">
 										<Grid.RowDefinitions>
 												<RowDefinition Height="auto"/>
-												<!--sorting-->
+												<!--^sorting^-->
 												<RowDefinition Height="*"/>
 										</Grid.RowDefinitions>
 										<TreeView Grid.Row="1" x:Name="listboxComments" ItemsSource="{Binding Post.Comments}" ItemTemplate="{StaticResource Comment}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>

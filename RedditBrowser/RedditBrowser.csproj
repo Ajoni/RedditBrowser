@@ -106,12 +106,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Classes\SimplfiedPost.cs" />
     <Compile Include="Classes\User.cs" />
     <Compile Include="Converters\ImgConverter.cs" />
     <Compile Include="Helpers\DelegateCommand.cs" />
     <Compile Include="Helpers\Extensions.cs" />
     <Compile Include="Helpers\RangeObservableCollection.cs" />
+    <Compile Include="ViewModel\LoginVM.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="ViewModel\Messages\GoToListViewMessage.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="ViewModel\IViewModel.cs" />
     <Compile Include="ViewModel\ListVM.cs" />
@@ -121,7 +124,6 @@
     <Compile Include="Pages\CommentsWindow.xaml.cs">
       <DependentUpon>CommentsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Classes\CustomCommands.cs" />
     <Compile Include="Pages\PostDetailsWindow.xaml.cs">
       <DependentUpon>PostDetailsWindow.xaml</DependentUpon>
     </Compile>
