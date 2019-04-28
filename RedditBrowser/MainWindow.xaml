@@ -19,8 +19,10 @@
 	</Grid.RowDefinitions>
 	<UserControl Grid.Row="0" Content="{Binding TopPanel}"/>
 
-	<UserControl Grid.Row="1" Content="{Binding CurrentPage}"/>
-	<UserControl Grid.RowSpan="2" Content="{Binding LoginVM}"/>
+    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+	    <UserControl Content="{Binding CurrentPage}"/>
+    </ScrollViewer>
+    <UserControl Grid.RowSpan="2" Content="{Binding LoginVM}"/>
 	
   </Grid>
 </Window>
