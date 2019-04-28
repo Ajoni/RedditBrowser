@@ -8,28 +8,19 @@
 								x:Name="windowMain"
         Title="RedditBrowser" Height="450" Width="800" Loaded="WindowMain_Loaded">
 
-		<!--<Window.CommandBindings>
-				<CommandBinding Command="local:CustomCommands.OpenSub" CanExecute="OpenSub_CanExecute" Executed="OpenSub_Executed" />
-				<CommandBinding Command="local:CustomCommands.Download" CanExecute="Download_CanExecute" Executed="Download_Executed" />
-				<CommandBinding Command="local:CustomCommands.Prev" CanExecute="Prev_CanExecute" Executed="Prev_Executed" />
-				<CommandBinding Command="local:CustomCommands.Next" CanExecute="Next_CanExecute" Executed="Next_Executed" />
-				<CommandBinding Command="local:CustomCommands.ImgLink" CanExecute="ImgLink_CanExecute" Executed="ImgLink_Executed" />
-				<CommandBinding Command="local:CustomCommands.ShowButtons" CanExecute="ShowButtons_CanExecute" Executed="ShowButtons_Executed" />
-				<CommandBinding Command="local:CustomCommands.ResetImg" CanExecute="ResetImg_CanExecute" Executed="ResetImg_Executed" />
-				<CommandBinding Command="local:CustomCommands.ShowComments" CanExecute="ShowComments_CanExecute" Executed="ShowComments_Executed" />
-		</Window.CommandBindings>-->
-		
-		<Window.Resources>
-				<ResourceDictionary Source="/Resources/Merged.xaml"/>
-		</Window.Resources>
+  <Window.Resources>
+	<ResourceDictionary Source="/Resources/Merged.xaml"/>
+  </Window.Resources>
 
-		<Grid>
-				<Grid.RowDefinitions>
-						<RowDefinition Height="auto"/>
-						<RowDefinition Height="*"/>
-				</Grid.RowDefinitions>
-				<UserControl Grid.Row="0" Content="{Binding TopPanel}"/>
+  <Grid>
+	<Grid.RowDefinitions>
+	  <RowDefinition Height="auto"/>
+	  <RowDefinition Height="*"/>
+	</Grid.RowDefinitions>
+	<UserControl Grid.Row="0" Content="{Binding TopPanel}"/>
 
-				<UserControl Grid.Row="1" Content="{Binding CurrentPage}"/>
-		</Grid>
+	<UserControl Grid.Row="1" Content="{Binding CurrentPage}"/>
+	<UserControl Grid.RowSpan="2" Content="{Binding LoginVM}"/>
+	
+  </Grid>
 </Window>
