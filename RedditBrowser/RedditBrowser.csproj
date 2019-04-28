@@ -108,6 +108,9 @@
     </ApplicationDefinition>
     <Compile Include="Classes\SimplfiedPost.cs" />
     <Compile Include="Classes\User.cs" />
+    <Compile Include="Config\GlobalConfig.cs" />
+    <Compile Include="Config\GlobalKeys.cs" />
+    <Compile Include="Config\GlobalPaths.cs" />
     <Compile Include="Converters\ImgConverter.cs" />
     <Compile Include="Helpers\DelegateCommand.cs" />
     <Compile Include="Helpers\Extensions.cs" />
