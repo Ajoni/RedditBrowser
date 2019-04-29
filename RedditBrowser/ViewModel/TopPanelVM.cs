@@ -12,8 +12,13 @@ namespace RedditBrowser.ViewModel
 		public string Search { get; set; }
 
 		public ICommand GoToListView => new DelegateCommand((a) =>
-																																																	{
-																																																		Messenger.Default.Send(new GoToListViewMessage());
-																																																	});
+			{
+				Messenger.Default.Send(new GoToListViewMessage());
+			});
+
+		public ICommand LoginClick => new DelegateCommand((a) =>
+		{
+			Messenger.Default.Send(new ShowLoginMessage());
+		});
 	}
 }

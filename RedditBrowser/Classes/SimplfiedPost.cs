@@ -1,4 +1,5 @@
-﻿using RedditSharp.Things;
+﻿using RedditSharp;
+using RedditSharp.Things;
 using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -8,7 +9,6 @@ namespace RedditBrowser.Classes
 {
 	public class SimplfiedPost : Post
 	{
-		public new string Id { get; set; }
 		public new Comment[] Comments { get; }
 		public new bool IsSpoiler { get; set; }
 		public new string Domain { get; set; }
@@ -26,12 +26,13 @@ namespace RedditBrowser.Classes
 		public new bool NSFW { get; set; }
 		public new Subreddit Subreddit { get; }
 		public new Uri Url { get; set; }
-		public new int Score{ get; set; }
 		public new DateTimeOffset Created { get; set; }
 
-		public SimplfiedPost(Post post)
+		public SimplfiedPost(Post post, WebAgent webAgent, Reddit reddit)
 		{
-			Id = post.FullName;
+			Id = post.Id;
+			FullName = post.FullName;
+			Kind = post.Kind;
 			Comments = post.Comments;
 			IsSpoiler = post.IsSpoiler;
 			Domain = post.Domain;
@@ -51,6 +52,8 @@ namespace RedditBrowser.Classes
 			Url = post.Url;
 			Score = post.Score;
 			Created = post.Created;
+			WebAgent = webAgent;
+			Reddit = reddit;
 		}
 
 

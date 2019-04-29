@@ -4,7 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RedditBrowser"
-        mc:Ignorable="d"
+		xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+		mc:Ignorable="d"
 								x:Name="windowMain"
         Title="RedditBrowser" Height="450" Width="800" Loaded="WindowMain_Loaded">
 
@@ -19,8 +20,11 @@
 	</Grid.RowDefinitions>
 	<UserControl Grid.Row="0" Content="{Binding TopPanel}"/>
 
-	<UserControl Grid.Row="1" Content="{Binding CurrentPage}"/>
+	<xctk:BusyIndicator Grid.Row="1" IsBusy="{Binding Busy}" BusyContentTemplate="{StaticResource Busy}">
+	  <UserControl Grid.Row="1" Content="{Binding CurrentPage}"/>
+	</xctk:BusyIndicator>
 	<UserControl Grid.RowSpan="2" Content="{Binding LoginVM}"/>
-	
+	<UserControl Grid.RowSpan="2" Content="{Binding PostVM}"/>
+
   </Grid>
 </Window>

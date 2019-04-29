@@ -1,26 +1,26 @@
-﻿using GalaSoft.MvvmLight.Messaging;
+﻿using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.CommandWpf;
+using GalaSoft.MvvmLight.Messaging;
 using RedditBrowser.Classes;
 using RedditBrowser.Helpers;
 using RedditBrowser.ViewModel.Messages;
+using RedditSharp.Things;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Input;
 
 namespace RedditBrowser.ViewModel
 {
-    public class ListVM : IViewModel, INotifyPropertyChanged
-    {
-        public ObservableCollection<SimplfiedPost> Posts { get; set; } = new ObservableCollection<SimplfiedPost>();
-        public SimplfiedPost MousedOverPost { get; set; }
+    public class ListVM : ViewModelBase, IViewModel
+	{
+		private AuthenticatedUser _user;
+		private bool _busy;
 
-        private void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
-        {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
-        }
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public ListVM()
+		public ObservableCollection<Post> Posts { get; set; } = new ObservableCollection<Post>();
+        public Post MousedOverPost { get; set; }
+		public AuthenticatedUser User { get => _user; set { _user = value; RaisePropertyChanged();  } }
+		public bool Busy { get => _busy; set { _busy = value; RaisePropertyChanged(); } }
+		public ListVM()
         {
             Messenger.Default.Send(new GoToPageMessage(this));
         }
@@ -31,7 +31,7 @@ namespace RedditBrowser.ViewModel
             {
                 return new DelegateCommand((a) =>
                     {
-                        this.MousedOverPost = (SimplfiedPost)a;
+                        this.MousedOverPost = (Post)a;
                     }
                     , (a) =>
                     {
@@ -40,13 +40,13 @@ namespace RedditBrowser.ViewModel
             }
         }
 
-        public ICommand ItemClicked
+        public ICommand ItemClick
         {
             get
             {
                 return new DelegateCommand((a) =>
                 {
-                    Messenger.Default.Send(new GoToPageMessage(new PostVM(this.MousedOverPost)));
+                    Messenger.Default.Send(new ShowPostMessage(this.MousedOverPost));
                 }
                 , (a) =>
                 {
@@ -54,5 +54,35 @@ namespace RedditBrowser.ViewModel
                 });
             }
         }
-    }
+
+		public ICommand UpvoteClick
+		{
+			get
+			{
+				return new RelayCommand(() =>
+				{
+					if(MousedOverPost.Liked.HasValue && MousedOverPost.Liked.Value) MousedOverPost.ClearVote(); else MousedOverPost.Upvote();
+				}
+				, () =>
+				{
+					return this.User != null && this.MousedOverPost != null;
+				},true);
+			}
+		}
+
+		public ICommand DownvoteClick
+		{
+			get
+			{
+				return new DelegateCommand((a) =>
+				{
+					if (MousedOverPost.Liked.HasValue && MousedOverPost.Liked.Value) MousedOverPost.ClearVote(); else MousedOverPost.Downvote();
+				}
+				, (a) =>
+				{
+					return this.User != null && this.MousedOverPost != null;
+				});
+			}
+		}
+	}
 }
