@@ -1,32 +1,37 @@
 ﻿using RedditSharp.Things;
 using System;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
 
 namespace RedditBrowser.Classes
 {
-	public class SimplfiedPost
+	public class SimplfiedPost : Post
 	{
-		public Comment[] Comments { get; }
-		public bool IsSpoiler { get; set; }
-		public string Domain { get; set; }
-		public bool IsSelfPost { get; set; }
-		public string LinkFlairCssClass { get; set; }
-		public string LinkFlairText { get; set; }
-		public RedditUser Author { get; }
-		public int CommentCount { get; set; }
-		public Uri Permalink { get; set; }
-		public string SelfText { get; set; }
-		public string SelfTextHtml { get; set; }
-		public Uri Thumbnail { get; set; }
-		public string Title { get; set; }
-		public string SubredditName { get; set; }
-		public bool NSFW { get; set; }
-		public Subreddit Subreddit { get; }
-		public Uri Url { get; set; }
-		public int Score{ get; set; }
-		public DateTimeOffset Created { get; set; }
+		public new string Id { get; set; }
+		public new Comment[] Comments { get; }
+		public new bool IsSpoiler { get; set; }
+		public new string Domain { get; set; }
+		public new bool IsSelfPost { get; set; }
+		public new string LinkFlairCssClass { get; set; }
+		public new string LinkFlairText { get; set; }
+		public new RedditUser Author { get; }
+		public new int CommentCount { get; set; }
+		public new Uri Permalink { get; set; }
+		public new string SelfText { get; set; }
+		public new string SelfTextHtml { get; set; }
+		public new Uri Thumbnail { get; set; }
+		public new string Title { get; set; }
+		public new string SubredditName { get; set; }
+		public new bool NSFW { get; set; }
+		public new Subreddit Subreddit { get; }
+		public new Uri Url { get; set; }
+		public new int Score{ get; set; }
+		public new DateTimeOffset Created { get; set; }
 
 		public SimplfiedPost(Post post)
 		{
+			Id = post.FullName;
 			Comments = post.Comments;
 			IsSpoiler = post.IsSpoiler;
 			Domain = post.Domain;
@@ -47,5 +52,7 @@ namespace RedditBrowser.Classes
 			Score = post.Score;
 			Created = post.Created;
 		}
+
+
 	}
 }

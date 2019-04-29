@@ -38,8 +38,9 @@ namespace RedditBrowser.ViewModel
             AuthProvider auth = new AuthProvider(keys[0], keys[1], keys[2]);
             var accessToken = auth.GetOAuthToken(keys[3], keys[4]);
             var agent = new WebAgent() { AccessToken = accessToken };
-            this.Reddit = new Reddit(agent);
-            this.Subreddit = this.Reddit.RSlashAll;
+			WebAgent.RootDomain = "oauth.reddit.com";
+			this.Reddit = new Reddit(agent,true);
+			this.Subreddit = this.Reddit.RSlashAll;
 
             this.TopPanel.Header = Subreddit.HeaderImage;
             this.TopPanel.SubredditName = Subreddit.Name;
