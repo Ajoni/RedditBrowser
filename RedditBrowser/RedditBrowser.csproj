@@ -115,6 +115,9 @@
     <Compile Include="Helpers\DelegateCommand.cs" />
     <Compile Include="Helpers\Extensions.cs" />
     <Compile Include="Helpers\RangeObservableCollection.cs" />
+    <Compile Include="Pages\TopPanelView.xaml.cs">
+      <DependentUpon>TopPanelView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModel\LoginVM.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\Messages\GoToListViewMessage.cs" />
@@ -131,6 +134,10 @@
       <DependentUpon>PostDetailsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\TopPanelVM.cs" />
+    <Page Include="Pages\TopPanelView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Resources\Converters.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
