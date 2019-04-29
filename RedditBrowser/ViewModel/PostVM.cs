@@ -11,26 +11,27 @@ namespace RedditBrowser.ViewModel
 {
 	public class PostVM : ViewModelBase, IViewModel
 	{
-		private WindowState _windowState;
+		//private WindowState _windowState;
 
 		public Post Post { get; set; }
 		public string Comment { get; set; }
-		public WindowState WindowState
+		//public WindowState WindowState
+		//{
+		//	get => _windowState; set { _windowState = value; RaisePropertyChanged(); }
+		//}
+
+		public PostVM(Post post)
 		{
-			get => _windowState; set { _windowState = value; RaisePropertyChanged(); }
+			Post = post;
+			//RegisterMessages();
 		}
 
-		public PostVM()
-		{
-			RegisterMessages();
-		}
+		//private void RegisterMessages()
+		//{
+		//	Messenger.Default.Register<ShowPostMessage>(this, (action) => ReceiveMessage(action));
+		//}
 
-		private void RegisterMessages()
-		{
-			Messenger.Default.Register<ShowPostMessage>(this, (action) => ReceiveMessage(action));
-		}
-
-		private void ReceiveMessage(ShowPostMessage message) { this.WindowState = WindowState.Open; this.Post = message.Post; }
+		//private void ReceiveMessage(ShowPostMessage message) { this.WindowState = WindowState.Open; this.Post = message.Post; }
 
 		public ICommand UpvoteClick
 		{

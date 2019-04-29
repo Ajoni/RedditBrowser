@@ -46,7 +46,7 @@ namespace RedditBrowser.ViewModel
             {
                 return new DelegateCommand((a) =>
                 {
-                    Messenger.Default.Send(new ShowPostMessage(this.MousedOverPost));
+                    Messenger.Default.Send(new GoToPageMessage(new PostVM(this.MousedOverPost)));
                 }
                 , (a) =>
                 {

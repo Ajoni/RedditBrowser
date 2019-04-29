@@ -36,7 +36,7 @@ namespace RedditBrowser.ViewModel
 			this.RegisterMessages();
 			this.ListVM = new ListVM();
 			this.LoginVM = new LoginVM();
-			this.PostVM = new PostVM();
+			//this.PostVM = new PostVM();
 
 			this.WebAgent = this.LoginApp();
 			this.Reddit = new Reddit(WebAgent, true);
