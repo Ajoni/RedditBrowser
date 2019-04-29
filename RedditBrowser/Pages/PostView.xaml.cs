@@ -10,16 +10,17 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace RedditBrowser.Windows
+namespace RedditBrowser.Pages
 {
     /// <summary>
-    /// Interaction logic for PostDetailsWindow.xaml
+    /// Interaction logic for PostView.xaml
     /// </summary>
-    public partial class PostDetailsWindow : Window
+    public partial class PostView : UserControl
     {
-        public PostDetailsWindow()
+        public PostView()
         {
             InitializeComponent();
         }
