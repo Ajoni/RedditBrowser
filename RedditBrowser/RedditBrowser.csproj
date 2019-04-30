@@ -118,6 +118,7 @@
     </ApplicationDefinition>
     <Compile Include="Classes\SimplfiedPost.cs" />
     <Compile Include="Classes\User.cs" />
+    <Compile Include="Classes\UserLoginResult.cs" />
     <Compile Include="Config\GlobalConfig.cs" />
     <Compile Include="Config\GlobalKeys.cs" />
     <Compile Include="Config\GlobalPaths.cs" />

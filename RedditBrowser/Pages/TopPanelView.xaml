@@ -20,6 +20,6 @@
         <Button Grid.Column="0" x:Name="buttonSubredditName" Content="{Binding SubredditName}" Command="{Binding GoToListView}"/>
         <xctk:WatermarkTextBox Grid.Column="1" x:Name="texboxSearch" Text="{Binding Search}" Watermark="Search"
                 FontSize="16" Padding="7"/>
-        <Button Grid.Column="2" x:Name="buttonLogin" Content="Login"/>
+        <Button Grid.Column="2" x:Name="buttonLogin" Content="Login" Command="{Binding LoginClick}"/>
     </Grid>
 </UserControl>

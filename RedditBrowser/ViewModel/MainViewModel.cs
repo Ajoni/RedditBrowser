@@ -38,8 +38,9 @@ namespace RedditBrowser.ViewModel
 			this.LoginVM = new LoginVM();
 			//this.PostVM = new PostVM();
 
-			this.WebAgent = this.LoginApp();
-			this.Reddit = new Reddit(WebAgent, true);
+			//this.WebAgent = this.LoginApp();
+			//this.Reddit = new Reddit(WebAgent, true);
+			this.Reddit = new Reddit();
 			this.Subreddit = this.Reddit.RSlashAll;
 
 			this.TopPanel.Header = Subreddit.HeaderImage;
@@ -65,7 +66,7 @@ namespace RedditBrowser.ViewModel
 			this.Busy = true;
 			await Task.Run(() =>
 			{
-				posts = LoadPosts(0, 20);
+				posts = LoadPosts(0, 3);
 			});
 			IObservable<Post> postsToLoad = posts.ToObservable();
 			postsToLoad.Subscribe(p =>
@@ -84,7 +85,7 @@ namespace RedditBrowser.ViewModel
 
 		private void ReceiveMessage(GoToPageMessage message) => this.CurrentPage = message.Page;
 		private void ReceiveMessage(GoToListViewMessage message) => this.CurrentPage = this.ListVM;
-		private void ReceiveMessage(LoginChangeMessage message) { this.Reddit.User = message.User; this.ListVM.User = message.User; }
+		private void ReceiveMessage(LoginChangeMessage message) { this.Reddit.User = message.UserLoginResult.AuthenticatedUser; this.ListVM.User = message.UserLoginResult.AuthenticatedUser; }
 
 		private void RegisterMessages()
 		{

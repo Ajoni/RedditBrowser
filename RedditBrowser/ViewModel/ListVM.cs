@@ -22,8 +22,8 @@ namespace RedditBrowser.ViewModel
 		public bool Busy { get => _busy; set { _busy = value; RaisePropertyChanged(); } }
 		public ListVM()
         {
-            Messenger.Default.Send(new GoToPageMessage(this));
-        }
+			Messenger.Default.Send(new GoToPageMessage(this));
+		}
 
         public ICommand ItemHover
         {

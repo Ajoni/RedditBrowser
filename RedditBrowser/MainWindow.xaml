@@ -21,9 +21,7 @@
 	<UserControl Grid.Row="0" Content="{Binding TopPanel}"/>
 
 	<xctk:BusyIndicator Grid.Row="1" IsBusy="{Binding Busy}" BusyContentTemplate="{StaticResource Busy}">
-	  <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
 		<UserControl Grid.Row="1" Content="{Binding CurrentPage}"/>
-	  </ScrollViewer>
 	</xctk:BusyIndicator>
 
 	<UserControl Grid.RowSpan="2" Content="{Binding LoginVM}"/>

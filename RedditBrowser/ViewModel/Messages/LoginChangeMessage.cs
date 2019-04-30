@@ -9,11 +9,11 @@ namespace RedditBrowser.ViewModel.Messages
 {
 	public class LoginChangeMessage
 	{
-		public AuthenticatedUser User { get; set; }
+		public Classes.UserLoginResult UserLoginResult { get; set; }
 
-		public LoginChangeMessage(AuthenticatedUser user)
+		public LoginChangeMessage(Classes.UserLoginResult userLoginResult)
 		{
-			User = user;
+			UserLoginResult = userLoginResult;
 		}
 	}
 }
