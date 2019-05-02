@@ -21,7 +21,7 @@
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
             <Button Grid.Row="0" x:Name="buttonUpVote" FontFamily="Segoe UI Symbol" Content="&#xE110;"/>
-            <!--<TextBlock Grid.Row="1" x:Name="textblockVotes" Text="{Binding Score}" VerticalAlignment="Center"/>-->
+            <TextBlock Grid.Row="1" x:Name="textblockVotes" Text="{Binding Score}" VerticalAlignment="Center"/>
             <Button Grid.Row="2" x:Name="buttonDownVote" FontFamily="Segoe UI Symbol" Content="&#xE1FD;"/>
         </Grid>
 

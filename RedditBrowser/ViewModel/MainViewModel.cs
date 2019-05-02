@@ -18,6 +18,7 @@ namespace RedditBrowser.ViewModel
 	{
 		private IViewModel _currentPage;
 		private bool _busy;
+		private AuthenticatedUser _user;
 
 		public IViewModel CurrentPage { get => _currentPage; set { _currentPage = value; RaisePropertyChanged(); } }
 		public TopPanelVM TopPanel { get; set; } = new TopPanelVM();
@@ -27,7 +28,7 @@ namespace RedditBrowser.ViewModel
 		public Subreddit Subreddit { get; set; }
 		public Reddit Reddit { get; set; }
 		public bool Busy { get => _busy; set { _busy = value; RaisePropertyChanged(); } }
-
+		public AuthenticatedUser User { get => _user; set { _user = value; this.ListVM.User = value; RaisePropertyChanged(); } }
 		private WebAgent WebAgent { get; set; }
 
 
@@ -38,13 +39,13 @@ namespace RedditBrowser.ViewModel
 			this.LoginVM = new LoginVM();
 			//this.PostVM = new PostVM();
 
-			//this.WebAgent = this.LoginApp();
-			//this.Reddit = new Reddit(WebAgent, true);
-			this.Reddit = new Reddit();
-			this.Subreddit = this.Reddit.RSlashAll;
+			this.WebAgent = this.LoginApp();
+			this.Reddit = new Reddit(WebAgent, true);
+			//this.Reddit = new Reddit();
+			//this.Subreddit = this.Reddit.RSlashAll;
 
-			this.TopPanel.Header = Subreddit.HeaderImage;
-			this.TopPanel.SubredditName = Subreddit.Name;
+			//this.TopPanel.Header = Subreddit.HeaderImage;
+			//this.TopPanel.SelectedSubreddit = Subreddit.Name;
 
 		}
 
@@ -79,13 +80,20 @@ namespace RedditBrowser.ViewModel
 			});
 		}
 
-		private List<Post> LoadPosts(int from, int amount)
-		{
-			return Subreddit.Posts.Skip(from).Take(amount).ToList();
-		}
+		private List<Post> LoadPosts(int from, int amount) => Subreddit.Posts.Skip(from).Take(amount).ToList();
 
 		private void ReceiveMessage(GoToPageMessage message) => this.CurrentPage = message.Page;
-		private void ReceiveMessage(GoToListViewMessage message) => this.CurrentPage = this.ListVM;
+
+		private async void ReceiveMessage(ChangeSubredditMessage message)
+		{
+			this.CurrentPage = this.ListVM;
+			if (message.Name == "r/all")
+				this.Subreddit = this.Reddit.RSlashAll;
+			else
+				this.Subreddit = await this.Reddit.GetSubredditAsync(message.Name);
+			await this.Init();
+
+		}
 		private async void ReceiveMessage(LoginChangeMessage message)
 		{
 			this.Reddit = new Reddit(message.UserLoginResult.WebAgent, true);
@@ -96,7 +104,7 @@ namespace RedditBrowser.ViewModel
 		private void RegisterMessages()
 		{
 			Messenger.Default.Register<GoToPageMessage>(this, (action) => ReceiveMessage(action));
-			Messenger.Default.Register<GoToListViewMessage>(this, (action) => ReceiveMessage(action));
+			Messenger.Default.Register<ChangeSubredditMessage>(this, (action) => ReceiveMessage(action));
 			Messenger.Default.Register<LoginChangeMessage>(this, (action) => ReceiveMessage(action));
 		}
 

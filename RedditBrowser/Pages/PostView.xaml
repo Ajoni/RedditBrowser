@@ -25,6 +25,7 @@
 		<Grid.RowDefinitions>
 		  <RowDefinition Height="auto"/>
 		  <RowDefinition Height="auto"/>
+		  <RowDefinition Height="auto"/>
 		  <RowDefinition Height="*"/>
 		  <RowDefinition Height="auto"/>
 		</Grid.RowDefinitions>
@@ -53,7 +54,9 @@
 		</WrapPanel>
 		<TextBlock Grid.Row="1" Grid.Column="1" x:Name="textblockTitle" Text="{Binding Post.Title}"
                     TextWrapping="Wrap"/>
-		<Image Grid.Row="2" Grid.Column="1" x:Name="image" Source="{Binding Post.Url}"/>
+		<TextBlock Grid.Row="2" Grid.Column="1" x:Name="textblockText" Text="{Binding Post.SelfText}"
+                    TextWrapping="Wrap"/>
+		<Image Grid.Row="3" Grid.Column="1" x:Name="image" Source="{Binding Post.Url}"/>
 	  </Grid>
 	  <Grid Grid.Row="1" x:Name="gridComment" Margin="5">
 		<Grid.RowDefinitions>

@@ -24,7 +24,7 @@ namespace RedditBrowser
 
             VM = new MainViewModel();
             this.DataContext = VM;
-            await this.VM.Init();
+            //await this.VM.Init();
         }
 
         private void InitConfig()
