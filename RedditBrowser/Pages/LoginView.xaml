@@ -19,8 +19,8 @@
                     <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
                 <xctk:WatermarkTextBox Grid.Row="0" x:Name="watermarktextboxUsername"  Watermark="Username" Text="{Binding Username}"/>
-                <xctk:WatermarkPasswordBox Grid.Row="1" x:Name="watermarkpasswordboxPasswordd" Watermark="Password" Text="{Binding Password}"/>
-                <Button Grid.Row="2" x:Name="buttonLogin" Content="Login" Command="{Binding LoginClick}"/>
+                <xctk:WatermarkPasswordBox Grid.Row="1" x:Name="watermarkpasswordboxPasswordd" Watermark="Password"/>
+                <Button Grid.Row="2" x:Name="buttonLogin" Content="Login" IsDefault="True" Click="ButtonLogin_Click"/>
             </Grid>
         </xctk:ChildWindow>
     </xctk:BusyIndicator>

@@ -21,7 +21,7 @@ namespace RedditBrowser.Helpers
 
 			var accessToken = await Task.Run(() => {
 				try { return auth.GetOAuthToken(username, password); }
-				catch (WebException) { return null; }
+				catch (Exception) { return null; }
 			});
 
 			if (accessToken == null)
@@ -32,8 +32,10 @@ namespace RedditBrowser.Helpers
 
 			var user = await Task.Run(() => {
 				try { return auth.GetUser(accessToken); }
-				catch (WebException) { return null; }
+				catch (Exception) { return null; }
 			});
+			if (user == null)
+				return null;
 			return new Classes.UserLoginResult(agent, user);
 		}
 	}

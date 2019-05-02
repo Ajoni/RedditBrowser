@@ -12,7 +12,6 @@ namespace RedditBrowser.ViewModel
 		private WindowState _windowState;
 		private bool _busy;
 
-		public string Password { get; set; }
 		public string Username { get; set; }
 		public bool Busy { get => _busy; set { _busy = value; RaisePropertyChanged(); } }
 		public WindowState WindowState
@@ -26,15 +25,6 @@ namespace RedditBrowser.ViewModel
 			WindowState = WindowState.Closed;
 			RegisterMessages();
 		}
-
-		public ICommand LoginClick => new DelegateCommand(async (a) =>
-		{
-			this.Busy = true;
-			var user = await LoginHelper.LoginUser(this.Username, this.Password);
-			Messenger.Default.Send(new LoginChangeMessage(user));
-			this.Busy = false;
-			this.WindowState = WindowState.Closed;
-		});
 
 		private void ReceiveMessage(ShowLoginMessage message) => this.WindowState = WindowState.Open;
 

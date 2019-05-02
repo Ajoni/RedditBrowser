@@ -23,7 +23,7 @@ namespace RedditBrowser.ViewModel
 		public TopPanelVM TopPanel { get; set; } = new TopPanelVM();
 		public ListVM ListVM { get; set; }
 		public LoginVM LoginVM { get; set; }
-		public PostVM PostVM { get; set; }
+		//public PostVM PostVM { get; set; }
 		public Subreddit Subreddit { get; set; }
 		public Reddit Reddit { get; set; }
 		public bool Busy { get => _busy; set { _busy = value; RaisePropertyChanged(); } }
@@ -62,6 +62,7 @@ namespace RedditBrowser.ViewModel
 
 		public async Task Init()
 		{
+			this.ListVM.Posts.Clear();
 			List<Post> posts = new List<Post>();
 			this.Busy = true;
 			await Task.Run(() =>
@@ -85,7 +86,12 @@ namespace RedditBrowser.ViewModel
 
 		private void ReceiveMessage(GoToPageMessage message) => this.CurrentPage = message.Page;
 		private void ReceiveMessage(GoToListViewMessage message) => this.CurrentPage = this.ListVM;
-		private void ReceiveMessage(LoginChangeMessage message) { this.Reddit.User = message.UserLoginResult.AuthenticatedUser; this.ListVM.User = message.UserLoginResult.AuthenticatedUser; }
+		private async void ReceiveMessage(LoginChangeMessage message)
+		{
+			this.Reddit = new Reddit(message.UserLoginResult.WebAgent, true);
+			this.Reddit.User = this.ListVM.User = message.UserLoginResult.AuthenticatedUser;
+			await this.Init();
+		}
 
 		private void RegisterMessages()
 		{
