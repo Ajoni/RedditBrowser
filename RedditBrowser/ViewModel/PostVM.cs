@@ -30,13 +30,6 @@ namespace RedditBrowser.ViewModel
 			//RegisterMessages();
 		}
 
-		//private void RegisterMessages()
-		//{
-		//	Messenger.Default.Register<ShowPostMessage>(this, (action) => ReceiveMessage(action));
-		//}
-
-		//private void ReceiveMessage(ShowPostMessage message) { this.WindowState = WindowState.Open; this.Post = message.Post; }
-
 		public ICommand UpvoteClick
 		{
 			get
@@ -63,7 +56,7 @@ namespace RedditBrowser.ViewModel
 				, () =>
 				{
 					return this.Post != null && this.User != null;
-				},true);
+				}, true);
 			}
 		}
 

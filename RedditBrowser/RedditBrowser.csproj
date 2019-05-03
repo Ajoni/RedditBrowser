@@ -119,7 +119,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Classes\SimplfiedPost.cs" />
+    <Compile Include="Classes\LoadedPost.cs" />
     <Compile Include="Classes\User.cs" />
     <Compile Include="Classes\UserLoginResult.cs" />
     <Compile Include="Config\GlobalConfig.cs" />

@@ -61,12 +61,12 @@ namespace RedditBrowser.ViewModel
 			{
 				return new RelayCommand(() =>
 				{
-					if(MousedOverPost.Liked.HasValue && MousedOverPost.Liked.Value) MousedOverPost.ClearVote(); else MousedOverPost.Upvote();
+					if (MousedOverPost.Liked.HasValue && MousedOverPost.Liked.Value) MousedOverPost.ClearVote(); else MousedOverPost.Upvote();
 				}
 				, () =>
 				{
 					return this.User != null && this.MousedOverPost != null;
-				},true);
+				}, true);
 			}
 		}
 
