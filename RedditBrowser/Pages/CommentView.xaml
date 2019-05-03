@@ -6,9 +6,22 @@
              xmlns:local="clr-namespace:RedditBrowser.Pages"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/Merged.xaml" />                
+            </ResourceDictionary.MergedDictionaries>
+            
+            <Style x:Key="CommentSmallTextButton" TargetType="TextBlock">
+                <Setter Property="FontSize" Value="12" />
+                <Setter Property="Foreground" Value="Gray" />
+                <Setter Property="FontWeight" Value="Bold" />
+            </Style>
+        </ResourceDictionary>        
+    </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="40"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -20,9 +33,43 @@
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
-            <Button Grid.Row="0" x:Name="buttonUpVote" FontFamily="Segoe UI Symbol" Content="&#xE110;"/>
+            <Button Grid.Row="0" x:Name="buttonUpVote" >
+                <Viewbox>
+                    <Canvas Width="124.01568" Height="99.212545">
+                        <Canvas.RenderTransform>
+                            <TranslateTransform X="0" Y="0"/>
+                        </Canvas.RenderTransform>
+                        <Canvas.Resources/>
+                        <Canvas>
+                            <Canvas.RenderTransform>
+                                <TranslateTransform X="0" Y="-953.14939"/>
+                            </Canvas.RenderTransform>
+                            <Path Fill="#FF868A8C" StrokeThickness="0" Stroke="#FF000000" StrokeMiterLimit="4"
+                                                          StrokeLineJoin="Miter" StrokeStartLineCap="Flat" StrokeEndLineCap="Flat" 
+                                                          Data="m 81.045943 1052.3621 -0.12627 -41.7528 45.115267 -0.061 L 63.017473 951.7394 1.2667943e-5 1010.5485 45.115283 1010.6093 l -0.12627 41.7528 z"/>
+                        </Canvas>
+                    </Canvas>
+                </Viewbox>
+            </Button>
             <TextBlock Grid.Row="1" x:Name="textblockVotes" Text="{Binding Score}" VerticalAlignment="Center"/>
-            <Button Grid.Row="2" x:Name="buttonDownVote" FontFamily="Segoe UI Symbol" Content="&#xE1FD;"/>
+            <Button Grid.Row="2" x:Name="buttonDownVote">
+                <Viewbox>
+                    <Canvas Width="124.01568" Height="99.212545">
+                        <Canvas.RenderTransform>
+                            <TranslateTransform X="0" Y="0"/>
+                        </Canvas.RenderTransform>
+                        <Canvas.Resources/>
+                        <Canvas>
+                            <Canvas.RenderTransform>
+                                <TranslateTransform X="0" Y="-953.14939"/>
+                            </Canvas.RenderTransform>
+                            <Path  Fill="#FF868A8C" StrokeThickness="0" Stroke="#FF000000"
+                                                           StrokeMiterLimit="4" StrokeLineJoin="Miter" StrokeStartLineCap="Flat" StrokeEndLineCap="Flat" 
+                                                           Data="m 81.045943 951.7394 -0.12627 41.7528 45.115267 0.061 -63.017467 58.8089 L 1.2667943e-5 993.553 45.115283 993.4922 44.989013 951.7394 Z"/>
+                        </Canvas>
+                    </Canvas>
+                </Viewbox>
+            </Button>
         </Grid>
 
         <Grid Grid.Column="1">
@@ -42,7 +89,9 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
-                <Button Grid.Column="0"  x:Name="buttonReply" Content="Reply"/>
+                <Button Grid.Column="0"  x:Name="buttonReply" Style="{StaticResource TransparentButtonStyle}">
+                    <TextBlock Style="{StaticResource CommentSmallTextButton}">Reply</TextBlock>
+                </Button>
             </Grid>
         </Grid>
     </Grid>
