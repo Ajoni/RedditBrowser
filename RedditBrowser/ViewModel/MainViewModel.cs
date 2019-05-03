@@ -20,17 +20,14 @@ namespace RedditBrowser.ViewModel
 	{
 		private IViewModel _currentPage;
 		private bool _busy;
-		private AuthenticatedUser _user;
 
 		public IViewModel CurrentPage { get => _currentPage; set { _currentPage = value; RaisePropertyChanged(); } }
 		public TopPanelVM TopPanel { get; set; } = new TopPanelVM();
 		public ListVM ListVM { get; set; }
 		public LoginVM LoginVM { get; set; }
-		//public PostVM PostVM { get; set; }
 		public Subreddit Subreddit { get; set; }
 		public Reddit Reddit { get; set; }
 		public bool Busy { get => _busy; set { _busy = value; RaisePropertyChanged(); } }
-		public AuthenticatedUser User { get => _user; set { _user = value; this.ListVM.User = value; RaisePropertyChanged(); } }
 		private WebAgent WebAgent { get; set; }
 
 		public MainViewModel()
@@ -72,12 +69,12 @@ namespace RedditBrowser.ViewModel
 			this.Busy = true;
 			await Task.Run(() =>
 			{
-				posts = LoadPosts(0, 1);
+				posts = LoadPosts(0, 5);
 			});
 			IObservable<Post> postsToLoad = posts.ToObservable();
 			postsToLoad.Subscribe(p =>
 			{
-				Application.Current.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Background, new Action<Post>((post) => this.ListVM.Posts.Add(post)), p);
+				Application.Current.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Background, new Action<Post>((post) => this.ListVM.Posts.Add(new LoadedPost(post))), p);
 			}, () =>
 			{
 				this.Busy = false;
@@ -98,7 +95,7 @@ namespace RedditBrowser.ViewModel
                     return Subreddit.Posts.Skip(currentPostCount).Take(3).ToList();
                 });
                 foreach(var post in newPosts)
-                    ListVM.Posts.Add(post);
+                    ListVM.Posts.Add(new LoadedPost(post));
                 ListVM.RaisePropertyChanged("Posts");
             }
             ListVM.Busy = false;
@@ -108,8 +105,10 @@ namespace RedditBrowser.ViewModel
 
 		private async void ReceiveMessage(ChangeSubredditMessage message)
 		{
+			if (string.IsNullOrEmpty(message.Name))
+				return;
 			this.CurrentPage = this.ListVM;
-			if (message.Name == "r/all")
+			if (message.Name == "all")
 				this.Subreddit = this.Reddit.RSlashAll;
 			else
 				this.Subreddit = await this.Reddit.GetSubredditAsync(message.Name);
@@ -119,8 +118,14 @@ namespace RedditBrowser.ViewModel
 		private async void ReceiveMessage(LoginChangeMessage message)
 		{
 			this.Reddit = new Reddit(message.UserLoginResult.WebAgent, true);
-			this.Reddit.User = this.ListVM.User = message.UserLoginResult.AuthenticatedUser;
-			await this.Init();
+			this.ListVM.User = this.Reddit.User;
+
+			foreach (var item in this.Reddit.User.SubscribedSubreddits)
+				if(!this.TopPanel.Subreddits.Any(s => s==item.Name))
+					this.TopPanel.Subreddits.Add(item.Name);
+
+			if (this.Subreddit != null)
+				await this.Init();
 		}
 
 		private void RegisterMessages()

@@ -9,41 +9,41 @@
 			 xmlns:cmd="http://www.galasoft.ch/mvvmlight"
 			 mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Resources/Merged.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-            
-        </ResourceDictionary>
-    </UserControl.Resources>
-    <Grid x:Name="gridTopPanel" Margin="5">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="40" />
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="110"/>
-            <ColumnDefinition MinWidth="80" Width="2*"/>
-            <ColumnDefinition Width="8*"/>
-            <ColumnDefinition MinWidth="100" Width="3*"/>
-        </Grid.ColumnDefinitions>
-        <Button Grid.Column="0" Margin="0" BorderThickness="0" Style="{StaticResource TransparentButtonStyle}">
-            <Viewbox Margin="0">
-                <ContentControl Content="{StaticResource RedditTablet}" />
-            </Viewbox>
-        </Button>
-        <xctk:WatermarkComboBox Grid.Column="1" x:Name="watermarkcomboboxSubredditName" Watermark="Subreddit" 
+  <UserControl.Resources>
+	<ResourceDictionary>
+	  <ResourceDictionary.MergedDictionaries>
+		<ResourceDictionary Source="/Resources/Merged.xaml" />
+	  </ResourceDictionary.MergedDictionaries>
+
+	</ResourceDictionary>
+  </UserControl.Resources>
+  <Grid x:Name="gridTopPanel" Margin="5">
+	<Grid.RowDefinitions>
+	  <RowDefinition Height="40" />
+	</Grid.RowDefinitions>
+	<Grid.ColumnDefinitions>
+	  <ColumnDefinition Width="110"/>
+	  <ColumnDefinition MinWidth="80" Width="2*"/>
+	  <ColumnDefinition Width="8*"/>
+	  <ColumnDefinition MinWidth="100" Width="3*"/>
+	</Grid.ColumnDefinitions>
+	<Button Grid.Column="0" Margin="0" BorderThickness="0" Style="{StaticResource TransparentButtonStyle}">
+	  <Viewbox Margin="0">
+		<ContentControl Content="{StaticResource RedditTablet}" />
+	  </Viewbox>
+	</Button>
+	<xctk:WatermarkComboBox Grid.Column="1" x:Name="watermarkcomboboxSubredditName" Watermark="Subreddit" 
 							ItemsSource="{Binding Subreddits}" SelectedItem="{Binding SelectedSubreddit}" Text="{Binding SelectedSubreddit}"
 							IsEditable="True" IsTextSearchEnabled="True" IsTextSearchCaseSensitive="False" >
-	      <i:Interaction.Triggers>
-		    <iex:KeyTrigger Key="Enter">
-		      <cmd:EventToCommand Command="{Binding ChangeSubreddit}"/>
-		    </iex:KeyTrigger>
-	      </i:Interaction.Triggers>
-	    </xctk:WatermarkComboBox>
+	  <i:Interaction.Triggers>
+		<iex:KeyTrigger Key="Enter">
+		  <cmd:EventToCommand Command="{Binding ChangeSubreddit}"/>
+		</iex:KeyTrigger>
+	  </i:Interaction.Triggers>
+	</xctk:WatermarkComboBox>
 
-        <xctk:WatermarkTextBox Grid.Column="2" x:Name="texboxSearch" Text="{Binding Search}" Watermark="Search"
+	<xctk:WatermarkTextBox Grid.Column="2" x:Name="texboxSearch" Text="{Binding Search}" Watermark="Search"
                 FontSize="16" Padding="7"/>
-        <Button Grid.Column="3" x:Name="buttonLogin" Content="Login" Command="{Binding LoginClick}"/>
-    </Grid>
+	<Button Grid.Column="3" x:Name="buttonLogin" Content="Login" Command="{Binding LoginClick}"/>
+  </Grid>
 </UserControl>

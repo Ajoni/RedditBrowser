@@ -16,8 +16,8 @@ namespace RedditBrowser.ViewModel
 		private AuthenticatedUser   _user;
 		private bool                _busy;
 
-		public ObservableCollection<Post>   Posts           { get; set; } = new ObservableCollection<Post>();
-        public Post                         MousedOverPost  { get; set; }
+		public ObservableCollection<LoadedPost>   Posts           { get; set; } = new ObservableCollection<LoadedPost>();
+        public LoadedPost MousedOverPost  { get; set; }
 		public AuthenticatedUser            User            { get => _user; set { _user = value; RaisePropertyChanged(); } }
 		public bool                         Busy            { get => _busy; set { _busy = value; RaisePropertyChanged(); } }
 
@@ -36,7 +36,7 @@ namespace RedditBrowser.ViewModel
             {
                 return new DelegateCommand((a) =>
                     {
-                        this.MousedOverPost = (Post)a;
+                        this.MousedOverPost = (LoadedPost)a;
                     }
                     , (a) =>
                     {
@@ -70,7 +70,7 @@ namespace RedditBrowser.ViewModel
 				}
 				, () =>
 				{
-					return this.User != null && this.MousedOverPost != null;
+					return this.User != null;
 				}, true);
 			}
 		}
@@ -79,13 +79,13 @@ namespace RedditBrowser.ViewModel
 		{
 			get
 			{
-				return new DelegateCommand((a) =>
+				return new RelayCommand(() =>
 				{
 					if (MousedOverPost.Liked.HasValue && MousedOverPost.Liked.Value) MousedOverPost.ClearVote(); else MousedOverPost.Downvote();
 				}
-				, (a) =>
+				, () =>
 				{
-					return this.User != null && this.MousedOverPost != null;
+					return this.User != null;
 				});
 			}
 		}

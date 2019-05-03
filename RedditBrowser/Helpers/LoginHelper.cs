@@ -29,14 +29,7 @@ namespace RedditBrowser.Helpers
 
 			var agent = new WebAgent() { AccessToken = accessToken };
 			WebAgent.RootDomain = "oauth.reddit.com";
-
-			var user = await Task.Run(() => {
-				try { return auth.GetUser(accessToken); }
-				catch (Exception) { return null; }
-			});
-			if (user == null)
-				return null;
-			return new Classes.UserLoginResult(agent, user);
+			return new Classes.UserLoginResult(agent);
 		}
 	}
 }

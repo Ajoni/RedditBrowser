@@ -14,7 +14,7 @@ namespace RedditBrowser.ViewModel
 		//private WindowState _windowState;
 		private AuthenticatedUser _user;
 
-		public Post Post { get; set; }
+		public LoadedPost Post { get; set; }
 		public string Comment { get; set; }
 		public Comment MousedOverComment { get; set; }
 		public AuthenticatedUser User { get => _user; set { _user = value; RaisePropertyChanged(); } }
@@ -23,7 +23,7 @@ namespace RedditBrowser.ViewModel
 		//	get => _windowState; set { _windowState = value; RaisePropertyChanged(); }
 		//}
 
-		public PostVM(Post post, AuthenticatedUser user)
+		public PostVM(LoadedPost post, AuthenticatedUser user)
 		{
 			Post = post;
 			User = user;

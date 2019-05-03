@@ -1,31 +1,67 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Canvas x:Key="RedditTablet" Name="svg2" Width="290.55113" Height="106.29915">
-        <Canvas.RenderTransform>
-            <TranslateTransform X="0" Y="0"/>
-        </Canvas.RenderTransform>
-        <Canvas.Resources/>
-        <Canvas Name="layer2">
-            <Canvas.RenderTransform>
-                <TranslateTransform X="0" Y="-946.0632"/>
-            </Canvas.RenderTransform>
-            <TextBlock Panel.ZIndex="2" FontSize="72" FontWeight="Normal" 
+
+  <ResourceDictionary.MergedDictionaries>
+	<ResourceDictionary Source="Styles.xaml"/>
+  </ResourceDictionary.MergedDictionaries>
+
+  <Canvas x:Key="RedditTablet" Name="svg2" Width="290.55113" Height="106.29915">
+	<Canvas.RenderTransform>
+	  <TranslateTransform X="0" Y="0"/>
+	</Canvas.RenderTransform>
+	<Canvas.Resources/>
+	<Canvas Name="layer2">
+	  <Canvas.RenderTransform>
+		<TranslateTransform X="0" Y="-946.0632"/>
+	  </Canvas.RenderTransform>
+	  <TextBlock Panel.ZIndex="2" FontSize="72" FontWeight="Normal" 
                        FontFamily="sans-serif" FontStyle="normal" 
                        Foreground="#FF1A1A1A" TextWrapping="Wrap" 
                        Name="flowRoot3356" Width="274.28574" Height="108.57143"
                        Canvas.Left="50" Canvas.Top="959.64795">
                 reddit
-            </TextBlock>
-            <Rectangle Panel.ZIndex="1" Canvas.Left="0" Canvas.Top="946.64795"
+	  </TextBlock>
+	  <Rectangle Panel.ZIndex="1" Canvas.Left="0" Canvas.Top="946.64795"
                        Width="292.85715" Height="105.71429" RadiusY="17.041357"
                        RadiusX="17.041357" Name="rect3365" Fill="#FFE94507"
                        StrokeThickness="0.89200002" StrokeMiterLimit="10"
                        StrokeLineJoin="Miter" StrokeStartLineCap="Flat"
                        StrokeEndLineCap="Flat" Opacity="1"/>
-        </Canvas>
-    </Canvas>
-    
-    <!-- If you're looking for Up/Down/etc. Arrows, you'll find them in places where they are used, not here. -->
-    <!-- WPF won't allow those resources to be shared for whatever reason -->    
+	</Canvas>
+  </Canvas>
+
+  <Viewbox x:Key="UpvoteArrow" x:Shared="False" Stretch="Uniform">
+	<Canvas Width="124.01568" Height="99.212545" >
+	  <Canvas.RenderTransform>
+		<TranslateTransform X="0" Y="0"/>
+	  </Canvas.RenderTransform>
+	  <Canvas.Resources/>
+	  <Canvas>
+		<Canvas.RenderTransform>
+		  <TranslateTransform X="0" Y="-953.14939"/>
+		</Canvas.RenderTransform>
+		<Path Style="{StaticResource UpvotePathStyle}" StrokeThickness="0" Stroke="#FF000000" StrokeMiterLimit="4"
+                                                          StrokeLineJoin="Miter" StrokeStartLineCap="Flat" StrokeEndLineCap="Flat" 
+                                                          Data="m 81.045943 1052.3621 -0.12627 -41.7528 45.115267 -0.061 L 63.017473 951.7394 1.2667943e-5 1010.5485 45.115283 1010.6093 l -0.12627 41.7528 z"/>
+	  </Canvas>
+	</Canvas>
+  </Viewbox>
+
+  <Viewbox x:Key="DownvoteArrow" x:Shared="False" Stretch="Uniform">
+	<Canvas Width="124.01568" Height="99.212545">
+	  <Canvas.RenderTransform>
+		<TranslateTransform X="0" Y="0"/>
+	  </Canvas.RenderTransform>
+	  <Canvas.Resources/>
+	  <Canvas>
+		<Canvas.RenderTransform>
+		  <TranslateTransform X="0" Y="-953.14939"/>
+		</Canvas.RenderTransform>
+		<Path  Style="{StaticResource DownvotePathStyle}" StrokeThickness="0" Stroke="#FF000000"
+                                                           StrokeMiterLimit="4" StrokeLineJoin="Miter" StrokeStartLineCap="Flat" StrokeEndLineCap="Flat" 
+                                                           Data="m 81.045943 951.7394 -0.12627 41.7528 45.115267 0.061 -63.017467 58.8089 L 1.2667943e-5 993.553 45.115283 993.4922 44.989013 951.7394 Z"/>
+	  </Canvas>
+	</Canvas>
+  </Viewbox>
 
 </ResourceDictionary>

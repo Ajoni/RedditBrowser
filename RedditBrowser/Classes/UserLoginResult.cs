@@ -11,12 +11,10 @@ namespace RedditBrowser.Classes
 	public class UserLoginResult
 	{
 		public WebAgent WebAgent { get; set; }
-		public AuthenticatedUser AuthenticatedUser { get; set; }
 
-		public UserLoginResult(WebAgent webAgent, AuthenticatedUser  authenticatedUser)
+		public UserLoginResult(WebAgent webAgent)
 		{
 			WebAgent = webAgent;
-			AuthenticatedUser = authenticatedUser;
 		}
 	}
 }

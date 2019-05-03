@@ -1,0 +1,8 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:RedditBrowser.Resources">
+  <SolidColorBrush Color="OrangeRed" x:Key="Upvote"/>
+  <SolidColorBrush Color="#7193FF" x:Key="Downvote"/>
+  <SolidColorBrush Color="#FF868A8C" x:Key="Novote"/>
+  <SolidColorBrush Color="Black" x:Key="NovoteText"/>
+</ResourceDictionary>

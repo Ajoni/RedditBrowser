@@ -20,9 +20,6 @@ namespace RedditBrowser.ViewModel
 			get { return _SubredditName; }
 			set
 			{
-				if (!string.IsNullOrEmpty(value) && !value.Contains("r/"))
-					value = $"r/{value}";
-
 				_SubredditName = value;
 				RaisePropertyChanged();
 			}
