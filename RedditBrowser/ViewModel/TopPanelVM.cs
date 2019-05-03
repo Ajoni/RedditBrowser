@@ -1,22 +1,44 @@
-﻿using GalaSoft.MvvmLight.Messaging;
+﻿using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
 using RedditBrowser.Helpers;
 using RedditBrowser.ViewModel.Messages;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 
 namespace RedditBrowser.ViewModel
 {
-	public class TopPanelVM : IViewModel
+	public class TopPanelVM : ViewModelBase, IViewModel
 	{
-        private string _SubredditName;
+		private string _SubredditName = "";
 
 		public string Header { get; set; }
-		public string SubredditName { get { return "r/" + _SubredditName; } set { _SubredditName = value; } }
 		public string Search { get; set; }
-
-		public ICommand GoToListView => new DelegateCommand((a) =>
+		public ObservableCollection<string> Subreddits { get; set; }
+		public string SelectedSubreddit
+		{
+			get { return _SubredditName; }
+			set
 			{
-				Messenger.Default.Send(new GoToListViewMessage());
-			});
+				if (!string.IsNullOrEmpty(value) && !value.Contains("r/"))
+					value = $"r/{value}";
+
+				_SubredditName = value;
+				RaisePropertyChanged();
+			}
+		}
+
+		public TopPanelVM()
+		{
+			Subreddits = new ObservableCollection<string>();
+		}
+
+		public ICommand ChangeSubreddit => new RelayCommand(() =>
+		{
+			if (!Subreddits.Contains(this.SelectedSubreddit))
+				Subreddits.Add(this.SelectedSubreddit);
+			Messenger.Default.Send(new ChangeSubredditMessage(SelectedSubreddit));
+		});
 
 		public ICommand LoginClick => new DelegateCommand((a) =>
 		{

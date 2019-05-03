@@ -12,17 +12,21 @@ namespace RedditBrowser.ViewModel
 	public class PostVM : ViewModelBase, IViewModel
 	{
 		//private WindowState _windowState;
+		private AuthenticatedUser _user;
 
 		public Post Post { get; set; }
 		public string Comment { get; set; }
+		public Comment MousedOverComment { get; set; }
+		public AuthenticatedUser User { get => _user; set { _user = value; RaisePropertyChanged(); } }
 		//public WindowState WindowState
 		//{
 		//	get => _windowState; set { _windowState = value; RaisePropertyChanged(); }
 		//}
 
-		public PostVM(Post post)
+		public PostVM(Post post, AuthenticatedUser user)
 		{
 			Post = post;
+			User = user;
 			//RegisterMessages();
 		}
 
@@ -43,7 +47,7 @@ namespace RedditBrowser.ViewModel
 				}
 				, () =>
 				{
-					return this.Post != null;
+					return this.Post != null && this.User != null;
 				}, true);
 			}
 		}
@@ -58,9 +62,20 @@ namespace RedditBrowser.ViewModel
 				}
 				, () =>
 				{
-					return this.Post != null;
+					return this.Post != null && this.User != null;
 				},true);
 			}
 		}
+
+		//public ICommand CommentHover
+		//{
+		//	get
+		//	{
+		//		return new RelayCommand(() =>
+		//		{
+		//			this.MousedOverComment = (Post)a;
+		//		});					
+		//	}
+		//}
 	}
 }

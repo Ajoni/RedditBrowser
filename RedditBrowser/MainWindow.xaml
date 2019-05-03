@@ -12,20 +12,20 @@
   <Window.Resources>
 	<ResourceDictionary Source="/Resources/Merged.xaml"/>
   </Window.Resources>
-
   <Grid>
 	<Grid.RowDefinitions>
 	  <RowDefinition Height="auto"/>
+	  <RowDefinition Height="auto"/>
 	  <RowDefinition Height="*"/>
 	</Grid.RowDefinitions>
-	<UserControl Grid.Row="0" Content="{Binding TopPanel}"/>
+	<UserControl Grid.Row="1" Content="{Binding TopPanel}"/>
 
-	<xctk:BusyIndicator Grid.Row="1" IsBusy="{Binding Busy}" BusyContentTemplate="{StaticResource Busy}">
-		<UserControl Grid.Row="1" Content="{Binding CurrentPage}"/>
+	<xctk:BusyIndicator Grid.Row="2" IsBusy="{Binding Busy}" BusyContentTemplate="{StaticResource Busy}">
+	  <UserControl Grid.Row="2" Content="{Binding CurrentPage}"/>
 	</xctk:BusyIndicator>
 
-	<UserControl Grid.RowSpan="2" Content="{Binding LoginVM}"/>
-	<UserControl Grid.RowSpan="2" Content="{Binding PostVM}"/>
+	<UserControl  Grid.Row="1" Grid.RowSpan="2" Content="{Binding LoginVM}"/>
+	<UserControl Grid.Row="1" Grid.RowSpan="2" Content="{Binding PostVM}"/>
 
   </Grid>
 </Window>

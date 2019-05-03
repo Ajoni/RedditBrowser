@@ -51,7 +51,7 @@
                     </Canvas>
                 </Viewbox>
             </Button>
-            <!--<TextBlock Grid.Row="1" x:Name="textblockVotes" Text="{Binding Score}" VerticalAlignment="Center"/>-->
+            <TextBlock Grid.Row="1" x:Name="textblockVotes" Text="{Binding Score}" VerticalAlignment="Center"/>
             <Button Grid.Row="2" x:Name="buttonDownVote">
                 <Viewbox>
                     <Canvas Width="124.01568" Height="99.212545">
