@@ -195,6 +195,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Resources\GraphicalResources.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Resources\Merged.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -235,6 +239,10 @@
     <ProjectReference Include="..\Logic\Logic.csproj">
       <Project>{059D730F-B88A-4518-B4A9-FB7094D8B2D9}</Project>
       <Name>Logic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UserControls\UserControls.csproj">
+      <Project>{5a29f586-af9e-4ffe-8f55-812579b04d0f}</Project>
+      <Name>UserControls</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

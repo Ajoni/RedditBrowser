@@ -1,7 +1,9 @@
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using RedditBrowser.Classes;
 using RedditBrowser.Config;
+using RedditBrowser.Helpers;
 using RedditBrowser.ViewModel.Messages;
 using RedditSharp;
 using RedditSharp.Things;
@@ -30,11 +32,13 @@ namespace RedditBrowser.ViewModel
 
 		private WebAgent WebAgent { get; set; }
 
-
 		public MainViewModel()
 		{
 			this.RegisterMessages();
-			this.ListVM = new ListVM();
+            this.ListVM = new ListVM()
+            {
+                LoadNextPost = new RelayCommand(() => LoadNextPostMethod())
+            };
 			this.LoginVM = new LoginVM();
 			//this.PostVM = new PostVM();
 
@@ -67,7 +71,7 @@ namespace RedditBrowser.ViewModel
 			this.Busy = true;
 			await Task.Run(() =>
 			{
-				posts = LoadPosts(0, 3);
+				posts = LoadPosts(0, 1);
 			});
 			IObservable<Post> postsToLoad = posts.ToObservable();
 			postsToLoad.Subscribe(p =>
@@ -83,6 +87,24 @@ namespace RedditBrowser.ViewModel
 		{
 			return Subreddit.Posts.Skip(from).Take(amount).ToList();
 		}
+
+        private async void LoadNextPostMethod()
+        {
+            if (ListVM.Busy)
+                return;
+            ListVM.Busy = true;
+            {
+                var newPosts =  await Task.Run<List<Post>>(() =>
+                {
+                    var currentPostCount = ListVM.Posts.Count;
+                    return Subreddit.Posts.Skip(currentPostCount).Take(3).ToList();
+                });
+                foreach(var post in newPosts)
+                    ListVM.Posts.Add(post);
+                ListVM.RaisePropertyChanged("Posts");
+            }
+            ListVM.Busy = false;
+        }
 
 		private void ReceiveMessage(GoToPageMessage message) => this.CurrentPage = message.Page;
 		private void ReceiveMessage(GoToListViewMessage message) => this.CurrentPage = this.ListVM;

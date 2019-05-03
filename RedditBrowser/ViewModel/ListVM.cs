@@ -1,5 +1,5 @@
 ﻿using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.CommandWpf;
+using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using RedditBrowser.Classes;
 using RedditBrowser.Helpers;
@@ -13,17 +13,22 @@ namespace RedditBrowser.ViewModel
 {
     public class ListVM : ViewModelBase, IViewModel
 	{
-		private AuthenticatedUser _user;
-		private bool _busy;
+		private AuthenticatedUser   _user;
+		private bool                _busy;
 
-		public ObservableCollection<Post> Posts { get; set; } = new ObservableCollection<Post>();
-        public Post MousedOverPost { get; set; }
-		public AuthenticatedUser User { get => _user; set { _user = value; RaisePropertyChanged();  } }
-		public bool Busy { get => _busy; set { _busy = value; RaisePropertyChanged(); } }
+		public ObservableCollection<Post>   Posts           { get; set; } = new ObservableCollection<Post>();
+        public Post                         MousedOverPost  { get; set; }
+		public AuthenticatedUser            User            { get => _user; set { _user = value; RaisePropertyChanged(); } }
+		public bool                         Busy            { get => _busy; set { _busy = value; RaisePropertyChanged(); } }
+
 		public ListVM()
         {
 			Messenger.Default.Send(new GoToPageMessage(this));
 		}
+
+        #region Commands
+
+        public RelayCommand LoadNextPost { get; set; }
 
         public ICommand ItemHover
         {
@@ -84,5 +89,7 @@ namespace RedditBrowser.ViewModel
 				});
 			}
 		}
-	}
+
+        #endregion // Commands
+    }
 }
