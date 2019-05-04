@@ -10,12 +10,19 @@ namespace RedditBrowser.ViewModel
 {
 	public class TopPanelVM : ViewModelBase, IViewModel
 	{
-		private string _SubredditName = "";
+		private string  _SubredditName = "";
+        private bool    _IsUserLoggedIn = false;
 
-		public string Header { get; set; }
-		public string Search { get; set; }
-		public ObservableCollection<string> Subreddits { get; set; }
-		public string SelectedSubreddit
+		public string                       Header          { get; set; }
+		public string                       Search          { get; set; }
+		public ObservableCollection<string> Subreddits      { get; set; }
+        public bool                         IsUserLoggedIn
+        {
+            get { return _IsUserLoggedIn; }
+            set { _IsUserLoggedIn = value; RaisePropertyChanged(); }
+        }
+
+        public string SelectedSubreddit
 		{
 			get { return _SubredditName; }
 			set
@@ -30,7 +37,15 @@ namespace RedditBrowser.ViewModel
 			Subreddits = new ObservableCollection<string>();
 		}
 
-		public ICommand ChangeSubreddit => new RelayCommand(() =>
+        public RelayCommand GoToRAll => new RelayCommand(() =>
+        {
+            if (this.SelectedSubreddit == "all")
+                return;
+            this.SelectedSubreddit = "all";
+            ChangeSubreddit?.Execute(null);
+        });
+
+        public ICommand ChangeSubreddit => new RelayCommand(() =>
 		{
 			if (!Subreddits.Contains(this.SelectedSubreddit))
 				Subreddits.Add(this.SelectedSubreddit);

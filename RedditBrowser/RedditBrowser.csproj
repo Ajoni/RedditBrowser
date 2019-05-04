@@ -125,7 +125,9 @@
     <Compile Include="Config\GlobalConfig.cs" />
     <Compile Include="Config\GlobalKeys.cs" />
     <Compile Include="Config\GlobalPaths.cs" />
+    <Compile Include="Converters\FalseToVisibleConverter.cs" />
     <Compile Include="Converters\ImgConverter.cs" />
+    <Compile Include="Converters\TrueToVisibleConverter.cs" />
     <Compile Include="Helpers\DelegateCommand.cs" />
     <Compile Include="Helpers\Extensions.cs" />
     <Compile Include="Helpers\LoginHelper.cs" />

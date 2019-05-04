@@ -4,17 +4,19 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Data;
-using System.Windows.Media.Imaging;
 
 namespace RedditBrowser.Converters
 {
-    public class ImgConverter : IValueConverter
+    public class TrueToVisibleConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            BitmapImage bi = new BitmapImage((Uri)value);
-            return bi;
+            bool v = (bool)value;
+            if (v)
+                return Visibility.Visible;
+            return Visibility.Collapsed;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

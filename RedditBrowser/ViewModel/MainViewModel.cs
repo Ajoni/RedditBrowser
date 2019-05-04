@@ -28,14 +28,14 @@ namespace RedditBrowser.ViewModel
 		public Subreddit Subreddit { get; set; }
 		public Reddit Reddit { get; set; }
 		public bool Busy { get => _busy; set { _busy = value; RaisePropertyChanged(); } }
-		private WebAgent WebAgent { get; set; }
+        private WebAgent WebAgent { get; set; }
 
 		public MainViewModel()
 		{
 			this.RegisterMessages();
             this.ListVM = new ListVM()
             {
-                LoadNextPost = new RelayCommand(() => LoadNextPostMethod())
+                LoadNextPost = new RelayCommand(() => LoadNextPostMethod(), canExecute: () => Subreddit != null)
             };
 			this.LoginVM = new LoginVM();
 			//this.PostVM = new PostVM();
@@ -115,24 +115,30 @@ namespace RedditBrowser.ViewModel
 			await this.Init();
 
 		}
+        
 		private async void ReceiveMessage(LoginChangeMessage message)
 		{
 			this.Reddit = new Reddit(message.UserLoginResult.WebAgent, true);
 			this.ListVM.User = this.Reddit.User;
 
-			foreach (var item in this.Reddit.User.SubscribedSubreddits)
-				if(!this.TopPanel.Subreddits.Any(s => s==item.Name))
-					this.TopPanel.Subreddits.Add(item.Name);
+            if (Reddit.User != null)
+            {
+                foreach (var item in this.Reddit.User.SubscribedSubreddits)
+                    if (!this.TopPanel.Subreddits.Any(s => s == item.Name))
+                        this.TopPanel.Subreddits.Add(item.Name);
+            }
 
 			if (this.Subreddit != null)
 				await this.Init();
-		}
 
+            TopPanel.IsUserLoggedIn = Reddit.User != null;
+		}
+        
 		private void RegisterMessages()
 		{
-			Messenger.Default.Register<GoToPageMessage>(this, (action) => ReceiveMessage(action));
-			Messenger.Default.Register<ChangeSubredditMessage>(this, (action) => ReceiveMessage(action));
-			Messenger.Default.Register<LoginChangeMessage>(this, (action) => ReceiveMessage(action));
+			Messenger.Default.Register<GoToPageMessage>         (this, (message) => ReceiveMessage(message));
+			Messenger.Default.Register<ChangeSubredditMessage>  (this, (message) => ReceiveMessage(message));
+			Messenger.Default.Register<LoginChangeMessage>      (this, (message) => ReceiveMessage(message));
 		}
 
 	}
