@@ -69,7 +69,7 @@ namespace RedditBrowser.ViewModel
 			this.Busy = true;
 			await Task.Run(() =>
 			{
-				posts = LoadPosts(0, 5);
+				posts = LoadPosts(0, 10);
 			});
 			IObservable<Post> postsToLoad = posts.ToObservable();
 			postsToLoad.Subscribe(p =>
@@ -92,7 +92,7 @@ namespace RedditBrowser.ViewModel
                 var newPosts =  await Task.Run<List<Post>>(() =>
                 {
                     var currentPostCount = ListVM.Posts.Count;
-                    return Subreddit.Posts.Skip(currentPostCount).Take(3).ToList();
+                    return Subreddit.Posts.Skip(currentPostCount).Take(5).ToList();
                 });
                 foreach(var post in newPosts)
                     ListVM.Posts.Add(new LoadedPost(post));

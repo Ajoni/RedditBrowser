@@ -40,9 +40,9 @@
 			<RowDefinition Height="*"/>
 			<RowDefinition Height="auto"/>
 		  </Grid.RowDefinitions>
-		  <Button Grid.Row="0" x:Name="buttonUpVote" Content="{StaticResource UpvoteArrow}" Style="{StaticResource VoteButtonStyle}" Command="{Binding ElementName=root, Path=UpvoteClick}"/>
+		  <Button Grid.Row="0" x:Name="buttonUpVote" Content="{StaticResource UpvoteArrow}" Style="{StaticResource VoteButtonStyle}" Command="{Binding ElementName=root, Path=DataContext.UpvoteClick}"/>
 		  <TextBlock Grid.Row="1" x:Name="textblockVotes" Text="{Binding Score}" VerticalAlignment="Center" Style="{StaticResource VoteTextBlockStyle}"/>
-		  <Button Grid.Row="2" x:Name="buttonDownVote" Content="{StaticResource DownvoteArrow}" Style="{StaticResource VoteButtonStyle}" Command="{Binding ElementName=root, Path=DownvoteClick}"/>
+		  <Button Grid.Row="2" x:Name="buttonDownVote" Content="{StaticResource DownvoteArrow}" Style="{StaticResource VoteButtonStyle}" Command="{Binding ElementName=root, Path=DataContext.DownvoteClick}"/>
 		</Grid>
 		<WrapPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
 		  <TextBlock x:Name="textblockSubredditName" Text="{Binding Post.Post.Subreddit.Name}"/>

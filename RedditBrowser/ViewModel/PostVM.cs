@@ -51,7 +51,7 @@ namespace RedditBrowser.ViewModel
 			{
 				return new RelayCommand(() =>
 				{
-					if (Post.Liked.HasValue && Post.Liked.Value) Post.ClearVote(); else Post.Downvote();
+					if (Post.Liked.HasValue && !Post.Liked.Value) Post.ClearVote(); else Post.Downvote();
 				}
 				, () =>
 				{
