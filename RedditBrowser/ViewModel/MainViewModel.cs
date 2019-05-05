@@ -118,7 +118,10 @@ namespace RedditBrowser.ViewModel
         
 		private async void ReceiveMessage(LoginChangeMessage message)
 		{
-			this.Reddit = new Reddit(message.UserLoginResult.WebAgent, true);
+			if (message.UserLoginResult != null)
+				this.Reddit = new Reddit(message.UserLoginResult.WebAgent, true);
+			else
+				this.Reddit = new Reddit();
 			this.ListVM.User = this.Reddit.User;
 
             if (Reddit.User != null)

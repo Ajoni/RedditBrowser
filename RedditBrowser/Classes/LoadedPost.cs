@@ -1,6 +1,7 @@
 ﻿using RedditSharp;
 using RedditSharp.Things;
 using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -15,7 +16,7 @@ namespace RedditBrowser.Classes
 		private bool? _liked;
 		private int _score;
 
-		public Comment[] Comments { get; }
+		public ObservableCollection<Comment> Comments { get; } = new ObservableCollection<Comment>();
 		//public bool IsSpoiler { get; set; }
 		//public string Domain { get; set; }
 		//public bool IsSelfPost { get; set; }
@@ -54,7 +55,8 @@ namespace RedditBrowser.Classes
 			//Id = post.Id;
 			//FullName = post.FullName;
 			//Kind = post.Kind;
-			Comments = post.Comments;
+			foreach (var comment in post.Comments)
+				Comments.Add(comment);
 			//IsSpoiler = post.IsSpoiler;
 			//Domain = post.Domain;
 			//IsSelfPost = post.IsSelfPost;
@@ -103,6 +105,12 @@ namespace RedditBrowser.Classes
 		{
 			Score = Post.Score;
 			Liked = Post.Liked;
+		}
+
+		public void Reply(string message)
+		{
+			this.Post.Comment(message);
+
 		}
 
 		public event PropertyChangedEventHandler PropertyChanged;

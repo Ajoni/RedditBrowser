@@ -60,6 +60,21 @@ namespace RedditBrowser.ViewModel
 			}
 		}
 
+		public ICommand PostComment
+		{
+			get
+			{
+				return new RelayCommand(() =>
+				{
+					if (Post.Liked.HasValue && !Post.Liked.Value) Post.ClearVote(); else Post.Downvote();
+				}
+				, () =>
+				{
+					return this.Comment.Length > 0;
+				}, true);
+			}
+		}
+
 		//public ICommand CommentHover
 		//{
 		//	get

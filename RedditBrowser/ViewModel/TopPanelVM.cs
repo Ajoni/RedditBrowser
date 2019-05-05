@@ -56,5 +56,10 @@ namespace RedditBrowser.ViewModel
 		{
 			Messenger.Default.Send(new ShowLoginMessage());
 		});
+
+		public ICommand LogoutClick => new DelegateCommand((a) =>
+		{
+			Messenger.Default.Send(new LoginChangeMessage(null));
+		});
 	}
 }
