@@ -125,6 +125,7 @@
     <Compile Include="Config\GlobalConfig.cs" />
     <Compile Include="Config\GlobalKeys.cs" />
     <Compile Include="Config\GlobalPaths.cs" />
+    <Compile Include="Converters\DateToHowLongAgoConverter.cs" />
     <Compile Include="Converters\FalseToVisibleConverter.cs" />
     <Compile Include="Converters\ImgConverter.cs" />
     <Compile Include="Converters\TrueToVisibleConverter.cs" />

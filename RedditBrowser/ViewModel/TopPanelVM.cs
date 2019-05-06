@@ -42,15 +42,20 @@ namespace RedditBrowser.ViewModel
             if (this.SelectedSubreddit == "all")
                 return;
             this.SelectedSubreddit = "all";
-            ChangeSubreddit?.Execute(null);
-        });
+			ChangeSubredditExec();
+		});
 
         public ICommand ChangeSubreddit => new RelayCommand(() =>
+		{
+			ChangeSubredditExec();
+		});
+
+		private void ChangeSubredditExec()
 		{
 			if (!Subreddits.Contains(this.SelectedSubreddit))
 				Subreddits.Add(this.SelectedSubreddit);
 			Messenger.Default.Send(new ChangeSubredditMessage(SelectedSubreddit));
-		});
+		}
 
 		public ICommand LoginClick => new DelegateCommand((a) =>
 		{

@@ -13,15 +13,23 @@ namespace RedditBrowser.ViewModel
 	{
 		//private WindowState _windowState;
 		private AuthenticatedUser _user;
+		private string _comment;
 
 		public LoadedPost Post { get; set; }
-		public string Comment { get; set; }
+		public string Comment
+		{
+			get => _comment; set
+			{
+				_comment = value; RaisePropertyChanged(); RaisePropertyChanged("CommentButtonEnabled");
+			}
+		}
 		public Comment MousedOverComment { get; set; }
-		public AuthenticatedUser User { get => _user; set { _user = value; RaisePropertyChanged(); } }
+		public AuthenticatedUser User { get => _user; set { _user = value; RaisePropertyChanged(); RaisePropertyChanged("CommentButtonEnabled"); } }
+		public bool CommentButtonEnabled { get { return !string.IsNullOrEmpty(this.Comment) && this.User != null; } }
 		//public WindowState WindowState
-		//{
-		//	get => _windowState; set { _windowState = value; RaisePropertyChanged(); }
-		//}
+										   //{
+										   //	get => _windowState; set { _windowState = value; RaisePropertyChanged(); }
+										   //}
 
 		public PostVM(LoadedPost post, AuthenticatedUser user)
 		{
@@ -66,12 +74,8 @@ namespace RedditBrowser.ViewModel
 			{
 				return new RelayCommand(() =>
 				{
-					if (Post.Liked.HasValue && !Post.Liked.Value) Post.ClearVote(); else Post.Downvote();
-				}
-				, () =>
-				{
-					return this.Comment.Length > 0;
-				}, true);
+					this.Post.Comment(this.Comment);
+				});
 			}
 		}
 

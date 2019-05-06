@@ -18,8 +18,9 @@ namespace RedditBrowser.ViewModel
 
 		public ObservableCollection<LoadedPost>   Posts           { get; set; } = new ObservableCollection<LoadedPost>();
         public LoadedPost MousedOverPost  { get; set; }
-		public AuthenticatedUser            User            { get => _user; set { _user = value; RaisePropertyChanged(); } }
+		public AuthenticatedUser            User            { get => _user; set { _user = value; this.PostVM.User = value; RaisePropertyChanged(); } }
 		public bool                         Busy            { get => _busy; set { _busy = value; RaisePropertyChanged(); } }
+		public PostVM PostVM { get; private set; }
 
 		public ListVM()
         {
@@ -51,7 +52,8 @@ namespace RedditBrowser.ViewModel
             {
                 return new DelegateCommand((a) =>
                 {
-                    Messenger.Default.Send(new GoToPageMessage(new PostVM(this.MousedOverPost, this.User)));
+					this.PostVM = new PostVM(this.MousedOverPost, this.User);
+					Messenger.Default.Send(new GoToPageMessage(this.PostVM));
                 }
                 , (a) =>
                 {
@@ -90,6 +92,6 @@ namespace RedditBrowser.ViewModel
 			}
 		}
 
-        #endregion // Commands
-    }
+		#endregion // Commands
+	}
 }

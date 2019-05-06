@@ -107,10 +107,11 @@ namespace RedditBrowser.Classes
 			Liked = Post.Liked;
 		}
 
-		public void Reply(string message)
+		public void Comment(string message)
 		{
 			this.Post.Comment(message);
-
+			foreach (var comment in this.Post.Comments)
+				Comments.Add(comment);
 		}
 
 		public event PropertyChangedEventHandler PropertyChanged;

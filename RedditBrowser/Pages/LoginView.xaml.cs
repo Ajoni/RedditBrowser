@@ -37,7 +37,7 @@ namespace RedditBrowser.Pages
 		private async void ButtonLogin_Click(object sender, RoutedEventArgs e)
 		{
 			this.LoginVM.Busy = true;
-			var user = await LoginHelper.LoginUser(this.LoginVM.Username, this.watermarkpasswordboxPasswordd.Password);
+			var user = await Task.Run( () => LoginHelper.LoginUser(this.LoginVM.Username, this.watermarkpasswordboxPasswordd.Password));
 			this.LoginVM.Busy = false;
 			if (user == null)
 				MessageBox.Show("Could not login");

@@ -48,9 +48,7 @@
 		  <TextBlock x:Name="textblockSubredditName" Text="{Binding Post.Post.Subreddit.Name}"/>
 		  <TextBlock Text=" • Posted by "/>
 		  <TextBlock x:Name="textblockPosterName" Text="{Binding Post.Author.Name}"/>
-		  <TextBlock Text=" Date "/>
-		  <TextBlock x:Name="textblockCreatedDate" Text="{Binding Post.Created}"/>
-		  <!--TODO dodac date converted z DateTime.Now - Post.Created do np 4h ago-->
+		  <TextBlock x:Name="textblockCreatedDate" Text="{Binding Post.Created, Converter={StaticResource DateToHowLongAgoConverter}}"/>
 		</WrapPanel>
 		<TextBlock Grid.Row="1" Grid.Column="1" x:Name="textblockTitle" Text="{Binding Post.Title}"
                     TextWrapping="Wrap"/>
@@ -69,9 +67,9 @@
 		  <ColumnDefinition Width="auto"/>
 		</Grid.ColumnDefinitions>
 		<xctk:WatermarkTextBox Grid.Row="0" Grid.ColumnSpan="2" x:Name="textBoxComment"
-                        Watermark="What are your thoughts?" Text="{Binding Comment}" AcceptsReturn="True"
+                        Watermark="What are your thoughts?" Text="{Binding Comment, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True"
                         TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" MinHeight="80"/>
-		<Button Grid.Row="1" Grid.Column="1" x:Name="buttonAddComment" Content="Comment"/>
+		<Button Grid.Row="1" Grid.Column="1" x:Name="buttonAddComment" Content="Comment" Command="{Binding PostComment}" IsEnabled="{Binding CommentButtonEnabled}"/>
 	  </Grid>
 	  <Grid Grid.Row="2" x:Name="gridComments">
 		<Grid.RowDefinitions>
