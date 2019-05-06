@@ -77,7 +77,17 @@
         <Setter Property="BorderBrush" Value="#0079D3"/>
     </Style>
 
-    <!-- Heavens, it seems that fixing TreeViews requires a full replacement of TreeViewItem definition.
+  <Style x:Key="LinkTextStyle" TargetType="{x:Type TextBlock}">
+	<Setter Property="Cursor" Value="Hand"/>
+	<Setter Property="FontWeight" Value="Bold"/>
+	<Style.Triggers>
+	  <Trigger Property="IsMouseOver" Value="True">
+		<Setter Property="TextDecorations" Value="Underline" />
+	  </Trigger>
+	</Style.Triggers>
+  </Style>
+
+  <!-- Heavens, it seems that fixing TreeViews requires a full replacement of TreeViewItem definition.
          May all goodness forgive me for just pasting this ball of mud. -->
     <Style TargetType="TreeViewItem"
        BasedOn="{StaticResource {x:Type TreeViewItem}}">

@@ -11,7 +11,6 @@ namespace RedditBrowser.ViewModel
 {
 	public class PostVM : ViewModelBase, IViewModel
 	{
-		//private WindowState _windowState;
 		private AuthenticatedUser _user;
 		private string _comment;
 
@@ -26,16 +25,23 @@ namespace RedditBrowser.ViewModel
 		public Comment MousedOverComment { get; set; }
 		public AuthenticatedUser User { get => _user; set { _user = value; RaisePropertyChanged(); RaisePropertyChanged("CommentButtonEnabled"); } }
 		public bool CommentButtonEnabled { get { return !string.IsNullOrEmpty(this.Comment) && this.User != null; } }
-		//public WindowState WindowState
-										   //{
-										   //	get => _windowState; set { _windowState = value; RaisePropertyChanged(); }
-										   //}
 
 		public PostVM(LoadedPost post, AuthenticatedUser user)
 		{
 			Post = post;
 			User = user;
 			//RegisterMessages();
+		}
+
+		public ICommand SubredditNameClick
+		{
+			get
+			{
+				return new RelayCommand(() =>
+				{
+					Messenger.Default.Send(new ChangeSubredditMessage(this.Post.Post.SubredditName));
+				});
+			}
 		}
 
 		public ICommand UpvoteClick

@@ -108,6 +108,9 @@ namespace RedditBrowser.ViewModel
 			if (string.IsNullOrEmpty(message.Name))
 				return;
 			this.CurrentPage = this.ListVM;
+			if (message.Name == this.Subreddit?.Name)
+				return;
+
 			if (message.Name == "all")
 				this.Subreddit = this.Reddit.RSlashAll;
 			else
@@ -118,11 +121,10 @@ namespace RedditBrowser.ViewModel
 				catch (System.Net.WebException)
 				{
 					this.TopPanel.Subreddits.Remove(message.Name);
-					MessageBox.Show($"Subreddit: '{message.Name}' does not exists or there is something wrong with your connection or redddit.");
+					MessageBox.Show($"Subreddit: '{message.Name}' does not exist or there is something wrong with your connection or reddit.");
 					return;
 				}
 			await this.Init();
-
 		}
         
 		private async void ReceiveMessage(LoginChangeMessage message)

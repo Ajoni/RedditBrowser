@@ -21,7 +21,6 @@ namespace RedditBrowser.ViewModel
             get { return _IsUserLoggedIn; }
             set { _IsUserLoggedIn = value; RaisePropertyChanged(); }
         }
-
         public string SelectedSubreddit
 		{
 			get { return _SubredditName; }
@@ -35,12 +34,11 @@ namespace RedditBrowser.ViewModel
 		public TopPanelVM()
 		{
 			Subreddits = new ObservableCollection<string> { "all" };
+			RegisterMessages();
 		}
 
         public RelayCommand GoToRAll => new RelayCommand(() =>
         {
-            if (this.SelectedSubreddit == "all")
-                return;
             this.SelectedSubreddit = "all";
 			ChangeSubredditExec();
 		});
@@ -66,5 +64,27 @@ namespace RedditBrowser.ViewModel
 		{
 			Messenger.Default.Send(new LoginChangeMessage(null));
 		});
+
+		/// <summary>
+		/// update selected sub when user clicks on subreddit link
+		/// </summary>
+		/// <param name="message"></param>
+		private void ReceiveMessage(ChangeSubredditMessage message)
+		{
+			if (string.IsNullOrEmpty(message.Name))
+				return;
+
+			if (message.Name != this.SelectedSubreddit)
+				this.SelectedSubreddit = message.Name;
+
+			if (!Subreddits.Contains(this.SelectedSubreddit))
+				Subreddits.Add(this.SelectedSubreddit);
+
+		}
+
+		private void RegisterMessages()
+		{
+			Messenger.Default.Register<ChangeSubredditMessage>(this, (message) => ReceiveMessage(message));
+		}
 	}
 }
