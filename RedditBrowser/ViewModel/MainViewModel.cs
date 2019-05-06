@@ -65,23 +65,23 @@ namespace RedditBrowser.ViewModel
 		public async Task Init()
 		{
 			this.ListVM.Posts.Clear();
-			List<Post> posts = new List<Post>();
+			List<LoadedPost> posts = new List<LoadedPost>();
 			this.Busy = true;
 			await Task.Run(() =>
 			{
-				posts = LoadPosts(0, 10);
+				posts = LoadPosts(0, 5);
 			});
-			IObservable<Post> postsToLoad = posts.ToObservable();
+			IObservable<LoadedPost> postsToLoad = posts.ToObservable();
 			postsToLoad.Subscribe(p =>
 			{
-				Application.Current.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Background, new Action<Post>((post) => this.ListVM.Posts.Add(new LoadedPost(post))), p);
+				Application.Current.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Background, new Action<LoadedPost>((post) => this.ListVM.Posts.Add(post)), p);
 			}, () =>
 			{
 				this.Busy = false;
 			});
 		}
 
-		private List<Post> LoadPosts(int from, int amount) => Subreddit.Posts.Skip(from).Take(amount).ToList();
+		private List<LoadedPost> LoadPosts(int from, int amount) => Subreddit.Posts.Skip(from).Select(post => new LoadedPost(post)).Take(amount).ToList();
 
         private async void LoadNextPostMethod()
         {
@@ -89,13 +89,13 @@ namespace RedditBrowser.ViewModel
                 return;
             ListVM.Busy = true;
             {
-                var newPosts =  await Task.Run<List<Post>>(() =>
+                var newPosts =  await Task.Run(() =>
                 {
                     var currentPostCount = ListVM.Posts.Count;
-                    return Subreddit.Posts.Skip(currentPostCount).Take(5).ToList();
+                    return Subreddit.Posts.Skip(currentPostCount).Take(3).Select( post => new LoadedPost(post)).ToList();
                 });
                 foreach(var post in newPosts)
-                    ListVM.Posts.Add(new LoadedPost(post));
+                    ListVM.Posts.Add(post);
                 ListVM.RaisePropertyChanged("Posts");
             }
             ListVM.Busy = false;
