@@ -34,7 +34,7 @@ namespace RedditBrowser.ViewModel
 
 		public TopPanelVM()
 		{
-			Subreddits = new ObservableCollection<string>();
+			Subreddits = new ObservableCollection<string> { "all" };
 		}
 
         public RelayCommand GoToRAll => new RelayCommand(() =>

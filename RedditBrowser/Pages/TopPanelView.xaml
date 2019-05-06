@@ -56,7 +56,6 @@
         <Button Grid.Column="3" x:Name="buttonLogin" Content="_LOG IN" Command="{Binding LoginClick}"
                 Style="{StaticResource LoginLogoutButtonStyle}" Margin="5,1" 
                 Visibility="{Binding IsUserLoggedIn, Converter={StaticResource falseToVisibleConverter}}"/>
-                <!-- TODO: LogOut Command -->
         <Button Grid.Column="3" x:Name="buttonLogout" Content="_LOG OUT" Command="{Binding LogoutClick}"
                 Style="{StaticResource LoginLogoutButtonStyle}" Margin="5,1" 
                 Visibility="{Binding IsUserLoggedIn, Converter={StaticResource trueToVisibleConverter}}"/>

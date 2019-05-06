@@ -111,8 +111,16 @@ namespace RedditBrowser.ViewModel
 			if (message.Name == "all")
 				this.Subreddit = this.Reddit.RSlashAll;
 			else
-				this.Subreddit = await this.Reddit.GetSubredditAsync(message.Name);
-			await this.Init();
+				try
+				{
+					this.Subreddit = await this.Reddit.GetSubredditAsync(message.Name);
+					await this.Init();
+				}
+				catch (System.Net.WebException)
+				{
+					this.TopPanel.Subreddits.Remove(message.Name);
+					MessageBox.Show($"Subreddit: '{message.Name}' does not exists or there is something wrong with your connection or redddit.");
+				}
 
 		}
         
