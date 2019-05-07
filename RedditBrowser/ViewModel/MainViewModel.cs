@@ -96,8 +96,10 @@ namespace RedditBrowser.ViewModel
 				try
 				{
 					this.Subreddit = await this.Reddit.GetSubredditAsync(message.Name);
+					if (this.Subreddit == null)
+						throw new Exception();
 				}
-				catch (System.Net.WebException)
+				catch (Exception)
 				{
 					this.TopPanel.Subreddits.Remove(message.Name);
 					MessageBox.Show($"Subreddit: '{message.Name}' does not exist or there is something wrong with your connection or reddit.");

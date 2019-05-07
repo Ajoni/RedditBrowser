@@ -55,8 +55,7 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
 		  </TextBlock>
-		  <TextBlock Text=" • Posted by "/>
-		  <TextBlock x:Name="textblockPosterName" Text="{Binding Post.Author.Name}"/>
+		  <TextBlock x:Name="textblockPosterName" Text="{Binding Post.Author.Name, StringFormat='{} • Posted by {0} '}"/>
 		  <TextBlock x:Name="textblockCreatedDate" Text="{Binding Post.Created, Converter={StaticResource DateToHowLongAgoConverter}}"/>
 		</WrapPanel>
 		<TextBlock Grid.Row="1" Grid.Column="1" x:Name="textblockTitle" Text="{Binding Post.Title}"

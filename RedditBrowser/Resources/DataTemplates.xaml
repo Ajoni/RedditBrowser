@@ -83,8 +83,7 @@
                         <ColumnDefinition Width="auto"/>
                         <ColumnDefinition Width="auto"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0" Text="Posted by "/>
-                    <TextBlock Grid.Column="1" Text="{Binding Author.Name}"/>
+                    <TextBlock Grid.Column="0" Text="{Binding Author.Name, StringFormat=Posted by {0}}"/>
                 </Grid>
                 <Grid Grid.Row="2">
                     <Grid.ColumnDefinitions>
