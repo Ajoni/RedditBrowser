@@ -38,28 +38,7 @@ namespace RedditBrowser.ViewModel
                 LoadNextPost = new RelayCommand(() => LoadNextPostMethod(), canExecute: () => Subreddit != null)
             };
 			this.LoginVM = new LoginVM();
-			//this.PostVM = new PostVM();
-
-			this.WebAgent = this.LoginApp();
-			this.Reddit = new Reddit(WebAgent, true);
-			//this.Reddit = new Reddit();
-			//this.Subreddit = this.Reddit.RSlashAll;
-
-			//this.TopPanel.Header = Subreddit.HeaderImage;
-			//this.TopPanel.SelectedSubreddit = Subreddit.Name;
-
-		}
-
-		private WebAgent LoginApp()
-		{
-			string keyPath = GlobalConfig.Get<string>(GlobalKeys.KeyConfigPath);
-
-			string[] keys = System.IO.File.ReadAllText(keyPath).Split(',');
-			AuthProvider auth = new AuthProvider(keys[0], keys[1], keys[2]);
-			var accessToken = auth.GetOAuthToken(keys[3], keys[4]);
-			var agent = new WebAgent() { AccessToken = accessToken };
-			WebAgent.RootDomain = "oauth.reddit.com";
-			return agent;
+			this.Reddit = new Reddit();
 		}
 
 		public async Task Init()
@@ -148,12 +127,14 @@ namespace RedditBrowser.ViewModel
 
             TopPanel.IsUserLoggedIn = Reddit.User != null;
 		}
+		private void ReceiveMessage(SearchMessage message) => this.CurrentPage = new SearchResultVM(new ListVM(false),message.Query,this.Reddit,this.Subreddit);
         
 		private void RegisterMessages()
 		{
 			Messenger.Default.Register<GoToPageMessage>         (this, (message) => ReceiveMessage(message));
 			Messenger.Default.Register<ChangeSubredditMessage>  (this, (message) => ReceiveMessage(message));
 			Messenger.Default.Register<LoginChangeMessage>      (this, (message) => ReceiveMessage(message));
+			Messenger.Default.Register<SearchMessage>			(this, (message) => ReceiveMessage(message));
 		}
 
 	}

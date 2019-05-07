@@ -10,18 +10,25 @@ namespace RedditBrowser.ViewModel
 {
 	public class TopPanelVM : ViewModelBase, IViewModel
 	{
-		private string  _SubredditName = "";
-        private bool    _IsUserLoggedIn = false;
+		private string _SubredditName = "";
+		private bool _IsUserLoggedIn = false;
+		private string _query;
 
-		public string                       Header          { get; set; }
-		public string                       Search          { get; set; }
-		public ObservableCollection<string> Subreddits      { get; set; }
-        public bool                         IsUserLoggedIn
-        {
-            get { return _IsUserLoggedIn; }
-            set { _IsUserLoggedIn = value; RaisePropertyChanged(); }
-        }
-        public string SelectedSubreddit
+		public string Header { get; set; }
+		public string Query
+		{
+			get => _query; set
+			{
+				_query = value; RaisePropertyChanged();
+			}
+		}
+		public ObservableCollection<string> Subreddits { get; set; }
+		public bool IsUserLoggedIn
+		{
+			get { return _IsUserLoggedIn; }
+			set { _IsUserLoggedIn = value; RaisePropertyChanged(); }
+		}
+		public string SelectedSubreddit
 		{
 			get { return _SubredditName; }
 			set
@@ -37,13 +44,13 @@ namespace RedditBrowser.ViewModel
 			RegisterMessages();
 		}
 
-        public RelayCommand GoToRAll => new RelayCommand(() =>
-        {
-            this.SelectedSubreddit = "all";
+		public RelayCommand GoToRAll => new RelayCommand(() =>
+		{
+			this.SelectedSubreddit = "all";
 			ChangeSubredditExec();
 		});
 
-        public ICommand ChangeSubreddit => new RelayCommand(() =>
+		public ICommand ChangeSubreddit => new RelayCommand(() =>
 		{
 			ChangeSubredditExec();
 		});
@@ -55,14 +62,20 @@ namespace RedditBrowser.ViewModel
 			Messenger.Default.Send(new ChangeSubredditMessage(SelectedSubreddit));
 		}
 
-		public ICommand LoginClick => new DelegateCommand((a) =>
+		public ICommand LoginClick => new RelayCommand(() =>
 		{
 			Messenger.Default.Send(new ShowLoginMessage());
 		});
 
-		public ICommand LogoutClick => new DelegateCommand((a) =>
+		public ICommand LogoutClick => new RelayCommand(() =>
 		{
 			Messenger.Default.Send(new LoginChangeMessage(null));
+		});
+
+		public ICommand Search => new RelayCommand(() =>
+		{
+			if(!string.IsNullOrEmpty(Query))
+				Messenger.Default.Send(new SearchMessage(Query));
 		});
 
 		/// <summary>

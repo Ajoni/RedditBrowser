@@ -129,10 +129,8 @@
     <Compile Include="Converters\FalseToVisibleConverter.cs" />
     <Compile Include="Converters\ImgConverter.cs" />
     <Compile Include="Converters\TrueToVisibleConverter.cs" />
-    <Compile Include="Helpers\DelegateCommand.cs" />
     <Compile Include="Helpers\Extensions.cs" />
     <Compile Include="Helpers\LoginHelper.cs" />
-    <Compile Include="Helpers\RangeObservableCollection.cs" />
     <Compile Include="Pages\CommentView.xaml.cs">
       <DependentUpon>CommentView.xaml</DependentUpon>
     </Compile>
@@ -145,6 +143,9 @@
     <Compile Include="Pages\PostView.xaml.cs">
       <DependentUpon>PostView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\SearchResultView.xaml.cs">
+      <DependentUpon>SearchResultView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\TopPanelView.xaml.cs">
       <DependentUpon>TopPanelView.xaml</DependentUpon>
     </Compile>
@@ -153,14 +154,15 @@
     <Compile Include="ViewModel\Messages\ChangeSubredditMessage.cs" />
     <Compile Include="ViewModel\Messages\GoToListViewMessage.cs" />
     <Compile Include="ViewModel\Messages\LoginChangeMessage.cs" />
+    <Compile Include="ViewModel\Messages\SearchMessage.cs" />
     <Compile Include="ViewModel\Messages\ShowLoginMessage.cs" />
     <Compile Include="ViewModel\Messages\ShowPostMessage.cs" />
+    <Compile Include="ViewModel\SearchResultVM.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="ViewModel\IViewModel.cs" />
     <Compile Include="ViewModel\ListVM.cs" />
     <Compile Include="ViewModel\Messages\GoToPageMessage.cs" />
     <Compile Include="ViewModel\PostVM.cs" />
-    <Compile Include="ViewModel\SearchVM.cs" />
     <Compile Include="ViewModel\TopPanelVM.cs" />
     <Page Include="Pages\CommentView.xaml">
       <SubType>Designer</SubType>
@@ -177,6 +179,9 @@
     <Page Include="Pages\PostView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\SearchResultView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </Page>
     <Page Include="Pages\TopPanelView.xaml">
       <SubType>Designer</SubType>

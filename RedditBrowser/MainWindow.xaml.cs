@@ -18,13 +18,12 @@ namespace RedditBrowser
             InitializeComponent();
         }
 
-        private async void WindowMain_Loaded(object sender, RoutedEventArgs e)
+        private void WindowMain_Loaded(object sender, RoutedEventArgs e)
         {
             InitConfig();
 
             VM = new MainViewModel();
             this.DataContext = VM;
-            //await this.VM.Init();
         }
 
         private void InitConfig()

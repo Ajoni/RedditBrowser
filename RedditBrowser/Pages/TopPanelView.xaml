@@ -50,8 +50,14 @@
 		<ColumnDefinition Width="*"/>
 	  </Grid.ColumnDefinitions>
 	  <ContentControl Grid.Column="0" Panel.ZIndex="2" Content="{StaticResource MagnifyingGlass}" Width="auto" Height="auto" Margin="15,7,7,7"/>
-	  <xctk:WatermarkTextBox Grid.Column="0" Grid.ColumnSpan="2" Panel.ZIndex="1" x:Name="texboxSearch" Text="{Binding Search}" Watermark="Search"
-                FontSize="16" Padding="40,7,7,7" Margin="5,0,0,0"/>
+	  <xctk:WatermarkTextBox Grid.Column="0" Grid.ColumnSpan="2" Panel.ZIndex="1" x:Name="texboxSearch" Text="{Binding Query, UpdateSourceTrigger=PropertyChanged}" Watermark="Search"
+                FontSize="16" Padding="40,7,7,7" Margin="5,0,0,0">
+		<i:Interaction.Triggers>
+		  <iex:KeyTrigger Key="Enter" ActiveOnFocus="True">
+			<cmd:EventToCommand Command="{Binding Search}"/>
+		  </iex:KeyTrigger>
+		</i:Interaction.Triggers>
+	  </xctk:WatermarkTextBox>
 	</Grid>
 	<Button Grid.Column="3" x:Name="buttonLogin" Content="_LOG IN" Command="{Binding LoginClick}"
                 Style="{StaticResource LoginLogoutButtonStyle}" Margin="5,1" 

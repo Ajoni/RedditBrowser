@@ -18,13 +18,14 @@ namespace RedditBrowser.ViewModel
 
 		public ObservableCollection<LoadedPost>   Posts           { get; set; } = new ObservableCollection<LoadedPost>();
         public LoadedPost MousedOverPost  { get; set; }
-		public AuthenticatedUser            User            { get => _user; set { _user = value; this.PostVM.User = value; RaisePropertyChanged(); } }
+		public AuthenticatedUser            User            { get => _user; set { _user = value; if(this.PostVM != null) this.PostVM.User = value; RaisePropertyChanged(); } }
 		public bool                         Busy            { get => _busy; set { _busy = value; RaisePropertyChanged(); } }
 		public PostVM PostVM { get; private set; }
 
-		public ListVM()
+		public ListVM(bool goTo = true)
         {
-			Messenger.Default.Send(new GoToPageMessage(this));
+			if(goTo)
+				Messenger.Default.Send(new GoToPageMessage(this));
 		}
 
         #region Commands
@@ -35,9 +36,9 @@ namespace RedditBrowser.ViewModel
         {
             get
             {
-                return new DelegateCommand((a) =>
+                return new RelayCommand<LoadedPost>((post) =>
                     {
-                        this.MousedOverPost = (LoadedPost)a;
+                        this.MousedOverPost = post;
                     }
                     , (a) =>
                     {
@@ -50,15 +51,26 @@ namespace RedditBrowser.ViewModel
         {
             get
             {
-                return new DelegateCommand((a) =>
-                {
+				return new RelayCommand(() =>
+				{
 					this.PostVM = new PostVM(this.MousedOverPost, this.User);
 					Messenger.Default.Send(new GoToPageMessage(this.PostVM));
                 }
-                , (a) =>
+                , () =>
                 {
                     return Posts.Count > 0;
                 });
+            }
+        }
+
+		public ICommand LinkClick
+		{
+            get
+            {
+                return new RelayCommand<LoadedPost>((post) =>
+                {
+					System.Diagnostics.Process.Start(post.Url.ToString());
+				});
             }
         }
 

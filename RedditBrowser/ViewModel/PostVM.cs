@@ -84,16 +84,5 @@ namespace RedditBrowser.ViewModel
 				});
 			}
 		}
-
-		//public ICommand CommentHover
-		//{
-		//	get
-		//	{
-		//		return new RelayCommand(() =>
-		//		{
-		//			this.MousedOverComment = (Post)a;
-		//		});					
-		//	}
-		//}
 	}
 }
