@@ -120,14 +120,12 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Classes\LoadedPost.cs" />
-    <Compile Include="Classes\User.cs" />
     <Compile Include="Classes\UserLoginResult.cs" />
     <Compile Include="Config\GlobalConfig.cs" />
     <Compile Include="Config\GlobalKeys.cs" />
     <Compile Include="Config\GlobalPaths.cs" />
     <Compile Include="Converters\DateToHowLongAgoConverter.cs" />
     <Compile Include="Converters\FalseToVisibleConverter.cs" />
-    <Compile Include="Converters\ImgConverter.cs" />
     <Compile Include="Converters\TrueToVisibleConverter.cs" />
     <Compile Include="Helpers\Extensions.cs" />
     <Compile Include="Helpers\LoginHelper.cs" />
@@ -252,10 +250,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Logic\Logic.csproj">
-      <Project>{059D730F-B88A-4518-B4A9-FB7094D8B2D9}</Project>
-      <Name>Logic</Name>
-    </ProjectReference>
     <ProjectReference Include="..\UserControls\UserControls.csproj">
       <Project>{5a29f586-af9e-4ffe-8f55-812579b04d0f}</Project>
       <Name>UserControls</Name>

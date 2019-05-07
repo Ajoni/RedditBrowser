@@ -2,7 +2,6 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:RedditBrowser.Resources"
                     xmlns:conv="clr-namespace:RedditBrowser.Converters">
-  <conv:ImgConverter x:Key="imgConverter"/>
   <conv:TrueToVisibleConverter x:Key="trueToVisibleConverter" />
   <conv:FalseToVisibleConverter x:Key="falseToVisibleConverter" />
   <conv:DateToHowLongAgoConverter x:Key="DateToHowLongAgoConverter" />
