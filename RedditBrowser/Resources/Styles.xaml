@@ -87,7 +87,17 @@
 	</Style.Triggers>
   </Style>
 
-  <!-- Heavens, it seems that fixing TreeViews requires a full replacement of TreeViewItem definition.
+    <Style x:Key="SmallClickableText" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="Foreground" Value="Gray" />
+        <Setter Property="FontWeight" Value="Bold" />
+    </Style>
+
+    <Style x:Key="LightGrayBackground" TargetType="Grid">
+        <Setter Property="Background" Value="#F8F9FA" />
+    </Style>
+
+    <!-- Heavens, it seems that fixing TreeViews requires a full replacement of TreeViewItem definition.
          May all goodness forgive me for just pasting this ball of mud. -->
     <Style TargetType="TreeViewItem"
        BasedOn="{StaticResource {x:Type TreeViewItem}}">

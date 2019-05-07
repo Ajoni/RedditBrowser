@@ -126,6 +126,7 @@
     <Compile Include="Config\GlobalPaths.cs" />
     <Compile Include="Converters\DateToHowLongAgoConverter.cs" />
     <Compile Include="Converters\FalseToVisibleConverter.cs" />
+    <Compile Include="Converters\ImageUriToVisibilityConverter.cs" />
     <Compile Include="Converters\TrueToVisibleConverter.cs" />
     <Compile Include="Helpers\Extensions.cs" />
     <Compile Include="Helpers\LoginHelper.cs" />

@@ -9,14 +9,8 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Resources/Merged.xaml" />                
+                <ResourceDictionary Source="/Resources/Merged.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            
-            <Style x:Key="CommentSmallTextButton" TargetType="TextBlock">
-                <Setter Property="FontSize" Value="12" />
-                <Setter Property="Foreground" Value="Gray" />
-                <Setter Property="FontWeight" Value="Bold" />
-            </Style>
         </ResourceDictionary>        
     </UserControl.Resources>
   <Grid >
@@ -56,7 +50,7 @@
                     <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
                 <Button Grid.Column="0"  x:Name="buttonReply" Style="{StaticResource TransparentButtonStyle}">
-                    <TextBlock Style="{StaticResource CommentSmallTextButton}">Reply</TextBlock>
+                    <TextBlock Style="{StaticResource SmallClickableText}">Reply</TextBlock>
                 </Button>
             </Grid>
 	</Grid>

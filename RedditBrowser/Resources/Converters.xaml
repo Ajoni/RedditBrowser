@@ -5,4 +5,5 @@
   <conv:TrueToVisibleConverter x:Key="trueToVisibleConverter" />
   <conv:FalseToVisibleConverter x:Key="falseToVisibleConverter" />
   <conv:DateToHowLongAgoConverter x:Key="DateToHowLongAgoConverter" />
+  <conv:ImageUriToVisibilityConverter x:Key="ImageUriToVisibilityConverter" />
 </ResourceDictionary>
