@@ -1,5 +1,4 @@
-﻿using Logic;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using RedditBrowser.Config;
 using RedditBrowser.Helpers;
 using RedditBrowser.ViewModel;

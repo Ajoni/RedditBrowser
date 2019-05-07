@@ -19,47 +19,49 @@
             </Style>
         </ResourceDictionary>        
     </UserControl.Resources>
-  <Grid >
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="40"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto" />
-        </Grid.RowDefinitions>
-        <Grid Grid.Column="0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-            </Grid.RowDefinitions>
-	  <Button Grid.Row="0" x:Name="buttonUpVote" Content="{StaticResource UpvoteArrow}" Style="{StaticResource VoteButtonStyle}"/>
-	  <TextBlock Grid.Row="1" x:Name="textblockVotes" Text="{Binding Score}" VerticalAlignment="Center" Style="{StaticResource VoteTextBlockStyle}"/>
-	  <Button Grid.Row="2" x:Name="buttonDownVote" Content="{StaticResource DownvoteArrow}" Style="{StaticResource VoteButtonStyle}"/>
-	</Grid>
+  <Border BorderThickness="1" BorderBrush="DarkGray" SnapsToDevicePixels="true">
+	<Grid >
+	  <Grid.ColumnDefinitions>
+		<ColumnDefinition Width="40"/>
+		<ColumnDefinition Width="*"/>
+	  </Grid.ColumnDefinitions>
+	  <Grid.RowDefinitions>
+		<RowDefinition Height="auto" />
+	  </Grid.RowDefinitions>
+	  <Grid Grid.Column="0">
+		<Grid.RowDefinitions>
+		  <RowDefinition Height="auto"/>
+		  <RowDefinition Height="auto"/>
+		  <RowDefinition Height="auto"/>
+		</Grid.RowDefinitions>
+		<Button Grid.Row="0" x:Name="buttonUpVote" Content="{StaticResource UpvoteArrow}" Style="{StaticResource VoteButtonStyle}"/>
+		<TextBlock Grid.Row="1" x:Name="textblockVotes" Text="{Binding Score}" VerticalAlignment="Center" Style="{StaticResource VoteTextBlockStyle}"/>
+		<Button Grid.Row="2" x:Name="buttonDownVote" Content="{StaticResource DownvoteArrow}" Style="{StaticResource VoteButtonStyle}"/>
+	  </Grid>
 
-        <Grid Grid.Column="1" >
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="auto"/>
-            </Grid.RowDefinitions>
-            <WrapPanel  Grid.Row="0" Grid.ColumnSpan="2" Orientation="Horizontal">
-                <TextBlock x:Name="textblockAuthorName" Text="{Binding AuthorName}" />
-                <TextBlock x:Name="textblockAuthorFlairText" Text="{Binding AuthorFlairText}" />
-                <TextBlock x:Name="textblockScore" Text="{Binding Score}" />
-                <TextBlock x:Name="textblockDate" Text="{Binding Created}" />
-            </WrapPanel>
-            <TextBlock Grid.Row="1" Text="{Binding Body}" TextWrapping="Wrap"/>
-            <Grid Grid.Row="2">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto"/>
-                </Grid.ColumnDefinitions>
-                <Button Grid.Column="0"  x:Name="buttonReply" Style="{StaticResource TransparentButtonStyle}">
-                    <TextBlock Style="{StaticResource CommentSmallTextButton}">Reply</TextBlock>
-                </Button>
-            </Grid>
+	  <Grid Grid.Column="1" >
+		<Grid.RowDefinitions>
+		  <RowDefinition Height="auto"/>
+		  <RowDefinition Height="*"/>
+		  <RowDefinition Height="auto"/>
+		</Grid.RowDefinitions>
+		<WrapPanel  Grid.Row="0" Grid.ColumnSpan="2" Orientation="Horizontal">
+		  <TextBlock x:Name="textblockAuthorName" Text="{Binding AuthorName}" />
+		  <TextBlock x:Name="textblockAuthorFlairText" Text="{Binding AuthorFlairText}" />
+		  <TextBlock x:Name="textblockScore" Text="{Binding Score, StringFormat='{}{0} points • '}" />
+		  <TextBlock x:Name="textblockDate" Text="{Binding Created, Converter={StaticResource DateToHowLongAgoConverter}}" />
+		</WrapPanel>
+		<TextBlock Grid.Row="1" Text="{Binding Body}" TextWrapping="Wrap"/>
+		<Grid Grid.Row="2">
+		  <Grid.ColumnDefinitions>
+			<ColumnDefinition Width="auto"/>
+		  </Grid.ColumnDefinitions>
+		  <Button Grid.Column="0"  x:Name="buttonReply" Style="{StaticResource TransparentButtonStyle}">
+			<TextBlock Style="{StaticResource CommentSmallTextButton}">Reply</TextBlock>
+		  </Button>
+		</Grid>
+	  </Grid>
+
 	</Grid>
-	
-  </Grid>
+  </Border>
 </UserControl>
