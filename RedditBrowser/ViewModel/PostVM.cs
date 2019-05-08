@@ -30,7 +30,6 @@ namespace RedditBrowser.ViewModel
 		{
 			Post = post;
 			User = user;
-			//RegisterMessages();
 		}
 
 		public ICommand SubredditNameClick
@@ -82,6 +81,41 @@ namespace RedditBrowser.ViewModel
 				{
 					this.Post.Comment(this.Comment);
 				});
+			}
+		}
+
+		public ICommand CommentHover
+		{
+			get
+			{
+				return new RelayCommand<Comment>((comment) =>
+				{
+					this.MousedOverComment = comment;
+				});
+			}
+		}
+
+		public ICommand UpvoteCommentClick
+		{
+			get
+			{
+				return new RelayCommand(() =>
+				{
+					if (MousedOverComment.Liked.HasValue && MousedOverComment.Liked.Value) MousedOverComment.ClearVote(); else MousedOverComment.Upvote();
+				}
+				, true);
+			}
+		}
+
+		public ICommand DownvoteCommentClick
+		{
+			get
+			{
+				return new RelayCommand(() =>
+				{
+					if (MousedOverComment.Liked.HasValue && !MousedOverComment.Liked.Value) MousedOverComment.ClearVote(); else MousedOverComment.Downvote();
+				}
+				, true);
 			}
 		}
 	}

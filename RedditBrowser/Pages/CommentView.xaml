@@ -34,9 +34,9 @@
 		  <RowDefinition Height="auto"/>
 		  <RowDefinition Height="auto"/>
 		</Grid.RowDefinitions>
-		<Button Grid.Row="0" x:Name="buttonUpVote" Content="{StaticResource UpvoteArrow}" Style="{StaticResource VoteButtonStyle}"/>
+		<Button Grid.Row="0" x:Name="buttonUpVote" Content="{StaticResource UpvoteArrow}" Style="{StaticResource VoteButtonStyle}" Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TreeView}}, Path=DataContext.UpvoteCommentClick}" />
 		<TextBlock Grid.Row="1" x:Name="textblockVotes" Text="{Binding Score}" VerticalAlignment="Center" Style="{StaticResource VoteTextBlockStyle}"/>
-		<Button Grid.Row="2" x:Name="buttonDownVote" Content="{StaticResource DownvoteArrow}" Style="{StaticResource VoteButtonStyle}"/>
+		<Button Grid.Row="2" x:Name="buttonDownVote" Content="{StaticResource DownvoteArrow}" Style="{StaticResource VoteButtonStyle}" Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TreeView}}, Path=DataContext.DownvoteCommentClick}" />
 	  </Grid>
 
 	  <Grid Grid.Column="1" >

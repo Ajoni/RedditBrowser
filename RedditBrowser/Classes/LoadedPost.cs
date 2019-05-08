@@ -87,6 +87,7 @@ namespace RedditBrowser.Classes
 		public void Comment(string message)
 		{
 			this.Post.Comment(message);
+			this.Comments.Clear();
 			foreach (var comment in this.Post.Comments)
 				Comments.Add(comment);
 		}
