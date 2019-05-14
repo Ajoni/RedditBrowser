@@ -32,6 +32,18 @@
 		</Grid.ColumnDefinitions>
 		<user:ExtendedListBox Grid.Row="0" Grid.Column="0" x:Name="listboxSubreddits" ItemsSource="{Binding Subreddits}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                      HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" ItemTemplate="{StaticResource Subreddit}">
+		  <i:Interaction.Triggers>
+			<i:EventTrigger EventName="ScrollReachedBottom">
+			  <cmd:EventToCommand
+                            Command="{Binding LoadNextSubreddit}"
+                            />
+			</i:EventTrigger>
+			<i:EventTrigger EventName="NeedsMoreItems">
+			  <cmd:EventToCommand
+                            Command="{Binding LoadNextSubreddit}"
+                            />
+			</i:EventTrigger>
+		  </i:Interaction.Triggers>
 		</user:ExtendedListBox>
 	  </Grid>
   </xctk:BusyIndicator>

@@ -50,14 +50,26 @@ namespace RedditBrowser.ViewModel
 				InitPosts();
 		}
 
-		private async void InitSubs()
+		private async Task InitSubs()
 		{
 			Subreddits.Clear();
+			await LoadSubs(0, 5);
+		}
+
+		private async Task LoadSubs(int toSkip, int toTake)
+		{
 			List<Subreddit> subs = new List<Subreddit>();
 			Busy = true;
 			await Task.Run(() =>
 			{
-				subs = this.Reddit.SearchSubreddits(Query).Take(5).ToList();
+				try
+				{
+					subs = this.Reddit.SearchSubreddits(Query).Skip(toSkip).Take(toTake).ToList();
+				}
+				catch (Exception)
+				{
+					// oof
+				}
 			});
 			IObservable<Subreddit> postsToLoad = subs.ToObservable();
 			postsToLoad.Subscribe(p =>
@@ -67,7 +79,6 @@ namespace RedditBrowser.ViewModel
 			{
 				Busy = false;
 			});
-
 		}
 
 		public ICommand SubredditHover
@@ -104,15 +115,30 @@ namespace RedditBrowser.ViewModel
 			}
 		}
 
+		public ICommand LoadNextSubreddit
+		{
+			get
+			{
+				return new RelayCommand(async () =>
+				{
+					await LoadSubs(this.Subreddits.Count, 5);
+				}, () => this.Reddit != null);
+			}
+		}
 
 		private async void InitPosts()
 		{
 			ListVM.Posts.Clear();
+			await LoadPosts(ListVM.Posts.Count,3);
+		}
+
+		private async Task LoadPosts(int toSkip, int toTake)
+		{
 			List<LoadedPost> posts = new List<LoadedPost>();
 			Busy = true;
 			await Task.Run(() =>
 			{
-				posts = LoadPosts(0, 5);
+				posts = Subreddit.Search(Query).Skip(toSkip).Select(post => new LoadedPost(post)).Take(toTake).ToList();
 			});
 			IObservable<LoadedPost> postsToLoad = posts.ToObservable();
 			postsToLoad.Subscribe(p =>
@@ -122,11 +148,8 @@ namespace RedditBrowser.ViewModel
 			{
 				Busy = false;
 			});
-
 		}
-		private List<LoadedPost> LoadPosts(int from, int amount) =>
-		Subreddit.Search(Query)
-		.Skip(from).Select(post => new LoadedPost(post)).Take(amount).ToList();
+
 		private async void LoadNextPostMethod()
 		{
 			if (ListVM.Busy)
