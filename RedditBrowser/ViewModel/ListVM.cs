@@ -22,8 +22,9 @@ namespace RedditBrowser.ViewModel
 		public bool                         Busy            { get => _busy; set { _busy = value; RaisePropertyChanged(); } }
 		public PostVM PostVM { get; private set; }
 
-		public ListVM(bool goTo = true)
+		public ListVM(AuthenticatedUser user = null, bool goTo = true)
         {
+			User = user;
 			if(goTo)
 				Messenger.Default.Send(new GoToPageMessage(this));
 		}
@@ -105,5 +106,10 @@ namespace RedditBrowser.ViewModel
 		}
 
 		#endregion // Commands
+
+		private void ReceiveMessage(ChangeSubredditMessage message)
+		{
+			this.MousedOverPost = null;
+		}
 	}
 }

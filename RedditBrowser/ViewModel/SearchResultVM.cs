@@ -1,6 +1,8 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
 using RedditBrowser.Classes;
+using RedditBrowser.ViewModel.Messages;
 using RedditSharp;
 using RedditSharp.Things;
 using System;
@@ -10,6 +12,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 
 namespace RedditBrowser.ViewModel
 {
@@ -20,6 +23,7 @@ namespace RedditBrowser.ViewModel
 		public ListVM ListVM { get; set; }
 		public string Query { get; set; }
 		public ObservableCollection<Subreddit> Subreddits { get; set; } = new ObservableCollection<Subreddit>();
+		public Subreddit MousedOverSubreddit { get; private set; }
 		public bool Busy
 		{
 			get => _busy; set
@@ -28,6 +32,9 @@ namespace RedditBrowser.ViewModel
 			}
 		}
 		public Reddit Reddit { get; set; }
+		/// <summary>
+		/// currenlty loaded subbreddit, instance needed to search posts
+		/// </summary>
 		public Subreddit Subreddit { get; set; }
 
 		public SearchResultVM(ListVM listVM, string query, Reddit reddit, Subreddit subreddit)
@@ -62,6 +69,41 @@ namespace RedditBrowser.ViewModel
 			});
 
 		}
+
+		public ICommand SubredditHover
+		{
+			get
+			{
+				return new RelayCommand<Subreddit>((sub) =>
+				{
+					this.MousedOverSubreddit = sub;
+				});
+			}
+		}
+
+		public ICommand SubredditLinkClick
+		{
+			get
+			{
+				return new RelayCommand(() =>
+				{
+					Messenger.Default.Send(new ChangeSubredditMessage(this.MousedOverSubreddit.Name));
+				});
+			}
+		}
+
+		public ICommand SubredditSubscribeClick
+		{
+			get
+			{
+				return new RelayCommand(() =>
+				{
+					this.MousedOverSubreddit.Subscribe();
+					Messenger.Default.Send(new SubredditSubscribedMessage(this.MousedOverSubreddit.Name));
+				},() => this.Reddit.User != null);
+			}
+		}
+
 
 		private async void InitPosts()
 		{

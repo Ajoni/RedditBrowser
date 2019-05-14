@@ -101,8 +101,23 @@
 		<ColumnDefinition Width="*"/>
 		<ColumnDefinition Width="*"/>
 	  </Grid.ColumnDefinitions>
-	  <TextBlock Grid.Column="0" x:Name="textblockSubredditName" Text="{Binding Name}" HorizontalAlignment="Left"/>
-	  <Button Grid.Column="1" x:Name="buttonSubscribe" Content="Subscribe" Style="{StaticResource LoginLogoutButtonStyle}" HorizontalAlignment="Right"/>
+	  <i:Interaction.Triggers>
+		<i:EventTrigger EventName="MouseEnter">
+		  <cmd:EventToCommand Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type user:ExtendedListBox}}, Path=DataContext.SubredditHover}"
+                                                    CommandParameter="{Binding }" />
+		</i:EventTrigger>
+	  </i:Interaction.Triggers>
+	  <TextBlock Grid.Column="0" x:Name="textblockSubredditName" Text="{Binding Name}" Style="{StaticResource LinkTextStyle}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="1">
+		  <i:Interaction.Triggers>
+			<i:EventTrigger EventName="MouseLeftButtonUp">
+			<cmd:EventToCommand Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type user:ExtendedListBox}}, Path=DataContext.SubredditLinkClick}"
+                                                    CommandParameter="{Binding }" />
+		  </i:EventTrigger>
+		</i:Interaction.Triggers>
+	  </TextBlock>
+	  <Button Grid.Column="1" x:Name="buttonSubscribe" Content="Subscribe" 
+			  Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type user:ExtendedListBox}}, Path=DataContext.SubredditSubscribeClick}" 
+			  Style="{StaticResource LoginLogoutButtonStyle}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5,1" Padding="3"/>
 	</Grid>
   </DataTemplate>
 

@@ -156,6 +156,7 @@
     <Compile Include="ViewModel\Messages\SearchMessage.cs" />
     <Compile Include="ViewModel\Messages\ShowLoginMessage.cs" />
     <Compile Include="ViewModel\Messages\ShowPostMessage.cs" />
+    <Compile Include="ViewModel\Messages\SubredditSubscribedMessage.cs" />
     <Compile Include="ViewModel\SearchResultVM.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="ViewModel\IViewModel.cs" />

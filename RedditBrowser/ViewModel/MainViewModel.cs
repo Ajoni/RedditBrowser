@@ -125,11 +125,11 @@ namespace RedditBrowser.ViewModel
 
 			this.CurrentPage = this.ListVM;
 			if (this.Subreddit != null)
-				await this.Init();
+				ReceiveMessage(new ChangeSubredditMessage(this.Subreddit.Name)); //reload needed to update webAgents with user acces token
 
             TopPanel.IsUserLoggedIn = Reddit.User != null;
 		}
-		private void ReceiveMessage(SearchMessage message) => this.CurrentPage = new SearchResultVM(new ListVM(false),message.Query,this.Reddit,this.Subreddit);
+		private void ReceiveMessage(SearchMessage message) => this.CurrentPage = new SearchResultVM(new ListVM(this.Reddit.User, false),message.Query,this.Reddit,this.Subreddit);
         
 		private void RegisterMessages()
 		{
