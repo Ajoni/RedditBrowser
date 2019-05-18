@@ -116,13 +116,31 @@
 		  <i:Interaction.Triggers>
 			<i:EventTrigger EventName="MouseLeftButtonUp">
 			<cmd:EventToCommand Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type user:ExtendedListBox}}, Path=DataContext.SubredditLinkClick}"
-                                                    CommandParameter="{Binding }" />
+                                                    PassEventArgsToCommand="True" />
 		  </i:EventTrigger>
 		</i:Interaction.Triggers>
 	  </TextBlock>
-	  <Button Grid.Column="1" x:Name="buttonSubscribe" Content="Subscribe" 
-			  Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type user:ExtendedListBox}}, Path=DataContext.SubredditSubscribeClick}" 
-			  Style="{StaticResource LoginLogoutButtonStyle}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5,1" Padding="3"/>
+        <Button Grid.Column="1" x:Name="buttonSubscribe" Content="Subscribe" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5,1" Padding="3"
+                Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type user:ExtendedListBox}}, Path=DataContext.SubredditSubscribeClick}"
+                                                CommandParameter="{Binding}">
+            <Button.Style>
+                <Style BasedOn="{StaticResource LoginLogoutButtonStyle}" TargetType="Button">
+                    <Style.Triggers>
+                        <EventTrigger RoutedEvent="Button.Click">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <BooleanAnimationUsingKeyFrames 
+            Storyboard.TargetProperty="IsEnabled"
+            Duration="0:0:1" FillBehavior="HoldEnd" >
+                                        <DiscreteBooleanKeyFrame Value="False" KeyTime="0:0:0" />
+                                    </BooleanAnimationUsingKeyFrames>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+        </Button>
 	</Grid>
   </DataTemplate>
 

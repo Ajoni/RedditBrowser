@@ -23,6 +23,7 @@ namespace RedditBrowser.ViewModel
 		public ListVM ListVM { get; set; }
 		public string Query { get; set; }
 		public ObservableCollection<Subreddit> Subreddits { get; set; } = new ObservableCollection<Subreddit>();
+		public ObservableCollection<string> SubscribedSubreddits { get; set; } = new ObservableCollection<string>();
 		public Subreddit MousedOverSubreddit { get; private set; }
 		public bool Busy
 		{
@@ -44,8 +45,11 @@ namespace RedditBrowser.ViewModel
 			Query = query;
 			Reddit = reddit;
 			Subreddit = subreddit;
+            if(Reddit.User != null)
+                foreach (var sub in Reddit.User.SubscribedSubreddits)
+                    SubscribedSubreddits.Add(sub.Name);
 
-			InitSubs();
+			Task.Run(() =>InitSubs());
 			if (Subreddit != null)
 				InitPosts();
 		}
@@ -107,15 +111,16 @@ namespace RedditBrowser.ViewModel
 		{
 			get
 			{
-				return new RelayCommand(() =>
-				{
-					this.MousedOverSubreddit.Subscribe();
-					Messenger.Default.Send(new SubredditSubscribedMessage(this.MousedOverSubreddit.Name));
-				},() => this.Reddit.User != null);
+                return new RelayCommand<Subreddit>((sub) =>
+                {
+                    this.MousedOverSubreddit.Subscribe();
+                    this.SubscribedSubreddits.Add(sub.Name);
+					Messenger.Default.Send(new SubredditSubscribedMessage(sub.Name));
+				},(sub) => this.Reddit.User != null && !isSubscribed(sub));
 			}
 		}
-
-		public ICommand LoadNextSubreddit
+        private bool isSubscribed(Subreddit subreddit) => SubscribedSubreddits.Contains(subreddit.Name);
+        public ICommand LoadNextSubreddit
 		{
 			get
 			{
