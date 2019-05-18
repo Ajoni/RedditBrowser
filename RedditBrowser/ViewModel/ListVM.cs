@@ -68,10 +68,12 @@ namespace RedditBrowser.ViewModel
 		{
             get
             {
-                return new RelayCommand<LoadedPost>((post) =>
+                return new RelayCommand<MouseButtonEventArgs>((args) =>
                 {
-					System.Diagnostics.Process.Start(post.Url.ToString());
-				});
+                    var post = (LoadedPost)((System.Windows.Controls.TextBlock)args.Source).DataContext;
+                    System.Diagnostics.Process.Start(post.Url.ToString());
+                    args.Handled = true;
+                });
             }
         }
 

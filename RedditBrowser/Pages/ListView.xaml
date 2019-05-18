@@ -13,7 +13,6 @@
     <UserControl.Resources>
         <ResourceDictionary Source="/Resources/Merged.xaml"/>
     </UserControl.Resources>
-    <xctk:BusyIndicator IsBusy="{Binding Busy}" BusyContentTemplate="{StaticResource Busy}">
         <Grid x:Name="gridPosts" Margin="5, 0, 0, 5">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
@@ -37,5 +36,4 @@
                 </i:Interaction.Triggers>
             </user:ExtendedListBox>
         </Grid>
-    </xctk:BusyIndicator>
 </UserControl>
