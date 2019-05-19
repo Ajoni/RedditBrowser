@@ -5,8 +5,10 @@ using RedditBrowser.Classes;
 using RedditBrowser.Helpers;
 using RedditBrowser.ViewModel.Messages;
 using RedditSharp.Things;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Input;
 
 namespace RedditBrowser.ViewModel
@@ -103,6 +105,22 @@ namespace RedditBrowser.ViewModel
 				, () =>
 				{
 					return this.User != null;
+				});
+			}
+		}
+
+        public ICommand ShowFullResolutionImageChange
+        {
+			get
+			{
+				return new RelayCommand<LoadedPost>((post) =>
+				{
+                    post.ShowFullResolutionImage = !post.ShowFullResolutionImage;
+                }
+				, (post) =>
+				{
+                    var formats = new List<string>() { ".png", ".jpg", ".jpeg", ".gif" };
+                    return formats.Any(f => post.Url.ToString().Contains(f));
 				});
 			}
 		}

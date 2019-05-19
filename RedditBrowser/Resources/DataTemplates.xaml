@@ -40,6 +40,7 @@
 	  </Grid.ColumnDefinitions>
 	  <Grid.RowDefinitions>
 		<RowDefinition Height="auto" />
+		<RowDefinition Height="auto" />
 	  </Grid.RowDefinitions>
 
 	  <Grid Grid.Column="0">
@@ -95,9 +96,12 @@
 			<ColumnDefinition Width="auto"/>
 			<ColumnDefinition Width="*"/>
 		  </Grid.ColumnDefinitions>
-		</Grid>
+                    <Button x:Name="buttonShowFullResolutionImage" Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type user:ExtendedListBox}}, Path=DataContext.ShowFullResolutionImageChange}"
+        CommandParameter="{Binding}" Content="zrobić tu path jako ikonke"/>
+                </Grid>
 	  </Grid>
-	</Grid>
+            <Image Grid.ColumnSpan="3" Grid.Row="1" x:Name="imageFullResolution" Source="{Binding Url}" Visibility="{Binding ShowFullResolutionImage, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+    </Grid>
   </DataTemplate>
 
   <DataTemplate x:Key="Subreddit" DataType="{x:Type r:Subreddit}">

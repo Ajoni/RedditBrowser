@@ -17,7 +17,14 @@ namespace RedditBrowser.Converters
             {
                 BitmapImage bi = new BitmapImage();
                 bi.BeginInit();
-                bi.UriSource = new Uri(value.ToString(), UriKind.Absolute);
+                try
+                {
+                    bi.UriSource = new Uri(value.ToString(), UriKind.Absolute);
+                }
+                catch (UriFormatException)
+                {
+                    return null;
+                }
                 bi.EndInit();
                 return bi;
             }
