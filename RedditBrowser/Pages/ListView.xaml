@@ -13,7 +13,6 @@
     <UserControl.Resources>
         <ResourceDictionary Source="/Resources/Merged.xaml"/>
     </UserControl.Resources>
-    <xctk:BusyIndicator IsBusy="{Binding Busy}" BusyContentTemplate="{StaticResource Busy}">
         <Grid x:Name="gridPosts" Margin="5, 0, 0, 5">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
@@ -22,7 +21,7 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <user:ExtendedListBox Grid.Row="0" Grid.Column="0" x:Name="listboxPosts" ItemsSource="{Binding Posts}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                     HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" ItemTemplate="{StaticResource ListPostItem}">
+                     HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" ItemTemplate="{StaticResource ListPostItem}" ScrollViewer.CanContentScroll="False">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="ScrollReachedBottom">
                         <cmd:EventToCommand
@@ -37,5 +36,4 @@
                 </i:Interaction.Triggers>
             </user:ExtendedListBox>
         </Grid>
-    </xctk:BusyIndicator>
 </UserControl>

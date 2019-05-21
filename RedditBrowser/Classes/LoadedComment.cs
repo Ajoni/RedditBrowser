@@ -10,7 +10,7 @@ using static RedditSharp.Things.VotableThing;
 
 namespace RedditBrowser.Classes
 {
-	public class CommentLoad : INotifyPropertyChanged
+	public class LoadedComment : INotifyPropertyChanged
 	{
 		private bool? _liked;
 		private int _score;

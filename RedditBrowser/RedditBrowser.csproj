@@ -119,7 +119,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Classes\CommentLoad.cs" />
+    <Compile Include="Classes\LoadedComment.cs" />
     <Compile Include="Classes\LoadedPost.cs" />
     <Compile Include="Classes\UserLoginResult.cs" />
     <Compile Include="Config\GlobalConfig.cs" />
@@ -127,6 +127,7 @@
     <Compile Include="Config\GlobalPaths.cs" />
     <Compile Include="Converters\DateToHowLongAgoConverter.cs" />
     <Compile Include="Converters\FalseToVisibleConverter.cs" />
+    <Compile Include="Converters\ImgConverter.cs" />
     <Compile Include="Converters\TrueToVisibleConverter.cs" />
     <Compile Include="Helpers\Extensions.cs" />
     <Compile Include="Helpers\LoginHelper.cs" />
@@ -156,6 +157,7 @@
     <Compile Include="ViewModel\Messages\SearchMessage.cs" />
     <Compile Include="ViewModel\Messages\ShowLoginMessage.cs" />
     <Compile Include="ViewModel\Messages\ShowPostMessage.cs" />
+    <Compile Include="ViewModel\Messages\SubredditSubscribedMessage.cs" />
     <Compile Include="ViewModel\SearchResultVM.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="ViewModel\IViewModel.cs" />

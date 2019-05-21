@@ -94,10 +94,16 @@ namespace RedditBrowser.ViewModel
 				Subreddits.Add(this.SelectedSubreddit);
 
 		}
+		private void ReceiveMessage(SubredditSubscribedMessage message)
+		{
+			if (!Subreddits.Contains(message.Name))
+				Subreddits.Add(message.Name);
+		}
 
 		private void RegisterMessages()
 		{
 			Messenger.Default.Register<ChangeSubredditMessage>(this, (message) => ReceiveMessage(message));
+			Messenger.Default.Register<SubredditSubscribedMessage>(this, (message) => ReceiveMessage(message));
 		}
 	}
 }

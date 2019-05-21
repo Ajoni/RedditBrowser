@@ -80,6 +80,7 @@ namespace RedditBrowser.ViewModel
 				return new RelayCommand(() =>
 				{
 					this.Post.Comment(this.Comment);
+                    this.Comment = string.Empty;
 				});
 			}
 		}
