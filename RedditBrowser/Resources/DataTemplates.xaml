@@ -35,7 +35,7 @@
 	  <i:Interaction.Triggers>
 		<i:EventTrigger EventName="MouseEnter">
 		  <cmd:EventToCommand Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type user:ExtendedListBox}}, Path=DataContext.ItemHover}"
-                   CommandParameter="{Binding}" />
+                   CommandParameter="{Binding}/>
 		</i:EventTrigger>
 	  </i:Interaction.Triggers>
 	  <Grid.ColumnDefinitions>
@@ -102,13 +102,9 @@
 			<ColumnDefinition Width="*"/>
 		  </Grid.ColumnDefinitions>
                     <Button x:Name="buttonShowFullResolutionImage" Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type user:ExtendedListBox}}, Path=DataContext.ShowFullResolutionImageChange}"
-<<<<<<< HEAD
         CommandParameter="{Binding}">
                     <fa:ImageAwesome Icon="Expand" VerticalAlignment="Center" HorizontalAlignment="Center" Height="10px" />
                     </Button>
-=======
-        CommandParameter="{Binding}" Content="TODO ikonka"/>
->>>>>>> 78f688fe860f71b73a3b55ea1310000a22c0d3ef
                 </Grid>
 	  </Grid>
             <Image Grid.ColumnSpan="3" Grid.Row="1" x:Name="imageFullResolution" Source="{Binding Url}" Visibility="{Binding ShowFullResolutionImage, Converter={StaticResource BooleanToVisibilityConverter}}"/>

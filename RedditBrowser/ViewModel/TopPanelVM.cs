@@ -3,6 +3,7 @@ using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using RedditBrowser.Helpers;
 using RedditBrowser.ViewModel.Messages;
+using RedditSharp.Things;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
@@ -80,11 +81,23 @@ namespace RedditBrowser.ViewModel
 				Messenger.Default.Send(new SearchMessage(Query));
 		});
 
-		/// <summary>
-		/// update selected sub when user clicks on subreddit link
-		/// </summary>
-		/// <param name="message"></param>
-		private void ReceiveMessage(ChangeSubredditMessage message)
+        public ICommand SubredditUnsubscribeClick
+        {
+            get
+            {
+                return new RelayCommand<Subreddit>((sub) =>
+                {
+                    this.MousedOverSubreddit.Unsubscribe();
+                    this.SubscribedSubreddits.Remove(sub.Name);
+                }, (sub) => this.Reddit.User != null && !isSubscribed(sub));
+            }
+        }
+
+        /// <summary>
+        /// update selected sub when user clicks on subreddit link
+        /// </summary>
+        /// <param name="message"></param>
+        private void ReceiveMessage(ChangeSubredditMessage message)
 		{
 			if (string.IsNullOrEmpty(message.Name))
 				return;

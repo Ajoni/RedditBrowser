@@ -48,7 +48,7 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Button Grid.Column="0" Padding="-3" x:Name="buttonShowFullResolutionImage" Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type user:ExtendedListBox}}, Path=DataContext.SubredditUnsubscribeClick}"
+                        <Button Grid.Column="0" Padding="-3" x:Name="buttonShowFullResolutionImage" Command="{Binding SubredditUnsubscribeClick}"
                                                 CommandParameter="{Binding}">
                             <fa:ImageAwesome Icon="MinusSquare" VerticalAlignment="Center" HorizontalAlignment="Right" Width="15px" />
                         </Button>
