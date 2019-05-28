@@ -81,17 +81,17 @@ namespace RedditBrowser.ViewModel
 				Messenger.Default.Send(new SearchMessage(Query));
 		});
 
-        public ICommand SubredditUnsubscribeClick
-        {
-            get
-            {
-                return new RelayCommand<Subreddit>((sub) =>
-                {
-                    this.MousedOverSubreddit.Unsubscribe();
-                    this.SubscribedSubreddits.Remove(sub.Name);
-                }, (sub) => this.Reddit.User != null && !isSubscribed(sub));
-            }
-        }
+        //public ICommand SubredditUnsubscribeClick
+        //{
+        //    get
+        //    {
+        //        return new RelayCommand<Subreddit>((sub) =>
+        //        {
+        //            this.MousedOverSubreddit.Unsubscribe();
+        //            this.SubscribedSubreddits.Remove(sub.Name);
+        //        }, (sub) => this.Reddit.User != null && !isSubscribed(sub));
+        //    }
+        //}
 
         /// <summary>
         /// update selected sub when user clicks on subreddit link

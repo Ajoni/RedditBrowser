@@ -121,11 +121,11 @@ namespace RedditBrowser.ViewModel
                     this.MousedOverSubreddit.Subscribe();
                     this.SubscribedSubreddits.Add(sub.Name);
 					Messenger.Default.Send(new SubredditSubscribedMessage(sub.Name));
-				},(sub) => this.Reddit.User != null && !isSubscribed(sub));
+				},(sub) => this.Reddit.User != null && !IsSubscribed(sub));
 			}
 		}
         public bool _isSubscribed = false;
-        public bool isSubscribed(Subreddit subreddit) => SubscribedSubreddits.Contains(subreddit.Name);
+        public bool IsSubscribed(Subreddit subreddit) => SubscribedSubreddits.Contains(subreddit.Name);
        
         public ICommand SubredditUnsubscribeClick
         {
@@ -135,7 +135,7 @@ namespace RedditBrowser.ViewModel
                 {
                     this.MousedOverSubreddit.Unsubscribe();
                     this.SubscribedSubreddits.Remove(sub.Name);
-                }, (sub) => this.Reddit.User != null && !isSubscribed(sub));
+                }, (sub) => this.Reddit.User != null && !IsSubscribed(sub));
             }
         }
         public ICommand LoadNextSubreddit
@@ -159,7 +159,7 @@ namespace RedditBrowser.ViewModel
 		private async Task LoadPosts(int toSkip, int toTake)
 		{
 			List<LoadedPost> posts = new List<LoadedPost>();
-			Busy = true;
+			this.ListVM.Busy = true;
 			await Task.Run(() =>
 			{
 				posts = Subreddit.Search(Query).Skip(toSkip).Select(post => new LoadedPost(post)).Take(toTake).ToList();
@@ -170,7 +170,7 @@ namespace RedditBrowser.ViewModel
 				Application.Current.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Background, new Action<LoadedPost>((post) => ListVM.Posts.Add(post)), p);
 			}, () =>
 			{
-				Busy = false;
+                this.ListVM.Busy = false;
 			});
 		}
 
