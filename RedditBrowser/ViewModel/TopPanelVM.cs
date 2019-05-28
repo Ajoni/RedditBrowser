@@ -3,6 +3,7 @@ using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using RedditBrowser.Helpers;
 using RedditBrowser.ViewModel.Messages;
+using RedditSharp.Things;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
@@ -23,7 +24,9 @@ namespace RedditBrowser.ViewModel
 			}
 		}
 		public ObservableCollection<string> Subreddits { get; set; }
-		public bool IsUserLoggedIn
+        
+
+        public bool IsUserLoggedIn
 		{
 			get { return _IsUserLoggedIn; }
 			set { _IsUserLoggedIn = value; RaisePropertyChanged(); }
@@ -78,11 +81,23 @@ namespace RedditBrowser.ViewModel
 				Messenger.Default.Send(new SearchMessage(Query));
 		});
 
-		/// <summary>
-		/// update selected sub when user clicks on subreddit link
-		/// </summary>
-		/// <param name="message"></param>
-		private void ReceiveMessage(ChangeSubredditMessage message)
+        //public ICommand SubredditUnsubscribeClick
+        //{
+        //    get
+        //    {
+        //        return new RelayCommand<Subreddit>((sub) =>
+        //        {
+        //            this.MousedOverSubreddit.Unsubscribe();
+        //            this.SubscribedSubreddits.Remove(sub.Name);
+        //        }, (sub) => this.Reddit.User != null && !isSubscribed(sub));
+        //    }
+        //}
+
+        /// <summary>
+        /// update selected sub when user clicks on subreddit link
+        /// </summary>
+        /// <param name="message"></param>
+        private void ReceiveMessage(ChangeSubredditMessage message)
 		{
 			if (string.IsNullOrEmpty(message.Name))
 				return;
@@ -94,10 +109,16 @@ namespace RedditBrowser.ViewModel
 				Subreddits.Add(this.SelectedSubreddit);
 
 		}
+		private void ReceiveMessage(SubredditSubscribedMessage message)
+		{
+			if (!Subreddits.Contains(message.Name))
+				Subreddits.Add(message.Name);
+		}
 
 		private void RegisterMessages()
 		{
 			Messenger.Default.Register<ChangeSubredditMessage>(this, (message) => ReceiveMessage(message));
+			Messenger.Default.Register<SubredditSubscribedMessage>(this, (message) => ReceiveMessage(message));
 		}
 	}
 }
