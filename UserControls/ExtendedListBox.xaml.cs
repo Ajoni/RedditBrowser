@@ -21,6 +21,20 @@ namespace UserControls
     /// </summary>
     public partial class ExtendedListBox : ListBox
     {
+
+
+        public bool Spin
+        {
+            get { return (bool)GetValue(SpinProperty); }
+            set { SetValue(SpinProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for Spin.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty SpinProperty =
+            DependencyProperty.Register("Spin", typeof(bool), typeof(ExtendedListBox), new PropertyMetadata(false));
+
+
+
         #region Events
 
         static readonly RoutedEvent ScrollReachedBottomEvent =

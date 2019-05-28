@@ -7,33 +7,37 @@
              xmlns:local="clr-namespace:RedditBrowser.Pages"
              xmlns:cmd="http://www.galasoft.ch/mvvmlight"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:fa="http://schemas.fontawesome.io/icons/"
              xmlns:user="clr-namespace:UserControls;assembly=UserControls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <ResourceDictionary Source="/Resources/Merged.xaml"/>
     </UserControl.Resources>
-        <Grid x:Name="gridPosts" Margin="5, 0, 0, 5">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <user:ExtendedListBox Grid.Row="0" Grid.Column="0" x:Name="listboxPosts" ItemsSource="{Binding Posts}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                     HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" ItemTemplate="{StaticResource ListPostItem}" ScrollViewer.CanContentScroll="False">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="ScrollReachedBottom">
-                        <cmd:EventToCommand
+    <Grid x:Name="gridPosts" Margin="5, 0, 0, 5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <user:ExtendedListBox Grid.Row="0" Grid.Column="0" x:Name="listboxPosts" ItemsSource="{Binding Posts}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                     HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" ItemTemplate="{StaticResource ListPostItem}" ScrollViewer.CanContentScroll="False"
+                              Spin="{Binding Busy}">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="ScrollReachedBottom">
+                    <cmd:EventToCommand
                             Command="{Binding LoadNextPost}"
                             />
-                    </i:EventTrigger>
-                    <i:EventTrigger EventName="NeedsMoreItems">
-                        <cmd:EventToCommand
+                </i:EventTrigger>
+                <i:EventTrigger EventName="NeedsMoreItems">
+                    <cmd:EventToCommand
                             Command="{Binding LoadNextPost}"
                             />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </user:ExtendedListBox>
-        </Grid>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </user:ExtendedListBox>
+        
+    </Grid>
 </UserControl>
