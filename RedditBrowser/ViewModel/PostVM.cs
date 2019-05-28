@@ -12,9 +12,13 @@ namespace RedditBrowser.ViewModel
 	public class PostVM : ViewModelBase, IViewModel
 	{
 		private AuthenticatedUser _user;
+
 		private string _comment;
 
+
+
 		public LoadedPost Post { get; set; }
+
 		public string Comment
 		{
 			get => _comment; set
@@ -23,14 +27,20 @@ namespace RedditBrowser.ViewModel
 			}
 		}
 		public Comment MousedOverComment { get; set; }
+
 		public AuthenticatedUser User { get => _user; set { _user = value; RaisePropertyChanged(); RaisePropertyChanged("CommentButtonEnabled"); } }
+
 		public bool CommentButtonEnabled { get { return !string.IsNullOrEmpty(this.Comment) && this.User != null; } }
+
+
 
 		public PostVM(LoadedPost post, AuthenticatedUser user)
 		{
 			Post = post;
 			User = user;
 		}
+
+
 
 		public ICommand SubredditNameClick
 		{
@@ -115,8 +125,7 @@ namespace RedditBrowser.ViewModel
 				return new RelayCommand(() =>
 				{
 					if (MousedOverComment.Liked.HasValue && !MousedOverComment.Liked.Value) MousedOverComment.ClearVote(); else MousedOverComment.Downvote();
-				}
-				, true);
+				});
 			}
 		}
 	}
