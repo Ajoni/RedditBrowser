@@ -4,9 +4,11 @@
 					xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
 					xmlns:cmd="http://www.galasoft.ch/mvvmlight"
                     xmlns:r="clr-namespace:RedditSharp.Things;assembly=RedditSharp"
+                     xmlns:user="clr-namespace:UserControls;assembly=UserControls"
                     xmlns:vms="clr-namespace:RedditBrowser.ViewModel"
                     xmlns:pages="clr-namespace:RedditBrowser.Pages"
-                    xmlns:user="clr-namespace:UserControls;assembly=UserControls">
+                   
+                    xmlns:fa="http://schemas.fontawesome.io/icons/">
   <ResourceDictionary.MergedDictionaries>
 	<ResourceDictionary Source="Converters.xaml"/>
 	<ResourceDictionary Source="Styles.xaml"/>
@@ -25,7 +27,10 @@
 	<pages:ListView />
   </DataTemplate>
 
-  <DataTemplate x:Key="ListPostItem">
+    
+    
+
+    <DataTemplate x:Key="ListPostItem">
 	<Grid>
 	  <i:Interaction.Triggers>
 		<i:EventTrigger EventName="MouseEnter">
@@ -97,7 +102,9 @@
 			<ColumnDefinition Width="*"/>
 		  </Grid.ColumnDefinitions>
                     <Button x:Name="buttonShowFullResolutionImage" Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type user:ExtendedListBox}}, Path=DataContext.ShowFullResolutionImageChange}"
-        CommandParameter="{Binding}" Content="zrobić tu path jako ikonke"/>
+        CommandParameter="{Binding}">
+                    <fa:ImageAwesome Icon="Expand" VerticalAlignment="Center" HorizontalAlignment="Center" Height="10px" />
+                    </Button>
                 </Grid>
 	  </Grid>
             <Image Grid.ColumnSpan="3" Grid.Row="1" x:Name="imageFullResolution" Source="{Binding Url}" Visibility="{Binding ShowFullResolutionImage, Converter={StaticResource BooleanToVisibilityConverter}}"/>
@@ -124,14 +131,16 @@
 		  </i:EventTrigger>
 		</i:Interaction.Triggers>
 	  </TextBlock>
-        <Button Grid.Column="1" x:Name="buttonSubscribe" Content="Subscribe" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5,1" Padding="3"
+            <Button Grid.Column="1" x:Name="buttonSubscribe" Content="Subscribe"  HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5,1" Padding="3"
                 Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type user:ExtendedListBox}}, Path=DataContext.SubredditSubscribeClick}"
                                                 CommandParameter="{Binding}">
             <Button.Style>
                 <Style BasedOn="{StaticResource LoginLogoutButtonStyle}" TargetType="Button">
                     <Style.Triggers>
-                        <EventTrigger RoutedEvent="Button.Click">
-                            <BeginStoryboard>
+                          
+                            <EventTrigger RoutedEvent="Button.Click">
+
+                                    <BeginStoryboard>
                                 <Storyboard>
                                     <BooleanAnimationUsingKeyFrames 
             Storyboard.TargetProperty="IsEnabled"
@@ -140,8 +149,11 @@
                                     </BooleanAnimationUsingKeyFrames>
                                 </Storyboard>
                             </BeginStoryboard>
-                        </EventTrigger>
-                    </Style.Triggers>
+                          
+
+                            </EventTrigger>
+
+                        </Style.Triggers>
                 </Style>
             </Button.Style>
         </Button>

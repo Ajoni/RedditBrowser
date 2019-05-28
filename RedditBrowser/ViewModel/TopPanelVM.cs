@@ -23,7 +23,9 @@ namespace RedditBrowser.ViewModel
 			}
 		}
 		public ObservableCollection<string> Subreddits { get; set; }
-		public bool IsUserLoggedIn
+        
+
+        public bool IsUserLoggedIn
 		{
 			get { return _IsUserLoggedIn; }
 			set { _IsUserLoggedIn = value; RaisePropertyChanged(); }

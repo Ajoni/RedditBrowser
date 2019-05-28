@@ -1,5 +1,6 @@
 ﻿<UserControl x:Class="RedditBrowser.Pages.SearchResultView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:fa="http://schemas.fontawesome.io/icons/"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -34,9 +35,11 @@
                      HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" ItemTemplate="{StaticResource Subreddit}">
 		  <i:Interaction.Triggers>
 			<i:EventTrigger EventName="ScrollReachedBottom">
+                
 			  <cmd:EventToCommand
                             Command="{Binding LoadNextSubreddit}"
                             />
+                
 			</i:EventTrigger>
 			<i:EventTrigger EventName="NeedsMoreItems">
 			  <cmd:EventToCommand
@@ -44,7 +47,7 @@
                             />
 			</i:EventTrigger>
 		  </i:Interaction.Triggers>
-		</user:ExtendedListBox>
+                </user:ExtendedListBox>
 	  </Grid>
   </xctk:BusyIndicator>
 	  <GridSplitter Grid.Row="1" Height="5" HorizontalAlignment="Stretch" />

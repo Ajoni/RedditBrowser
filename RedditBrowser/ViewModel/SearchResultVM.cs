@@ -45,6 +45,7 @@ namespace RedditBrowser.ViewModel
 			Query = query;
 			Reddit = reddit;
 			Subreddit = subreddit;
+
             if(Reddit.User != null)
                 foreach (var sub in Reddit.User.SubscribedSubreddits)
                     SubscribedSubreddits.Add(sub.Name);
@@ -63,12 +64,14 @@ namespace RedditBrowser.ViewModel
 		private async Task LoadSubs(int toSkip, int toTake)
 		{
 			List<Subreddit> subs = new List<Subreddit>();
-			Busy = true;
-			await Task.Run(() =>
+            Busy = true;
+
+            await Task.Run(() =>
 			{
 				try
 				{
-					subs = this.Reddit.SearchSubreddits(Query).Skip(toSkip).Take(toTake).ToList();
+                    
+                    subs = this.Reddit.SearchSubreddits(Query).Skip(toSkip).Take(toTake).ToList();
 				}
 				catch (Exception)
 				{
@@ -82,7 +85,9 @@ namespace RedditBrowser.ViewModel
 			}, () =>
 			{
 				Busy = false;
-			});
+               
+
+            });
 		}
 
 		public ICommand SubredditHover
@@ -119,9 +124,23 @@ namespace RedditBrowser.ViewModel
 				},(sub) => this.Reddit.User != null && !isSubscribed(sub));
 			}
 		}
-        private bool isSubscribed(Subreddit subreddit) => SubscribedSubreddits.Contains(subreddit.Name);
+        public bool _isSubscribed = false;
+        public bool isSubscribed(Subreddit subreddit) => SubscribedSubreddits.Contains(subreddit.Name);
+       
+        public ICommand SubredditUnsubscribeClick
+        {
+            get
+            {
+                return new RelayCommand<Subreddit>((sub) =>
+                {
+                    this.MousedOverSubreddit.Unsubscribe();
+                    this.SubscribedSubreddits.Remove(sub.Name);
+                }, (sub) => this.Reddit.User != null && !isSubscribed(sub));
+            }
+        }
         public ICommand LoadNextSubreddit
 		{
+
 			get
 			{
 				return new RelayCommand(async () =>
