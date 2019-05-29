@@ -1,5 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:fa="http://schemas.fontawesome.io/icons/">
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="Styles.xaml"/>
@@ -110,5 +111,9 @@
         </Canvas>
 
     </Viewbox>
-    <!--  -->
+
+    <fa:ImageAwesome x:Key="ExpandImage" x:Shared="False" Icon="Expand" VerticalAlignment="Center" HorizontalAlignment="Center" Height="10px"/>
+    
+    <fa:ImageAwesome x:Key="HideImage" x:Shared="False" Icon="Close" VerticalAlignment="Center" HorizontalAlignment="Center" Height="10px"/>
+    
 </ResourceDictionary>

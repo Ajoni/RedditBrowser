@@ -8,7 +8,8 @@
                     xmlns:vms="clr-namespace:RedditBrowser.ViewModel"
                     xmlns:pages="clr-namespace:RedditBrowser.Pages"
                    
-                    xmlns:fa="http://schemas.fontawesome.io/icons/">
+                    xmlns:fa="http://schemas.fontawesome.io/icons/"
+                    xmlns:converters="clr-namespace:RedditBrowser.Converters">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="Converters.xaml"/>
         <ResourceDictionary Source="Styles.xaml"/>
@@ -26,9 +27,6 @@
     <DataTemplate DataType="{x:Type vms:ListVM}">
         <pages:ListView />
     </DataTemplate>
-
-
-
 
     <DataTemplate x:Key="ListPostItem">
         <Grid>
@@ -62,6 +60,20 @@
                                             Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type user:ExtendedListBox}}, Path=DataContext.DownvoteClick}" Style="{StaticResource VoteButtonStyle}"/>
             </Grid>
             <Image Grid.Column="1" Source="{Binding Thumbnail, Converter={StaticResource ImgConverter},  IsAsync=True}" MaxHeight="80" MaxWidth="100"  Margin="5,1"/>
+            <Button Grid.Column="1" x:Name="buttonShowFullResolutionImage" 
+                    Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type user:ExtendedListBox}}, Path=DataContext.ShowFullResolutionImageChange}"
+                    CommandParameter="{Binding}"
+                    Height="20px" Width="20px" HorizontalAlignment="Right" VerticalAlignment="Bottom"  
+                    Visibility="{Binding CanShowFullResolutionImage, Converter={StaticResource BooleanToVisibilityConverter}}"
+                    >
+                <Binding Path="ShowFullResolutionImage" >
+                    <Binding.Converter>
+                        <converters:GenericBooleanConverter 
+                            FalseValue="{StaticResource ExpandImage}"
+                            TrueValue="{StaticResource HideImage}"/>
+                    </Binding.Converter>
+                </Binding>
+            </Button>
             <Grid Grid.Column="2" Background="Transparent">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
@@ -95,16 +107,6 @@
                         <ColumnDefinition Width="auto"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Column="0" Text="{Binding Author.Name, StringFormat=Posted by {0}}"/>
-                </Grid>
-                <Grid Grid.Row="2">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Button x:Name="buttonShowFullResolutionImage" Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type user:ExtendedListBox}}, Path=DataContext.ShowFullResolutionImageChange}"
-        CommandParameter="{Binding}">
-                        <fa:ImageAwesome Icon="Expand" VerticalAlignment="Center" HorizontalAlignment="Center" Height="10px" />
-                    </Button>
                 </Grid>
             </Grid>
             <Image Grid.ColumnSpan="3" Grid.Row="1" x:Name="imageFullResolution" Source="{Binding Url}" 

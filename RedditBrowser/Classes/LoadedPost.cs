@@ -2,8 +2,10 @@
 using RedditSharp;
 using RedditSharp.Things;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -117,6 +119,15 @@ namespace RedditBrowser.Classes
         {
             Score = Post.Score;
             Liked = Post.Liked;
+        }
+
+        public bool CanShowFullResolutionImage
+        {
+            get
+            {
+                var formats = new List<string>() { ".png", ".jpg", ".jpeg", ".gif" };
+                return formats.Any(f => this.Url.ToString().Contains(f));
+            }
         }
 
         public void Comment(string message)
