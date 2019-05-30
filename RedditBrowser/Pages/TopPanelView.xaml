@@ -48,11 +48,24 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Button Grid.Column="0" Padding="-3" x:Name="buttonShowFullResolutionImage" Command="{Binding SubredditUnsubscribeClick}"
-                                                CommandParameter="{Binding}">
-                            <fa:ImageAwesome Icon="MinusSquare" VerticalAlignment="Center" HorizontalAlignment="Right" Width="15px" />
-                        </Button>
-                        <TextBlock Grid.Column="1" x:Name="textblockSubredditName" Text="{Binding}" Style="{StaticResource LinkTextStyle}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="1">
+                        <!--<i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseEnter">
+                                <cmd:EventToCommand Command="{MouseOverSubreddit}" CommandParameter="{Binding}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>-->
+                        <StackPanel Grid.Column="0" x:Name="stackpanelSubscribeButtons">
+                            <Button Padding="-3" x:Name="buttonUnsubscribe" Command="{Binding SubredditUnsubscribeClick}" 
+                                                CommandParameter="{Binding Name}"
+                                Visibility="{Binding IsSubscribed,Converter={StaticResource BooleanToVisibilityConverter}}">
+                                <fa:ImageAwesome Icon="MinusSquare" VerticalAlignment="Center" HorizontalAlignment="Right" Width="15px" />
+                            </Button>
+                            <Button Padding="-3" x:Name="buttonSubscribe" Command="{Binding SubredditSubscribeClick}" 
+                                                CommandParameter="{Binding Name}"
+                                Visibility="{Binding CanSubscribe,Converter={StaticResource BooleanToVisibilityConverter}}">
+                                <fa:ImageAwesome Icon="PlusSquare" VerticalAlignment="Center" HorizontalAlignment="Right" Width="15px" />
+                            </Button>
+                        </StackPanel>
+                        <TextBlock Grid.Column="1" x:Name="textblockSubredditName" Text="{Binding Name}" Style="{StaticResource LinkTextStyle}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="1">
                         </TextBlock>
 
                         

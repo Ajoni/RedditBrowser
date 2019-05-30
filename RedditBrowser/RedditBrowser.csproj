@@ -162,6 +162,9 @@
     <Compile Include="ViewModel\Messages\ShowLoginMessage.cs" />
     <Compile Include="ViewModel\Messages\ShowPostMessage.cs" />
     <Compile Include="ViewModel\Messages\SubredditSubscribedMessage.cs" />
+    <Compile Include="ViewModel\Messages\SubredditUnsubscribedMessage.cs" />
+    <Compile Include="ViewModel\Messages\SubscribeMessage.cs" />
+    <Compile Include="ViewModel\Messages\UnsubscribeMessage.cs" />
     <Compile Include="ViewModel\SearchResultVM.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="ViewModel\IViewModel.cs" />
