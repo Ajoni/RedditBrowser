@@ -138,13 +138,13 @@ namespace RedditBrowser.ViewModel
         {
             var sub = await this.Reddit.GetSubredditAsync(message.Name);
             sub.Subscribe();
-            Messenger.Default.Send(new SubredditSubscribedMessage(message.Name));
+            //Messenger.Default.Send(new SubredditSubscribedMessage(message.Name));
         }
         private async void ReceiveMessage(UnsubscribeMessage message)
         {
             var sub = await this.Reddit.GetSubredditAsync(message.Name);
             sub.Unsubscribe();
-            Messenger.Default.Send(new SubredditUnsubscribedMessage(message.Name));
+            //Messenger.Default.Send(new SubredditUnsubscribedMessage(message.Name));
         }
         
 		private void RegisterMessages()

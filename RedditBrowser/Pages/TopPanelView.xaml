@@ -48,20 +48,15 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <!--<i:Interaction.Triggers>
-                            <i:EventTrigger EventName="MouseEnter">
-                                <cmd:EventToCommand Command="{MouseOverSubreddit}" CommandParameter="{Binding}"/>
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>-->
                         <StackPanel Grid.Column="0" x:Name="stackpanelSubscribeButtons">
-                            <Button Padding="-3" x:Name="buttonUnsubscribe" Command="{Binding SubredditUnsubscribeClick}" 
+                            <Button Padding="-3" x:Name="buttonUnsubscribe" Command="{Binding SubredditUnsubscribeClick, UpdateSourceTrigger=PropertyChanged}" 
                                                 CommandParameter="{Binding Name}"
-                                Visibility="{Binding IsSubscribed,Converter={StaticResource BooleanToVisibilityConverter}}">
+                                Visibility="{Binding IsSubscribed,Converter={StaticResource BooleanToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}">
                                 <fa:ImageAwesome Icon="MinusSquare" VerticalAlignment="Center" HorizontalAlignment="Right" Width="15px" />
                             </Button>
-                            <Button Padding="-3" x:Name="buttonSubscribe" Command="{Binding SubredditSubscribeClick}" 
+                            <Button Padding="-3" x:Name="buttonSubscribe" Command="{Binding SubredditSubscribeClick, UpdateSourceTrigger=PropertyChanged}" 
                                                 CommandParameter="{Binding Name}"
-                                Visibility="{Binding CanSubscribe,Converter={StaticResource BooleanToVisibilityConverter}}">
+                                Visibility="{Binding CanSubscribe,Converter={StaticResource BooleanToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}">
                                 <fa:ImageAwesome Icon="PlusSquare" VerticalAlignment="Center" HorizontalAlignment="Right" Width="15px" />
                             </Button>
                         </StackPanel>
