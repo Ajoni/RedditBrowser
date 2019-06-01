@@ -44,7 +44,8 @@ namespace RedditBrowser.Pages
 			else
 			{
 				Messenger.Default.Send(new LoginChangeMessage(user));
-				this.LoginVM.WindowState = Xceed.Wpf.Toolkit.WindowState.Closed;
+                this.watermarkpasswordboxPasswordd.Password = "";
+                this.LoginVM.WindowState = Xceed.Wpf.Toolkit.WindowState.Closed;
 			}
 		}
 	}
