@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:RedditBrowser.Pages"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
@@ -13,8 +14,8 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>        
     </UserControl.Resources>
-  <Border BorderThickness="1" BorderBrush="DarkGray" SnapsToDevicePixels="true">
-	<Grid >
+    <Border BorderThickness="1" BorderBrush="DarkGray" SnapsToDevicePixels="true">
+        <Grid x:Name="gride">
 	  <Grid.ColumnDefinitions>
 		<ColumnDefinition Width="40"/>
 		<ColumnDefinition Width="*"/>
@@ -39,20 +40,49 @@
 		  <RowDefinition Height="*"/>
 		  <RowDefinition Height="auto"/>
 		</Grid.RowDefinitions>
-		<WrapPanel  Grid.Row="0" Grid.ColumnSpan="2" Orientation="Horizontal">
-		  <TextBlock x:Name="textblockAuthorName" Text="{Binding AuthorName}" />
-		  <TextBlock x:Name="textblockAuthorFlairText" Text="{Binding AuthorFlairText}" />
-		  <TextBlock x:Name="textblockScore" Text="{Binding Score, StringFormat='{}{0} points • '}" />
-		  <TextBlock x:Name="textblockDate" Text="{Binding Created, Converter={StaticResource DateToHowLongAgoConverter}}" />
+                <WrapPanel  Grid.Row="0" Grid.ColumnSpan="2" Orientation="Horizontal">
+                    <TextBlock FontWeight="Bold" x:Name="textblockAuthorName" Text="{Binding AuthorName}" />
+                    <TextBlock x:Name="textblockAuthorFlairText" Text="{Binding AuthorFlairText}" />
+                    <TextBlock x:Name="textblockScore"  >
+                        <Run Text=" "/>
+                    <Run Text="{Binding Score, StringFormat='{}{0} points • '}"/>
+                         
+                    </TextBlock>
+                    <TextBlock HorizontalAlignment="Right" x:Name="textblockDate" Text="{Binding Created, Converter={StaticResource DateToHowLongAgoConverter}}" />
 		</WrapPanel>
-		<TextBlock Grid.Row="1" Text="{Binding Body}" TextWrapping="Wrap"/>
+		<TextBlock Margin="0,20,0,0" Grid.Row="1" Text="{Binding Body}" TextWrapping="Wrap"/>
 		<Grid Grid.Row="2">
 		  <Grid.ColumnDefinitions>
 			<ColumnDefinition Width="auto"/>
 		  </Grid.ColumnDefinitions>
-		  <Button Grid.Column="0"  x:Name="buttonReply" Style="{StaticResource TransparentButtonStyle}">
-			<TextBlock Style="{StaticResource SmallClickableText}">Reply</TextBlock>
+                    <Button Click="Button_Click"  Style="{StaticResource TransparentButtonStyle}" Width="40" Height="auto"  Margin="0,50,0,0" HorizontalAlignment="Left" Grid.Column="0" Grid.Row="2" x:Name="buttonReply" >
+			<TextBlock  Style="{StaticResource SmallClickableText}">Reply</TextBlock>
 		  </Button>
+
+                        <Grid Margin="0,10,10,10" Visibility="Hidden" Height="auto" Background="#11469b" Name="commentAnswer">
+                           
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition  Width="*"/>
+                                <ColumnDefinition  Width="auto"/>
+                                <ColumnDefinition  Width="auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+
+                            </Grid.RowDefinitions>
+                        <xctk:WatermarkTextBox Margin="0,0,1000,0" TextWrapping="Wrap"
+  AcceptsReturn="True"  Watermark="What is your answer?"  Text="{Binding Comment, UpdateSourceTrigger=PropertyChanged}"
+  VerticalScrollBarVisibility="Auto" MinHeight="50" VerticalContentAlignment="Top" Width="{Binding ActualWidth, ElementName=gride}" Grid.Row="1" HorizontalAlignment="Stretch" Grid.Column="0" />
+                        <Button  Command="{Binding PostComment}" Style="{StaticResource TransparentButtonStyle}" Margin="60,5,5,5" HorizontalAlignment="Left"  Grid.Row="0" Width="50" Grid.Column="0">
+                            <TextBlock  Style="{StaticResource SmallClickableText}">Reply</TextBlock>
+                        </Button>
+                            
+                        <Button Style="{StaticResource TransparentButtonStyle}" Click="Button_Click" HorizontalAlignment="Left"  Grid.Column="0" Width="50" Margin="5" Grid.Row="0" Name="buttoncancel" >
+                            <TextBlock  Style="{StaticResource SmallClickableText}">Cancel</TextBlock>
+                        </Button>
+                        </Grid>
+
 		</Grid>
 	  </Grid>
 

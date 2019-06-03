@@ -24,5 +24,14 @@ namespace RedditBrowser.Pages
         {
             InitializeComponent();
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            if(commentAnswer.Visibility==Visibility.Visible)
+            commentAnswer.Visibility = Visibility.Hidden;
+            else
+                commentAnswer.Visibility = Visibility.Visible;
+
+        }
     }
 }

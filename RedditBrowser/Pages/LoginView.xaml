@@ -12,15 +12,25 @@
     </UserControl.Resources>
     <xctk:BusyIndicator IsBusy="{Binding Busy}" BusyContentTemplate="{StaticResource Busy}">
         <xctk:ChildWindow IsModal="True" WindowState="{Binding WindowState}" WindowStartupLocation="Center">
-            <Grid>
+            <Grid Width="200">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"/>
+
                 </Grid.RowDefinitions>
-                <xctk:WatermarkTextBox Grid.Row="0" x:Name="watermarktextboxUsername"  Watermark="Username" Text="{Binding Username}"/>
-                <xctk:WatermarkPasswordBox Grid.Row="1" x:Name="watermarkpasswordboxPasswordd" Watermark="Password"/>
-                <Button Grid.Row="2" x:Name="buttonLogin" Content="Login" IsDefault="True" Click="ButtonLogin_Click"/>
+                <xctk:WatermarkTextBox Margin="15,30,15,0"  Grid.Row="0" x:Name="watermarktextboxUsername"  Watermark="Username" Text="{Binding Username}"/>
+                <xctk:WatermarkPasswordBox Margin="15,15,15,15"  Grid.Row="1" x:Name="watermarkpasswordboxPasswordd" Watermark="Password"/>
+                <Button Margin="50,0,50,10" Grid.Row="2" x:Name="buttonLogin" Content="Login" IsDefault="True" Click="ButtonLogin_Click"/>
+                <TextBlock Grid.Row="3" Margin="10">
+New to Reddit?
+<Hyperlink  Click="Hyperlink_Click" 
+    NavigateUri="https://www.reddit.com/register/"
+  >
+  Sign Up
+  </Hyperlink>
+                </TextBlock>
             </Grid>
         </xctk:ChildWindow>
     </xctk:BusyIndicator>

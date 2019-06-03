@@ -47,5 +47,18 @@ namespace RedditBrowser.Pages
 				this.LoginVM.WindowState = Xceed.Wpf.Toolkit.WindowState.Closed;
 			}
 		}
-	}
+
+        private void Hyperlink_Click(object sender, RoutedEventArgs e)
+        {
+            Hyperlink source = sender as Hyperlink;
+
+            if (source != null)
+
+            {
+
+                System.Diagnostics.Process.Start(source.NavigateUri.ToString());
+
+            }
+        }
+    }
 }

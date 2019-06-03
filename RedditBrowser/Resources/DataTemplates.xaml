@@ -94,7 +94,7 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0" Text="{Binding Author.Name, StringFormat=Posted by {0}}"/>
+                    <TextBlock FontWeight="Bold" Grid.Column="0" Text="{Binding Author.Name, StringFormat=Posted by {0}}"/>
                 </Grid>
                 <Grid Grid.Row="2">
                     <Grid.ColumnDefinitions>
@@ -116,6 +116,7 @@
                 </Image.ContextMenu>
             </Image>
         </Grid>
+            
     </DataTemplate>
 
     <DataTemplate x:Key="Subreddit" DataType="{x:Type r:Subreddit}">

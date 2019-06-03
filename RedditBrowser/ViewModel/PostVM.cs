@@ -4,6 +4,8 @@ using GalaSoft.MvvmLight.Messaging;
 using RedditBrowser.Classes;
 using RedditBrowser.ViewModel.Messages;
 using RedditSharp.Things;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using Xceed.Wpf.Toolkit;
 
@@ -16,8 +18,7 @@ namespace RedditBrowser.ViewModel
 		private string _comment;
 
 
-
-		public LoadedPost Post { get; set; }
+        public LoadedPost Post { get; set; }
 
 		public string Comment
 		{
@@ -39,10 +40,10 @@ namespace RedditBrowser.ViewModel
 			Post = post;
 			User = user;
 		}
+       
 
 
-
-		public ICommand SubredditNameClick
+        public ICommand SubredditNameClick
 		{
 			get
 			{
