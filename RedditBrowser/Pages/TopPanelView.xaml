@@ -89,10 +89,10 @@
 	  </xctk:WatermarkTextBox>
 	</Grid>
 	<Button Grid.Column="3" x:Name="buttonLogin" Content="_LOG IN" Command="{Binding LoginClick}"
-                Style="{StaticResource LoginLogoutButtonStyle}" Margin="5,1" 
+                Style="{StaticResource LoginLogoutButtonStyle}" Margin="5,0,0,0"
                 Visibility="{Binding IsUserLoggedIn, Converter={StaticResource falseToVisibleConverter}}"/>
 	<Button Grid.Column="3" x:Name="buttonLogout" Content="_LOG OUT" Command="{Binding LogoutClick}"
-                Style="{StaticResource LoginLogoutButtonStyle}" Margin="5,1" 
+                Style="{StaticResource LoginLogoutButtonStyle}" Margin="5,0,0,0" 
                 Visibility="{Binding IsUserLoggedIn, Converter={StaticResource trueToVisibleConverter}}"/>
   </Grid>
 </UserControl>

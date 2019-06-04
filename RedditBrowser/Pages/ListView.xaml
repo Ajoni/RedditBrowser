@@ -15,7 +15,7 @@
         <ResourceDictionary Source="/Resources/Merged.xaml"/>
     </UserControl.Resources>
         
-    <Grid x:Name="gridPosts" Margin="5, 0, 0, 5">
+    <Grid x:Name="gridPosts" Margin="5, 0, 5, 5">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="auto" />
