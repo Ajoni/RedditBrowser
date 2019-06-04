@@ -203,6 +203,8 @@ namespace RedditBrowser.Classes
             Comments.Add(new LoadedComment(comment));
         }
 
+        public Action ReturnToPreviousViewAction { get; set; }
+
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
