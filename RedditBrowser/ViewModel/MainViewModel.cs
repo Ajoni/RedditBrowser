@@ -87,8 +87,8 @@ namespace RedditBrowser.ViewModel
 			if (string.IsNullOrEmpty(message.Name))
 				return;
 			this.CurrentPage = this.ListVM;
-			if (message.Name == this.Subreddit?.Name)
-				return;
+			//if (message.Name == this.Subreddit?.Name)
+			//	return;
 
 			if (message.Name == "all")
 				this.Subreddit = this.Reddit.RSlashAll;
@@ -129,7 +129,7 @@ namespace RedditBrowser.ViewModel
 
 			this.CurrentPage = this.ListVM;
 			if (this.Subreddit != null)
-				ReceiveMessage(new ChangeSubredditMessage(this.Subreddit.Name)); //reload needed to update webAgents with user acces token
+                Messenger.Default.Send(new ChangeSubredditMessage(this.Subreddit.Name)); //reload needed to update webAgents with user acces token
 
             TopPanel.IsUserLoggedIn = Reddit.User != null;
 		}

@@ -25,10 +25,10 @@ namespace RedditBrowser.Pages
             InitializeComponent();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void ChangeReplyBoxVisibilityButton_Click(object sender, RoutedEventArgs e)
         {
-            if(commentAnswer.Visibility==Visibility.Visible)
-            commentAnswer.Visibility = Visibility.Hidden;
+            if (commentAnswer.Visibility == Visibility.Visible)
+                commentAnswer.Visibility = Visibility.Collapsed;
             else
                 commentAnswer.Visibility = Visibility.Visible;
 

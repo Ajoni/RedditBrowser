@@ -31,7 +31,7 @@ namespace RedditBrowser.Classes
             }
         }
 
-        public ObservableCollection<Comment> Comments { get; } = new ObservableCollection<Comment>();
+        public ObservableCollection<LoadedComment> Comments { get; } = new ObservableCollection<LoadedComment>();
         public string LinkFlairText { get; set; }
         public RedditUser Author { get; }
         public Uri Permalink { get; set; }
@@ -60,7 +60,7 @@ namespace RedditBrowser.Classes
         {
             ShowFullResolutionImage = false;
             foreach (var comment in post.Comments)
-                Comments.Add(comment);
+                Comments.Add(new LoadedComment(comment));
             LinkFlairText = post.LinkFlairText;
             Author = post.Author;
             Permalink = post.Permalink;
@@ -132,10 +132,8 @@ namespace RedditBrowser.Classes
 
         public void Comment(string message)
         {
-            this.Post.Comment(message);
-            this.Comments.Clear();
-            foreach (var comment in this.Post.Comments)
-                Comments.Add(comment);
+            var comment = this.Post.Comment(message);
+            Comments.Add(new LoadedComment(comment));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

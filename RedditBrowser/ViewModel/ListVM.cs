@@ -29,7 +29,9 @@ namespace RedditBrowser.ViewModel
 			User = user;
 			if(goTo)
 				Messenger.Default.Send(new GoToPageMessage(this));
-		}
+
+            RegisterMessages();
+        }
 
         #region Commands
 
@@ -129,6 +131,12 @@ namespace RedditBrowser.ViewModel
 		private void ReceiveMessage(ChangeSubredditMessage message)
 		{
 			this.MousedOverPost = null;
+            this.Posts.Clear();
 		}
-	}
+
+        private void RegisterMessages()
+        {
+            Messenger.Default.Register<ChangeSubredditMessage>(this, (message) => ReceiveMessage(message));
+        }
+    }
 }
