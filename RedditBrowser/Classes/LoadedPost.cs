@@ -103,7 +103,7 @@ namespace RedditBrowser.Classes
             {
                 return new RelayCommand(() =>
                 {
-                    ItemClickAction.Invoke();
+                    OpenPost();
                 });
             }
         }
@@ -233,6 +233,11 @@ namespace RedditBrowser.Classes
                         MessageBoxButtons.OK);
                 }
             }
-        }        
+        }
+
+        private void OpenPost()
+        {
+            ItemClickAction?.Invoke();
+        }
     }
 }
