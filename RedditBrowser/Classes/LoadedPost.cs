@@ -96,15 +96,14 @@ namespace RedditBrowser.Classes
                 });
             }
         }
+
         public ICommand ItemClick
         {
             get
             {
                 return new RelayCommand(() =>
                 {
-                    throw new NotImplementedException();
-                    //Messenger.Default.Send(new GoToPageMessage(new PostVM(this));
-                    //ItemClickAction.Invoke();
+                    OpenPost();
                 });
             }
         }
@@ -136,6 +135,7 @@ namespace RedditBrowser.Classes
                 }, true);
             }
         }
+
         public ICommand DownvoteClick
         {
             get
@@ -164,7 +164,7 @@ namespace RedditBrowser.Classes
                     return CanShowFullResolutionImage;
                 },true);
             }
-        }
+        }        
 
         public void Downvote()
         {
@@ -201,8 +201,8 @@ namespace RedditBrowser.Classes
             var comment = this.Post.Comment(message);
             Comments.Add(new LoadedComment(comment));
         }
-
-        public Action ReturnToPreviousViewAction { get; set; }
+        
+        public Action ItemClickAction { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged([CallerMemberName] string propertyName = null)
@@ -231,6 +231,11 @@ namespace RedditBrowser.Classes
                         MessageBoxButtons.OK);
                 }
             }
+        }
+
+        private void OpenPost()
+        {
+            ItemClickAction?.Invoke();
         }
     }
 }

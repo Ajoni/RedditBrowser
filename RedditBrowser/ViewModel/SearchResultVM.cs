@@ -160,7 +160,11 @@ namespace RedditBrowser.ViewModel
 			this.ListVM.Busy = true;
 			await Task.Run(() =>
 			{
-				posts = Subreddit.Search(Query).Skip(toSkip).Select(post => new LoadedPost(post)).Take(toTake).ToList();
+				posts = Subreddit.Search(Query).Skip(toSkip).Select(post => {
+                    var p = new LoadedPost(post);
+                    p.ItemClickAction = () => ChangeToViewCommand.Execute(new PostVM(p) { ReturnToPreviousViewAction = () => ChangeToViewCommand.Execute(this) });
+                    return p;
+                }).Take(toTake).ToList();
 			});
 			IObservable<LoadedPost> postsToLoad = posts.ToObservable();
 			postsToLoad.Subscribe(p =>
@@ -181,7 +185,11 @@ namespace RedditBrowser.ViewModel
 				var newPosts = await Task.Run(() =>
 				{
 					var currentPostCount = ListVM.Posts.Count;
-					return Subreddit.Search(Query).Skip(currentPostCount).Take(3).Select(post => new LoadedPost(post) { ReturnToPreviousViewAction = () => ChangeToViewCommand.Execute(this) }).ToList();
+					return Subreddit.Search(Query).Skip(currentPostCount).Take(3).Select(post => {
+                        var p = new LoadedPost(post);
+                        p.ItemClickAction = () => ChangeToViewCommand.Execute(new PostVM(p) { ReturnToPreviousViewAction = () => ChangeToViewCommand.Execute(this) });
+                        return p;
+                    }).ToList();
 				});
 				foreach (var post in newPosts)
 					ListVM.Posts.Add(post);

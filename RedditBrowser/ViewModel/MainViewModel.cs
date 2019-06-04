@@ -62,7 +62,13 @@ namespace RedditBrowser.ViewModel
 			});
 		}
 
-		private List<LoadedPost> LoadPosts(int from, int amount) => Subreddit.Posts.Skip(from).Select(post => new LoadedPost(post)).Take(amount).ToList();
+		private List<LoadedPost> LoadPosts(int from, int amount) => Subreddit.Posts.Skip(from).Select(
+                post => {
+                    var p = new LoadedPost(post);
+                    p.ItemClickAction = () => ChangeToViewCommand.Execute(new PostVM(p) { ReturnToPreviousViewAction = () => ChangeToViewCommand.Execute(ListVM) });
+                    return p;
+                }
+            ).Take(amount).ToList();
 
         private async void LoadNextPostMethod()
         {
@@ -73,7 +79,7 @@ namespace RedditBrowser.ViewModel
                 var newPosts =  await Task.Run(() =>
                 {
                     var currentPostCount = ListVM.Posts.Count;
-                    return Subreddit.Posts.Skip(currentPostCount).Take(3).Select( post => new LoadedPost(post) { ReturnToPreviousViewAction = () => ChangeToViewCommand.Execute(ListVM)}).ToList();
+                    return LoadPosts(currentPostCount, 3);
                 });
                 foreach(var post in newPosts)
                     ListVM.Posts.Add(post);

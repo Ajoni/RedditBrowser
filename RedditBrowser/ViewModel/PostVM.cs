@@ -4,6 +4,7 @@ using GalaSoft.MvvmLight.Messaging;
 using RedditBrowser.Classes;
 using RedditBrowser.ViewModel.Messages;
 using RedditSharp.Things;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -52,6 +53,18 @@ namespace RedditBrowser.ViewModel
                      return !string.IsNullOrEmpty(this.Comment) && SessionContext.IsUserLoggedIn;
                  });
             }
+        }
+
+        public ICommand ReturnClick
+        {
+            get => new RelayCommand(Return);
+        }
+
+        public Action ReturnToPreviousViewAction { get; set; }
+
+        private void Return()
+        {
+            ReturnToPreviousViewAction?.Invoke();
         }
     }
 }
