@@ -136,7 +136,6 @@ namespace RedditBrowser.Classes
                 }, true);
             }
         }
-
         public ICommand DownvoteClick
         {
             get

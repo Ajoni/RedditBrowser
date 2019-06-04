@@ -3,7 +3,10 @@ using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using RedditBrowser.Helpers;
 using RedditBrowser.ViewModel.Messages;
+using RedditSharp;
 using RedditSharp.Things;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -120,6 +123,17 @@ namespace RedditBrowser.ViewModel
             if (!SubredditComboboxLayout.SubscribedSubreddits.Contains(message.Name))
                 SubredditComboboxLayout.SubscribedSubreddits.Add(message.Name);
         }
+
+        public void AddToCombobox(IEnumerable<Subreddit> subscribedSubreddits)
+        {
+            foreach (var item in subscribedSubreddits)
+            {
+                if (!Subreddits.Any(s => s.Name == item.Name))
+                    Subreddits.Add(new SubredditComboboxLayout(item.Name));
+                SubredditComboboxLayout.SubscribedSubreddits.Add(item.Name);
+            }
+        }
+
         private void ReceiveMessage(SubredditUnsubscribedMessage message)
         {
             SubredditComboboxLayout.SubscribedSubreddits.Remove(message.Name);
@@ -143,7 +157,8 @@ namespace RedditBrowser.ViewModel
                 {
                     if (value)
                         SubUnsubButtonPropsChanged();
-                } }
+                }
+            }
             public bool IsUserLoggedIn
             {
                 get => isUserLoggedIn; set

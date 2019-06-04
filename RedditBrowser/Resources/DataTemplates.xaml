@@ -30,12 +30,6 @@
 
     <DataTemplate x:Key="ListPostItem">
         <Grid>
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="MouseEnter">
-                    <cmd:EventToCommand Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type user:ExtendedListBox}}, Path=DataContext.ItemHover}"
-                   CommandParameter="{Binding}"/>
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="40"/>
                 <ColumnDefinition Width="auto"/>
@@ -54,14 +48,14 @@
                 </Grid.RowDefinitions>
 
                 <Button Grid.Row="0" Content="{StaticResource UpvoteArrow}"
-                                            Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type user:ExtendedListBox}}, Path=DataContext.UpvoteClick}" Style="{StaticResource VoteButtonStyle}"/>
+                                            Command="{Binding UpvoteClick}" Style="{StaticResource VoteButtonStyle}"/>
                 <TextBlock Grid.Row="1" Text="{Binding Score}" VerticalAlignment="Center" HorizontalAlignment="Center" Style="{StaticResource VoteTextBlockStyle}"/>
                 <Button Grid.Row="2" Height="auto" Width="auto" Content="{StaticResource DownvoteArrow}"
-                                            Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type user:ExtendedListBox}}, Path=DataContext.DownvoteClick}" Style="{StaticResource VoteButtonStyle}"/>
+                                            Command="{Binding DownvoteClick}" Style="{StaticResource VoteButtonStyle}"/>
             </Grid>
             <Image Grid.Column="1" Source="{Binding Thumbnail, Converter={StaticResource ImgConverter},  IsAsync=True}" MaxHeight="80" MaxWidth="100"  Margin="5,1"/>
             <Button Grid.Column="1" x:Name="buttonShowFullResolutionImage" 
-                    Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type user:ExtendedListBox}}, Path=DataContext.ShowFullResolutionImageChange}"
+                    Command="{Binding ShowFullResolutionImageChange}"
                     CommandParameter="{Binding}"
                     Height="20px" Width="20px" HorizontalAlignment="Right" VerticalAlignment="Bottom"  
                     Visibility="{Binding CanShowFullResolutionImage, Converter={StaticResource BooleanToVisibilityConverter}}"
@@ -82,8 +76,7 @@
                 </Grid.RowDefinitions>
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseLeftButtonUp">
-                        <cmd:EventToCommand Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type user:ExtendedListBox}}, Path=DataContext.ItemClick}"
-                                                    CommandParameter="{Binding}"/>
+                        <cmd:EventToCommand Command="{Binding ItemClick}" CommandParameter="{Binding}"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
 
@@ -96,8 +89,7 @@
                     <TextBlock Grid.Row="1" Text="{Binding Url}" TextWrapping="Wrap" TextBlock.FontSize="12" Style="{StaticResource LinkTextStyle}">
 		  <i:Interaction.Triggers>
 			<i:EventTrigger EventName="MouseLeftButtonUp">
-			<cmd:EventToCommand Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type user:ExtendedListBox}}, Path=DataContext.LinkClick}"
-                                                    PassEventArgsToCommand="True"/>
+			<cmd:EventToCommand Command="{Binding LinkClick}" PassEventArgsToCommand="True"/>
 		  </i:EventTrigger>
 		</i:Interaction.Triggers>
                     </TextBlock>

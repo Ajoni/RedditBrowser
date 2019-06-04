@@ -32,7 +32,6 @@ namespace RedditBrowser.ViewModel
         {
             get => new RelayCommand<IViewModel>((page) => this.CurrentPage = page);
         }
-        private WebAgent WebAgent { get; set; }
 
 		public MainViewModel()
 		{
@@ -112,30 +111,17 @@ namespace RedditBrowser.ViewModel
 		}
 		private async void ReceiveMessage(LoginChangeMessage message)
 		{
-			if (message.UserLoginResult != null)
-                SessionContext.Reddit = new Reddit(message.UserLoginResult.WebAgent, true);
-			else
-                SessionContext.Reddit = new Reddit();
-			this.ListVM.User = SessionContext.Reddit.User;
+            SessionContext.Update(message.UserLoginResult);
 
-            if (SessionContext.Reddit.User != null)
-            {
-                foreach (var item in SessionContext.Reddit.User.SubscribedSubreddits)
-                {
-                    if (!this.TopPanel.Subreddits.Any(s => s.Name == item.Name))
-                        this.TopPanel.Subreddits.Add(new TopPanelVM.SubredditComboboxLayout(item.Name));
-                    TopPanelVM.SubredditComboboxLayout.SubscribedSubreddits.Add(item.Name);
-                }
-            }
+            if (SessionContext.IsUserLoggedIn)
+                this.TopPanel.AddToCombobox(SessionContext.Reddit.User.SubscribedSubreddits);
 
 			this.CurrentPage = this.ListVM;
 			if (this.Subreddit != null)
                 Messenger.Default.Send(new ChangeSubredditMessage(this.Subreddit.Name)); //reload needed to update webAgents with user acces token
-
-            TopPanel.IsUserLoggedIn = SessionContext.Reddit.User != null;
 		}
 
-        private void ReceiveMessage(SearchMessage message) => this.CurrentPage = new SearchResultVM(new ListVM(SessionContext.Reddit.User, false), message.Query, this.Subreddit)
+        private void ReceiveMessage(SearchMessage message) => this.CurrentPage = new SearchResultVM(new ListVM(false), message.Query, this.Subreddit)
         {
             ChangeToViewCommand = this.ChangeToViewCommand
         };

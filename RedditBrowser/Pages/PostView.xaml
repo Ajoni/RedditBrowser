@@ -86,14 +86,14 @@
                 <xctk:WatermarkTextBox Grid.Row="0" Grid.ColumnSpan="2" x:Name="textBoxComment"
                         Watermark="What are your thoughts?" Text="{Binding Comment, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True"
                         TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" MinHeight="80"/>
-		<Button Grid.Row="1" Grid.Column="1" x:Name="buttonAddComment" Content="Comment" Command="{Binding PostComment}" IsEnabled="{Binding CommentButtonEnabled}"/>
-	  </Grid>
-	  <Grid Grid.Row="2" Grid.Column="1" x:Name="gridComments">
-		<Grid.RowDefinitions>
-		  <RowDefinition Height="auto"/>
-		  <RowDefinition Height="*"/>
-		</Grid.RowDefinitions>
-		<TreeView Grid.Row="1" x:Name="listboxComments" ItemsSource="{Binding Post.Comments}"
+                <Button Grid.Row="1" Grid.Column="1" x:Name="buttonAddComment" Content="Comment" Command="{Binding PostComment}" IsEnabled="{Binding CommentButtonEnabled}"/>
+            </Grid>
+            <Grid Grid.Row="2" Grid.Column="1" x:Name="gridComments">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TreeView Grid.Row="1" x:Name="listboxComments" ItemsSource="{Binding Post.Comments}"
                         ItemTemplate="{StaticResource Comment}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                         HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
                         Margin="5,0,5,5">

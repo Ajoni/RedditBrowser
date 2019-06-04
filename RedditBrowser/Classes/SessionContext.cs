@@ -11,5 +11,13 @@ namespace RedditBrowser.Classes
     {
         public static Reddit Reddit { get; set; } = new Reddit();
         public static bool IsUserLoggedIn { get => Reddit.User != null; }
+
+        internal static void Update(UserLoginResult userLoginResult)
+        {
+            if (userLoginResult != null)
+                Reddit = new Reddit(userLoginResult.WebAgent, true);
+            else
+                Reddit = new Reddit();
+        }
     }
 }

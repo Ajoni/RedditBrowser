@@ -68,13 +68,12 @@ namespace RedditBrowser.ViewModel
 			{
 				try
 				{
-                    
                     subs = SessionContext.Reddit.SearchSubreddits(Query).Skip(toSkip).Take(toTake).ToList();
 				}
 				catch (Exception)
 				{
-					// oof
-				}
+                    // oof
+                }
 			});
 			IObservable<Subreddit> postsToLoad = subs.ToObservable();
 			postsToLoad.Subscribe(p =>

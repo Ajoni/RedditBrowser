@@ -1,5 +1,5 @@
 ﻿using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using RedditBrowser.Classes;
 using RedditBrowser.ViewModel.Messages;
@@ -11,70 +11,37 @@ using Xceed.Wpf.Toolkit;
 
 namespace RedditBrowser.ViewModel
 {
-	public class PostVM : ViewModelBase, IViewModel
-	{
-		private AuthenticatedUser _user;
-		private string _comment;
+    public class PostVM : ViewModelBase, IViewModel
+    {
+        private AuthenticatedUser _user;
+        private string _comment;
 
 
         public LoadedPost Post { get; set; }
-		public string Comment
-		{
-			get => _comment; set
-			{
-				_comment = value; RaisePropertyChanged(); RaisePropertyChanged("CommentButtonEnabled");
-			}
-		}
-		public AuthenticatedUser User { get => _user; set { _user = value; RaisePropertyChanged(); RaisePropertyChanged("CommentButtonEnabled"); } }
-		public bool CommentButtonEnabled { get { return !string.IsNullOrEmpty(this.Comment) && this.User != null; } }
+        public string Comment
+        {
+            get => _comment; set
+            {
+                _comment = value; RaisePropertyChanged(); RaisePropertyChanged("CommentButtonEnabled");
+            }
+        }
 
-
-		public PostVM(LoadedPost post, AuthenticatedUser user)
-		{
-			Post = post;
-			User = user;
-		}
-
+        public PostVM(LoadedPost post, AuthenticatedUser user)
+        {
+            Post = post;
+            User = user;
+        }
 
         public ICommand SubredditNameClick
-		{
-			get
-			{
-				return new RelayCommand(() =>
-				{
-					Messenger.Default.Send(new ChangeSubredditMessage(this.Post.Post.SubredditName));
-				});
-			}
-		}
-
-		public ICommand UpvoteClick
-		{
-			get
-			{
-				return new RelayCommand(() =>
-				{
-					if (Post.Liked.HasValue && Post.Liked.Value) Post.ClearVote(); else Post.Upvote();
-				}
-				, () =>
-				{
-					return this.Post != null && this.User != null;
-				}, true);
-			}
-		}
-		public ICommand DownvoteClick
-		{
-			get
-			{
-				return new RelayCommand(() =>
-				{
-					if (Post.Liked.HasValue && !Post.Liked.Value) Post.ClearVote(); else Post.Downvote();
-				}
-				, () =>
-				{
-					return this.Post != null && this.User != null;
-				}, true);
-			}
-		}
+        {
+            get
+            {
+                return new RelayCommand(() =>
+                {
+                    Messenger.Default.Send(new ChangeSubredditMessage(this.Post.Post.SubredditName));
+                });
+            }
+        }
         public ICommand PostComment
         {
             get
@@ -82,7 +49,10 @@ namespace RedditBrowser.ViewModel
                 return new RelayCommand(() =>
                 {
                     Post.Comment(Comment);
-                });
+                }, () =>
+                 {
+                     return !string.IsNullOrEmpty(this.Comment) && SessionContext.IsUserLoggedIn;
+                 });
             }
         }
     }
