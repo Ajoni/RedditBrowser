@@ -4,165 +4,187 @@
 					xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
 					xmlns:cmd="http://www.galasoft.ch/mvvmlight"
                     xmlns:r="clr-namespace:RedditSharp.Things;assembly=RedditSharp"
+                     xmlns:user="clr-namespace:UserControls;assembly=UserControls"
                     xmlns:vms="clr-namespace:RedditBrowser.ViewModel"
                     xmlns:pages="clr-namespace:RedditBrowser.Pages"
-                    xmlns:user="clr-namespace:UserControls;assembly=UserControls">
-  <ResourceDictionary.MergedDictionaries>
-	<ResourceDictionary Source="Converters.xaml"/>
-	<ResourceDictionary Source="Styles.xaml"/>
-	<ResourceDictionary Source="GraphicalResources.xaml"/>
-  </ResourceDictionary.MergedDictionaries>
+                   
+                    xmlns:fa="http://schemas.fontawesome.io/icons/"
+                    xmlns:converters="clr-namespace:RedditBrowser.Converters">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="Converters.xaml"/>
+        <ResourceDictionary Source="Styles.xaml"/>
+        <ResourceDictionary Source="GraphicalResources.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
 
-  <DataTemplate x:Key="Busy" >
-	<TextBlock x:Name="textbloclPleaseWait" Text="Please wait..."/>
-  </DataTemplate>
+    <DataTemplate x:Key="Busy" >
+        <TextBlock x:Name="textbloclPleaseWait" Text="Please wait..."/>
+    </DataTemplate>
 
-  <HierarchicalDataTemplate x:Key="Comment" DataType="{x:Type r:Comment}" ItemsSource="{Binding Comments}">
-	<pages:CommentView />
-  </HierarchicalDataTemplate>
+    <HierarchicalDataTemplate x:Key="Comment" DataType="{x:Type r:Comment}" ItemsSource="{Binding Comments}">
+        <pages:CommentView />
+    </HierarchicalDataTemplate>
 
-  <DataTemplate DataType="{x:Type vms:ListVM}">
-	<pages:ListView />
-  </DataTemplate>
+    <DataTemplate DataType="{x:Type vms:ListVM}">
+        <pages:ListView />
+    </DataTemplate>
 
-  <DataTemplate x:Key="ListPostItem">
-	<Grid>
-	  <i:Interaction.Triggers>
-		<i:EventTrigger EventName="MouseEnter">
-		  <cmd:EventToCommand Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type user:ExtendedListBox}}, Path=DataContext.ItemHover}"
-                   CommandParameter="{Binding}" />
-		</i:EventTrigger>
-	  </i:Interaction.Triggers>
-	  <Grid.ColumnDefinitions>
-		<ColumnDefinition Width="40"/>
-		<ColumnDefinition Width="auto"/>
-		<ColumnDefinition Width="*" />
-	  </Grid.ColumnDefinitions>
-	  <Grid.RowDefinitions>
-		<RowDefinition Height="auto" />
-		<RowDefinition Height="auto" />
-	  </Grid.RowDefinitions>
-
-	  <Grid Grid.Column="0">
-		<Grid.RowDefinitions>
-		  <RowDefinition Height="auto"/>
-		  <RowDefinition Height="auto"/>
-		  <RowDefinition Height="auto"/>
-		</Grid.RowDefinitions>
-
-		<Button Grid.Row="0" Content="{StaticResource UpvoteArrow}"
-                                            Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type user:ExtendedListBox}}, Path=DataContext.UpvoteClick}" Style="{StaticResource VoteButtonStyle}"/>
-		<TextBlock Grid.Row="1" Text="{Binding Score}" VerticalAlignment="Center" HorizontalAlignment="Center" Style="{StaticResource VoteTextBlockStyle}"/>
-		<Button Grid.Row="2" Height="auto" Width="auto" Content="{StaticResource DownvoteArrow}"
-                                            Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type user:ExtendedListBox}}, Path=DataContext.DownvoteClick}" Style="{StaticResource VoteButtonStyle}"/>
-	  </Grid>
-            <Image Grid.Column="1" Source="{Binding Thumbnail, Converter={StaticResource ImgConverter},  IsAsync=True}" MaxHeight="80" MaxWidth="100"  Margin="5,1"/>
-	  <Grid Grid.Column="2" Background="Transparent">
-		<Grid.RowDefinitions>
-		  <RowDefinition Height="auto"/>
-		  <RowDefinition Height="auto"/>
-		  <RowDefinition Height="auto"/>
-		</Grid.RowDefinitions>
+    <DataTemplate x:Key="ListPostItem">
+        <Grid>
             <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="MouseLeftButtonUp">
-                    <cmd:EventToCommand Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type user:ExtendedListBox}}, Path=DataContext.ItemClick}"
-                                                    CommandParameter="{Binding}"/>
+                <i:EventTrigger EventName="MouseEnter">
+                    <cmd:EventToCommand Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type user:ExtendedListBox}}, Path=DataContext.ItemHover}"
+                   CommandParameter="{Binding}"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="40"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+
+                <Button Grid.Row="0" Content="{StaticResource UpvoteArrow}"
+                                            Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type user:ExtendedListBox}}, Path=DataContext.UpvoteClick}" Style="{StaticResource VoteButtonStyle}"/>
+                <TextBlock Grid.Row="1" Text="{Binding Score}" VerticalAlignment="Center" HorizontalAlignment="Center" Style="{StaticResource VoteTextBlockStyle}"/>
+                <Button Grid.Row="2" Height="auto" Width="auto" Content="{StaticResource DownvoteArrow}"
+                                            Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type user:ExtendedListBox}}, Path=DataContext.DownvoteClick}" Style="{StaticResource VoteButtonStyle}"/>
+            </Grid>
+            <Image Grid.Column="1" Source="{Binding Thumbnail, Converter={StaticResource ImgConverter},  IsAsync=True}" MaxHeight="80" MaxWidth="100"  Margin="5,1"/>
+            <Button Grid.Column="1" x:Name="buttonShowFullResolutionImage" 
+                    Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type user:ExtendedListBox}}, Path=DataContext.ShowFullResolutionImageChange}"
+                    CommandParameter="{Binding}"
+                    Height="20px" Width="20px" HorizontalAlignment="Right" VerticalAlignment="Bottom"  
+                    Visibility="{Binding CanShowFullResolutionImage, Converter={StaticResource BooleanToVisibilityConverter}}"
+                    >
+                <Binding Path="ShowFullResolutionImage" >
+                    <Binding.Converter>
+                        <converters:GenericBooleanConverter 
+                            FalseValue="{StaticResource ExpandImage}"
+                            TrueValue="{StaticResource HideImage}"/>
+                    </Binding.Converter>
+                </Binding>
+            </Button>
+            <Grid Grid.Column="2" Background="Transparent">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="MouseLeftButtonUp">
+                        <cmd:EventToCommand Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type user:ExtendedListBox}}, Path=DataContext.ItemClick}"
+                                                    CommandParameter="{Binding}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
 
                 <Grid Grid.Row="0">
-		  <Grid.RowDefinitions>
-			<RowDefinition Height="auto"/>
-			<RowDefinition Height="auto"/>
-		  </Grid.RowDefinitions>
-		  <TextBlock Grid.Row="0" Text="{Binding Title}" TextWrapping="Wrap"/>
-		  <TextBlock Grid.Row="1" Text="{Binding Url}" TextWrapping="Wrap" TextBlock.FontSize="12" Style="{StaticResource LinkTextStyle}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Text="{Binding Title}" TextWrapping="Wrap"/>
+                    <TextBlock Grid.Row="1" Text="{Binding Url}" TextWrapping="Wrap" TextBlock.FontSize="12" Style="{StaticResource LinkTextStyle}">
 		  <i:Interaction.Triggers>
 			<i:EventTrigger EventName="MouseLeftButtonUp">
 			<cmd:EventToCommand Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type user:ExtendedListBox}}, Path=DataContext.LinkClick}"
                                                     PassEventArgsToCommand="True"/>
 		  </i:EventTrigger>
 		</i:Interaction.Triggers>
-		  </TextBlock>
-		</Grid>
-		<Grid Grid.Row="1">
-		  <Grid.ColumnDefinitions>
-			<ColumnDefinition Width="auto"/>
-		  </Grid.ColumnDefinitions>
-		  <TextBlock Grid.Column="0" Text="{Binding Author.Name, StringFormat=Posted by {0}}"/>
-		</Grid>
-		<Grid Grid.Row="2">
-		  <Grid.ColumnDefinitions>
-			<ColumnDefinition Width="auto"/>
-			<ColumnDefinition Width="*"/>
-		  </Grid.ColumnDefinitions>
-                    <Button x:Name="buttonShowFullResolutionImage" Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type user:ExtendedListBox}}, Path=DataContext.ShowFullResolutionImageChange}"
-        CommandParameter="{Binding}" Content="zrobić tu path jako ikonke"/>
+                    </TextBlock>
                 </Grid>
-	  </Grid>
-            <Image Grid.ColumnSpan="3" Grid.Row="1" x:Name="imageFullResolution" Source="{Binding Url}" Visibility="{Binding ShowFullResolutionImage, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-    </Grid>
-  </DataTemplate>
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock FontWeight="Bold" Grid.Column="0" Text="{Binding Author.Name, StringFormat=Posted by {0}}"/>
+                </Grid>
+            </Grid>
+            <Image Grid.ColumnSpan="3" Grid.Row="1" x:Name="imageFullResolution" Source="{Binding Url}" 
+                   Visibility="{Binding ShowFullResolutionImage, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <Image.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Save..." Command="{Binding SaveImageCommand}"/>
+                    </ContextMenu>
+                </Image.ContextMenu>
+            </Image>
+        </Grid>
+            
+    </DataTemplate>
 
-  <DataTemplate x:Key="Subreddit" DataType="{x:Type r:Subreddit}">
-	<Grid>
-	  <Grid.ColumnDefinitions>
-		<ColumnDefinition Width="*"/>
-		<ColumnDefinition Width="*"/>
-	  </Grid.ColumnDefinitions>
-	  <i:Interaction.Triggers>
-		<i:EventTrigger EventName="MouseEnter">
-		  <cmd:EventToCommand Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type user:ExtendedListBox}}, Path=DataContext.SubredditHover}"
+    <DataTemplate x:Key="Subreddit" DataType="{x:Type r:Subreddit}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseEnter">
+                    <cmd:EventToCommand Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type user:ExtendedListBox}}, Path=DataContext.SubredditHover}"
                                                     CommandParameter="{Binding }" />
-		</i:EventTrigger>
-	  </i:Interaction.Triggers>
-	  <TextBlock Grid.Column="0" x:Name="textblockSubredditName" Text="{Binding Name}" Style="{StaticResource LinkTextStyle}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="1">
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+            <TextBlock Grid.Column="0" x:Name="textblockSubredditName" Text="{Binding Name}" Style="{StaticResource LinkTextStyle}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="1">
 		  <i:Interaction.Triggers>
 			<i:EventTrigger EventName="MouseLeftButtonUp">
 			<cmd:EventToCommand Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type user:ExtendedListBox}}, Path=DataContext.SubredditLinkClick}"
                                                     PassEventArgsToCommand="True" />
 		  </i:EventTrigger>
 		</i:Interaction.Triggers>
-	  </TextBlock>
-        <Button Grid.Column="1" x:Name="buttonSubscribe" Content="Subscribe" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5,1" Padding="3"
+            </TextBlock>
+            <Button Grid.Column="1" x:Name="buttonSubscribe" Content="Subscribe"  HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5,1" Padding="3"
                 Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type user:ExtendedListBox}}, Path=DataContext.SubredditSubscribeClick}"
                                                 CommandParameter="{Binding}">
-            <Button.Style>
-                <Style BasedOn="{StaticResource LoginLogoutButtonStyle}" TargetType="Button">
-                    <Style.Triggers>
-                        <EventTrigger RoutedEvent="Button.Click">
-                            <BeginStoryboard>
-                                <Storyboard>
-                                    <BooleanAnimationUsingKeyFrames 
+                <Button.Style>
+                    <Style BasedOn="{StaticResource LoginLogoutButtonStyle}" TargetType="Button">
+                        <Style.Triggers>
+
+                            <EventTrigger RoutedEvent="Button.Click">
+
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <BooleanAnimationUsingKeyFrames 
             Storyboard.TargetProperty="IsEnabled"
             Duration="0:0:1" FillBehavior="HoldEnd" >
-                                        <DiscreteBooleanKeyFrame Value="False" KeyTime="0:0:0" />
-                                    </BooleanAnimationUsingKeyFrames>
-                                </Storyboard>
-                            </BeginStoryboard>
-                        </EventTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Button.Style>
-        </Button>
-	</Grid>
-  </DataTemplate>
+                                            <DiscreteBooleanKeyFrame Value="False" KeyTime="0:0:0" />
+                                        </BooleanAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </BeginStoryboard>
 
-  <DataTemplate DataType="{x:Type vms:TopPanelVM}">
-	<pages:TopPanelView />
-  </DataTemplate>
 
-  <DataTemplate DataType="{x:Type vms:PostVM}">
-	<pages:PostView />
-  </DataTemplate>
+                            </EventTrigger>
 
-  <DataTemplate DataType="{x:Type vms:LoginVM}">
-	<pages:LoginView />
-  </DataTemplate>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </Grid>
+    </DataTemplate>
 
-  <DataTemplate DataType="{x:Type vms:SearchResultVM}">
-	<pages:SearchResultView />
-  </DataTemplate>
+    <DataTemplate DataType="{x:Type vms:TopPanelVM}">
+        <pages:TopPanelView />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vms:PostVM}">
+        <pages:PostView />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vms:LoginVM}">
+        <pages:LoginView />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vms:SearchResultVM}">
+        <pages:SearchResultView />
+    </DataTemplate>
 </ResourceDictionary>
     
     

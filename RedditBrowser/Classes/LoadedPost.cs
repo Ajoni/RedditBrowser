@@ -1,12 +1,18 @@
-﻿using RedditSharp;
+﻿using GalaSoft.MvvmLight.Command;
+using RedditSharp;
 using RedditSharp.Things;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Windows.Input;
 using static RedditSharp.Things.VotableThing;
 
 namespace RedditBrowser.Classes
@@ -25,7 +31,7 @@ namespace RedditBrowser.Classes
             }
         }
 
-        public ObservableCollection<Comment> Comments { get; } = new ObservableCollection<Comment>();
+        public ObservableCollection<LoadedComment> Comments { get; } = new ObservableCollection<LoadedComment>();
         public string LinkFlairText { get; set; }
         public RedditUser Author { get; }
         public Uri Permalink { get; set; }
@@ -54,7 +60,7 @@ namespace RedditBrowser.Classes
         {
             ShowFullResolutionImage = false;
             foreach (var comment in post.Comments)
-                Comments.Add(comment);
+                Comments.Add(new LoadedComment(comment));
             LinkFlairText = post.LinkFlairText;
             Author = post.Author;
             Permalink = post.Permalink;
@@ -67,6 +73,27 @@ namespace RedditBrowser.Classes
             Liked = post.Liked;
             Post = post;
         }
+
+        public ICommand SaveImageCommand
+        {
+            get
+            {
+                return new RelayCommand(() => {
+                    var split = Url.LocalPath.Split('.');
+                    string extension = split[split.Length - 1];
+
+                    var dialog = new SaveFileDialog();
+                    dialog.Filter = "A media file | *." + extension;
+                    dialog.ShowDialog();
+                    var fileName = dialog.FileName;
+                    if (fileName != null)
+                    {
+                        Task.Run(() => { Save(Url, fileName); });
+                    }
+                });
+            }
+        }
+
 
         public void Downvote()
         {
@@ -94,21 +121,46 @@ namespace RedditBrowser.Classes
             Liked = Post.Liked;
         }
 
+        public bool CanShowFullResolutionImage
+        {
+            get
+            {
+                var formats = new List<string>() { ".png", ".jpg", ".jpeg", ".gif" };
+                return formats.Any(f => this.Url.ToString().Contains(f));
+            }
+        }
+
         public void Comment(string message)
         {
-            this.Post.Comment(message);
-            this.Comments.Clear();
-            foreach (var comment in this.Post.Comments)
-                Comments.Add(comment);
+            var comment = this.Post.Comment(message);
+            Comments.Add(new LoadedComment(comment));
         }
 
         public Action ReturnToPreviousViewAction { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
         private void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChangedEventHandler handler = PropertyChanged;
             if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void Save(Uri uri, string fileName)
+        {
+            using (WebClient webClient = new WebClient())
+            {
+                try
+                {
+                    webClient.DownloadFile(Url, fileName);
+                }
+                catch
+                {
+                    MessageBox.Show("There was an error while downloading file.",
+                        "Please try again.",
+                        MessageBoxButtons.OK);
+                }
+            }
         }
     }
 }

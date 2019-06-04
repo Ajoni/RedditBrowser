@@ -4,6 +4,8 @@ using GalaSoft.MvvmLight.Messaging;
 using RedditBrowser.Classes;
 using RedditBrowser.ViewModel.Messages;
 using RedditSharp.Things;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using Xceed.Wpf.Toolkit;
 
@@ -14,7 +16,8 @@ namespace RedditBrowser.ViewModel
 		private AuthenticatedUser _user;
 		private string _comment;
 
-		public LoadedPost Post { get; set; }
+
+        public LoadedPost Post { get; set; }
 		public string Comment
 		{
 			get => _comment; set
@@ -22,9 +25,9 @@ namespace RedditBrowser.ViewModel
 				_comment = value; RaisePropertyChanged(); RaisePropertyChanged("CommentButtonEnabled");
 			}
 		}
-		public Comment MousedOverComment { get; set; }
 		public AuthenticatedUser User { get => _user; set { _user = value; RaisePropertyChanged(); RaisePropertyChanged("CommentButtonEnabled"); } }
 		public bool CommentButtonEnabled { get { return !string.IsNullOrEmpty(this.Comment) && this.User != null; } }
+
 
 		public PostVM(LoadedPost post, AuthenticatedUser user)
 		{
@@ -32,7 +35,8 @@ namespace RedditBrowser.ViewModel
 			User = user;
 		}
 
-		public ICommand SubredditNameClick
+
+        public ICommand SubredditNameClick
 		{
 			get
 			{
@@ -42,7 +46,6 @@ namespace RedditBrowser.ViewModel
 				});
 			}
 		}
-
 		public ICommand UpvoteClick
 		{
 			get
@@ -57,7 +60,6 @@ namespace RedditBrowser.ViewModel
 				}, true);
 			}
 		}
-
 		public ICommand DownvoteClick
 		{
 			get
@@ -72,52 +74,15 @@ namespace RedditBrowser.ViewModel
 				}, true);
 			}
 		}
-
-		public ICommand PostComment
-		{
-			get
-			{
-				return new RelayCommand(() =>
-				{
-					this.Post.Comment(this.Comment);
-                    this.Comment = string.Empty;
-				});
-			}
-		}
-
-		public ICommand CommentHover
-		{
-			get
-			{
-				return new RelayCommand<Comment>((comment) =>
-				{
-					this.MousedOverComment = comment;
-				});
-			}
-		}
-
-		public ICommand UpvoteCommentClick
-		{
-			get
-			{
-				return new RelayCommand(() =>
-				{
-					if (MousedOverComment.Liked.HasValue && MousedOverComment.Liked.Value) MousedOverComment.ClearVote(); else MousedOverComment.Upvote();
-				}
-				, true);
-			}
-		}
-
-		public ICommand DownvoteCommentClick
-		{
-			get
-			{
-				return new RelayCommand(() =>
-				{
-					if (MousedOverComment.Liked.HasValue && !MousedOverComment.Liked.Value) MousedOverComment.ClearVote(); else MousedOverComment.Downvote();
-				}
-				, true);
-			}
-		}
-	}
+        public ICommand PostComment
+        {
+            get
+            {
+                return new RelayCommand(() =>
+                {
+                    Post.Comment(Comment);
+                });
+            }
+        }
+    }
 }

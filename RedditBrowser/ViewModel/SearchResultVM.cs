@@ -45,6 +45,7 @@ namespace RedditBrowser.ViewModel
 			Query = query;
 			Reddit = reddit;
 			Subreddit = subreddit;
+
             if(Reddit.User != null)
                 foreach (var sub in Reddit.User.SubscribedSubreddits)
                     SubscribedSubreddits.Add(sub.Name);
@@ -63,12 +64,14 @@ namespace RedditBrowser.ViewModel
 		private async Task LoadSubs(int toSkip, int toTake)
 		{
 			List<Subreddit> subs = new List<Subreddit>();
-			Busy = true;
-			await Task.Run(() =>
+            Busy = true;
+
+            await Task.Run(() =>
 			{
 				try
 				{
-					subs = this.Reddit.SearchSubreddits(Query).Skip(toSkip).Take(toTake).ToList();
+                    
+                    subs = this.Reddit.SearchSubreddits(Query).Skip(toSkip).Take(toTake).ToList();
 				}
 				catch (Exception)
 				{
@@ -82,7 +85,9 @@ namespace RedditBrowser.ViewModel
 			}, () =>
 			{
 				Busy = false;
-			});
+               
+
+            });
 		}
 
 		public ICommand SubredditHover
@@ -116,12 +121,25 @@ namespace RedditBrowser.ViewModel
                     this.MousedOverSubreddit.Subscribe();
                     this.SubscribedSubreddits.Add(sub.Name);
 					Messenger.Default.Send(new SubredditSubscribedMessage(sub.Name));
-				},(sub) => this.Reddit.User != null && !isSubscribed(sub));
+				},(sub) => this.Reddit.User != null && !IsSubscribed(sub));
 			}
 		}
-        private bool isSubscribed(Subreddit subreddit) => SubscribedSubreddits.Contains(subreddit.Name);
+        private bool IsSubscribed(Subreddit subreddit) => SubscribedSubreddits.Contains(subreddit.Name);
+       
+        public ICommand SubredditUnsubscribeClick
+        {
+            get
+            {
+                return new RelayCommand<Subreddit>((sub) =>
+                {
+                    this.MousedOverSubreddit.Unsubscribe();
+                    this.SubscribedSubreddits.Remove(sub.Name);
+                }, (sub) => this.Reddit.User != null && !IsSubscribed(sub));
+            }
+        }
         public ICommand LoadNextSubreddit
 		{
+
 			get
 			{
 				return new RelayCommand(async () =>
@@ -142,7 +160,7 @@ namespace RedditBrowser.ViewModel
 		private async Task LoadPosts(int toSkip, int toTake)
 		{
 			List<LoadedPost> posts = new List<LoadedPost>();
-			Busy = true;
+			this.ListVM.Busy = true;
 			await Task.Run(() =>
 			{
 				posts = Subreddit.Search(Query).Skip(toSkip).Select(post => new LoadedPost(post)).Take(toTake).ToList();
@@ -153,7 +171,7 @@ namespace RedditBrowser.ViewModel
 				Application.Current.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Background, new Action<LoadedPost>((post) => ListVM.Posts.Add(post)), p);
 			}, () =>
 			{
-				Busy = false;
+                this.ListVM.Busy = false;
 			});
 		}
 

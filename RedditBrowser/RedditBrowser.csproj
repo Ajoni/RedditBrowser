@@ -38,6 +38,9 @@
     <Reference Include="CommonServiceLocator, Version=2.0.2.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
       <HintPath>..\packages\CommonServiceLocator.2.0.2\lib\net45\CommonServiceLocator.dll</HintPath>
     </Reference>
+    <Reference Include="FontAwesome.WPF, Version=4.7.0.37774, Culture=neutral, PublicKeyToken=0758b07a11a4f466, processorArchitecture=MSIL">
+      <HintPath>..\packages\FontAwesome.WPF.4.7.0.9\lib\net40\FontAwesome.WPF.dll</HintPath>
+    </Reference>
     <Reference Include="GalaSoft.MvvmLight, Version=5.4.1.0, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
       <HintPath>..\packages\MvvmLightLibs.5.4.1.1\lib\net45\GalaSoft.MvvmLight.dll</HintPath>
     </Reference>
@@ -127,6 +130,7 @@
     <Compile Include="Config\GlobalPaths.cs" />
     <Compile Include="Converters\DateToHowLongAgoConverter.cs" />
     <Compile Include="Converters\FalseToVisibleConverter.cs" />
+    <Compile Include="Converters\GenericBooleanConverter.cs" />
     <Compile Include="Converters\ImgConverter.cs" />
     <Compile Include="Converters\TrueToVisibleConverter.cs" />
     <Compile Include="Helpers\Extensions.cs" />
@@ -158,6 +162,9 @@
     <Compile Include="ViewModel\Messages\ShowLoginMessage.cs" />
     <Compile Include="ViewModel\Messages\ShowPostMessage.cs" />
     <Compile Include="ViewModel\Messages\SubredditSubscribedMessage.cs" />
+    <Compile Include="ViewModel\Messages\SubredditUnsubscribedMessage.cs" />
+    <Compile Include="ViewModel\Messages\SubscribeMessage.cs" />
+    <Compile Include="ViewModel\Messages\UnsubscribeMessage.cs" />
     <Compile Include="ViewModel\SearchResultVM.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="ViewModel\IViewModel.cs" />

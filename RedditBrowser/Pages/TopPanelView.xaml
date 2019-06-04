@@ -7,8 +7,11 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
 			 xmlns:cmd="http://www.galasoft.ch/mvvmlight"
+             xmlns:r="clr-namespace:RedditSharp.Things;assembly=RedditSharp"
+             xmlns:user="clr-namespace:UserControls;assembly=UserControls"
              xmlns:local="clr-namespace:RedditBrowser"
-			 mc:Ignorable="d" 
+             xmlns:fa="http://schemas.fontawesome.io/icons/"
+             mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
   <UserControl.Resources>
 	<ResourceDictionary>
@@ -37,7 +40,33 @@
 	<xctk:WatermarkComboBox Grid.Column="1" x:Name="watermarkcomboboxSubredditName" Watermark="Subreddit" 
 							ItemsSource="{Binding Subreddits}" SelectedItem="{Binding SelectedSubreddit}" Text="{Binding SelectedSubreddit}"
 							IsEditable="True" IsTextSearchEnabled="True" IsTextSearchCaseSensitive="False"
-                            Margin="5,0,0,0" Padding="5,12,0,5">
+                            Margin="5,0,0,0" Padding="5,12,0,5" SelectionChanged="WatermarkcomboboxSubredditName_SelectionChanged">
+            <ComboBox.ItemTemplate>
+                <DataTemplate >
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" x:Name="stackpanelSubscribeButtons">
+                            <Button Padding="-3" x:Name="buttonUnsubscribe" Command="{Binding SubredditUnsubscribeClick, UpdateSourceTrigger=PropertyChanged}" 
+                                                CommandParameter="{Binding Name}"
+                                Visibility="{Binding IsSubscribed,Converter={StaticResource BooleanToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}">
+                                <fa:ImageAwesome Icon="MinusSquare" VerticalAlignment="Center" HorizontalAlignment="Right" Width="15px" />
+                            </Button>
+                            <Button Padding="-3" x:Name="buttonSubscribe" Command="{Binding SubredditSubscribeClick, UpdateSourceTrigger=PropertyChanged}" 
+                                                CommandParameter="{Binding Name}"
+                                Visibility="{Binding CanSubscribe,Converter={StaticResource BooleanToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}">
+                                <fa:ImageAwesome Icon="PlusSquare" VerticalAlignment="Center" HorizontalAlignment="Right" Width="15px" />
+                            </Button>
+                        </StackPanel>
+                        <TextBlock Grid.Column="1" x:Name="textblockSubredditName" Text="{Binding Name}" Style="{StaticResource LinkTextStyle}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="1">
+                        </TextBlock>
+
+                        
+                    </Grid>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
 	  <i:Interaction.Triggers>
 		<iex:KeyTrigger Key="Enter" ActiveOnFocus="True">
 		  <cmd:EventToCommand Command="{Binding ChangeSubreddit}"/>
@@ -60,10 +89,10 @@
 	  </xctk:WatermarkTextBox>
 	</Grid>
 	<Button Grid.Column="3" x:Name="buttonLogin" Content="_LOG IN" Command="{Binding LoginClick}"
-                Style="{StaticResource LoginLogoutButtonStyle}" Margin="5,1" 
+                Style="{StaticResource LoginLogoutButtonStyle}" Margin="5,0,0,0"
                 Visibility="{Binding IsUserLoggedIn, Converter={StaticResource falseToVisibleConverter}}"/>
 	<Button Grid.Column="3" x:Name="buttonLogout" Content="_LOG OUT" Command="{Binding LogoutClick}"
-                Style="{StaticResource LoginLogoutButtonStyle}" Margin="5,1" 
+                Style="{StaticResource LoginLogoutButtonStyle}" Margin="5,0,0,0" 
                 Visibility="{Binding IsUserLoggedIn, Converter={StaticResource trueToVisibleConverter}}"/>
   </Grid>
 </UserControl>

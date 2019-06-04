@@ -1,11 +1,14 @@
-﻿using RedditSharp.Things;
+﻿using GalaSoft.MvvmLight.CommandWpf;
+using RedditSharp.Things;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using static RedditSharp.Things.VotableThing;
 
 namespace RedditBrowser.Classes
@@ -15,7 +18,17 @@ namespace RedditBrowser.Classes
 		private bool? _liked;
 		private int _score;
 
-		public string AuthorName { get; set; }
+        private string _replyText;
+
+
+        public string ReplyText
+        {
+            get => _replyText; set
+            {
+                _replyText = value; OnPropertyChanged();
+            }
+        }
+        public string AuthorName { get; set; }
 		public string AuthorFlairText { get; set; }
 		public string Body { get; set; }
 		public int Score
@@ -33,37 +46,83 @@ namespace RedditBrowser.Classes
 				_liked = value; OnPropertyChanged();
 			}
 		}
-		public Comment Comment { get; set; }
+        public ObservableCollection<LoadedComment> Comments { get; } = new ObservableCollection<LoadedComment>();
+        public Comment Comment { get; set; }
 
-		public void Downvote()
+        public LoadedComment(Comment comment)
+        {
+            this.Comment = comment;
+            this.Body = comment.Body;
+            this.AuthorName = comment.AuthorName;
+            this.AuthorFlairText = comment.AuthorFlairText;
+            this.Score = comment.Score;
+            this.Liked = comment.Liked;
+            foreach (var reply in comment.Comments)
+                this.Comments.Add(new LoadedComment(reply));
+        }
+
+        public ICommand UpvoteCommentClick
+        {
+            get
+            {
+                return new RelayCommand(() =>
+                {
+                    if (Liked.HasValue && Liked.Value) ClearVote(); else Upvote();
+                }
+                , true);
+            }
+        }
+        public ICommand DownvoteCommentClick
+        {
+            get
+            {
+                return new RelayCommand(() =>
+                {
+                    if (Liked.HasValue && !Liked.Value) ClearVote(); else Downvote();
+                });
+            }
+        }
+        public ICommand PostComment
+        {
+            get
+            {
+                return new RelayCommand(() =>
+                {
+                    Reply(ReplyText);
+                    ReplyText = "";
+                });
+            }
+        }
+
+        private void Downvote()
 		{
 			Comment.Downvote();
 			UpdateVoteProps();
 		}
-		public void Upvote()
+        private void Upvote()
 		{
 			Comment.Upvote();
 			UpdateVoteProps();
 		}
-		public void SetVote(VoteType type)
+        private void SetVote(VoteType type)
 		{
 			Comment.SetVote(type);
 			UpdateVoteProps();
 		}
-		public void ClearVote()
+        private void ClearVote()
 		{
 			Comment.ClearVote();
 			UpdateVoteProps();
 		}
-		private void UpdateVoteProps()
+        private void UpdateVoteProps()
 		{
 			Score = Comment.Score;
 			Liked = Comment.Liked;
 		}
-
-		public void Reply(string message)
+        private void Reply(string message)
 		{
-			this.Comment.Reply(message);
+			var comment = this.Comment.Reply(message);
+            Comments.Add(new LoadedComment(comment));
 		}
 
 		public event PropertyChangedEventHandler PropertyChanged;
