@@ -131,7 +131,9 @@ namespace RedditBrowser.ViewModel
 			}
 		}
 
-		private async void InitPosts()
+        public ICommand ChangeToViewCommand { get; set; }
+
+        private async void InitPosts()
 		{
 			ListVM.Posts.Clear();
 			await LoadPosts(ListVM.Posts.Count,3);
@@ -164,7 +166,7 @@ namespace RedditBrowser.ViewModel
 				var newPosts = await Task.Run(() =>
 				{
 					var currentPostCount = ListVM.Posts.Count;
-					return Subreddit.Search(Query).Skip(currentPostCount).Take(3).Select(post => new LoadedPost(post)).ToList();
+					return Subreddit.Search(Query).Skip(currentPostCount).Take(3).Select(post => new LoadedPost(post) { ReturnToPreviousViewAction = () => ChangeToViewCommand.Execute(this) }).ToList();
 				});
 				foreach (var post in newPosts)
 					ListVM.Posts.Add(post);

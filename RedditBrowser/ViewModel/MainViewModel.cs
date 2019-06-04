@@ -13,6 +13,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 
 namespace RedditBrowser.ViewModel
 {
@@ -28,6 +29,10 @@ namespace RedditBrowser.ViewModel
 		public Subreddit Subreddit { get; set; }
 		public Reddit Reddit { get; set; }
 		public bool Busy { get => _busy; set { _busy = value; RaisePropertyChanged(); } }
+        public ICommand ChangeToViewCommand
+        {
+            get => new RelayCommand<IViewModel>((page) => this.CurrentPage = page);
+        }
         private WebAgent WebAgent { get; set; }
 
 		public MainViewModel()
@@ -71,7 +76,7 @@ namespace RedditBrowser.ViewModel
                 var newPosts =  await Task.Run(() =>
                 {
                     var currentPostCount = ListVM.Posts.Count;
-                    return Subreddit.Posts.Skip(currentPostCount).Take(3).Select( post => new LoadedPost(post)).ToList();
+                    return Subreddit.Posts.Skip(currentPostCount).Take(3).Select( post => new LoadedPost(post) { ReturnToPreviousViewAction = () => ChangeToViewCommand.Execute(ListVM)}).ToList();
                 });
                 foreach(var post in newPosts)
                     ListVM.Posts.Add(post);
@@ -129,7 +134,11 @@ namespace RedditBrowser.ViewModel
 
             TopPanel.IsUserLoggedIn = Reddit.User != null;
 		}
-		private void ReceiveMessage(SearchMessage message) => this.CurrentPage = new SearchResultVM(new ListVM(this.Reddit.User, false),message.Query,this.Reddit,this.Subreddit);
+
+        private void ReceiveMessage(SearchMessage message) => this.CurrentPage = new SearchResultVM(new ListVM(this.Reddit.User, false), message.Query, this.Reddit, this.Subreddit)
+        {
+            ChangeToViewCommand = this.ChangeToViewCommand
+        };
         
 		private void RegisterMessages()
 		{
@@ -138,6 +147,5 @@ namespace RedditBrowser.ViewModel
 			Messenger.Default.Register<LoginChangeMessage>      (this, (message) => ReceiveMessage(message));
 			Messenger.Default.Register<SearchMessage>			(this, (message) => ReceiveMessage(message));
 		}
-
 	}
 }
