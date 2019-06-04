@@ -10,6 +10,7 @@
              xmlns:r="clr-namespace:RedditSharp.Things;assembly=RedditSharp"
              xmlns:user="clr-namespace:UserControls;assembly=UserControls"
              xmlns:local="clr-namespace:RedditBrowser"
+             xmlns:classes="clr-namespace:RedditBrowser.Classes"
              xmlns:fa="http://schemas.fontawesome.io/icons/"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
@@ -90,9 +91,9 @@
 	</Grid>
 	<Button Grid.Column="3" x:Name="buttonLogin" Content="_LOG IN" Command="{Binding LoginClick}"
                 Style="{StaticResource LoginLogoutButtonStyle}" Margin="5,0,0,0"
-                Visibility="{Binding IsUserLoggedIn, Converter={StaticResource falseToVisibleConverter}}"/>
+                Visibility="{Binding Source={x:Static classes:SessionContext.IsUserLoggedIn}, Converter={StaticResource falseToVisibleConverter}}"/>
 	<Button Grid.Column="3" x:Name="buttonLogout" Content="_LOG OUT" Command="{Binding LogoutClick}"
                 Style="{StaticResource LoginLogoutButtonStyle}" Margin="5,0,0,0" 
-                Visibility="{Binding IsUserLoggedIn, Converter={StaticResource trueToVisibleConverter}}"/>
+                Visibility="{Binding Source={x:Static classes:SessionContext.IsUserLoggedIn}, Converter={StaticResource trueToVisibleConverter}}"/>
   </Grid>
 </UserControl>

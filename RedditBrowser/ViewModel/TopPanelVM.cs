@@ -1,6 +1,7 @@
 ﻿using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
+using RedditBrowser.Classes;
 using RedditBrowser.Helpers;
 using RedditBrowser.ViewModel.Messages;
 using RedditSharp;
@@ -18,7 +19,6 @@ namespace RedditBrowser.ViewModel
     public class TopPanelVM : ViewModelBase, IViewModel
     {
         private string _SubredditName = "";
-        private bool _IsUserLoggedIn = false;
         private string _query;
 
         public string Header { get; set; }
@@ -31,19 +31,6 @@ namespace RedditBrowser.ViewModel
         }
         public ObservableCollection<SubredditComboboxLayout> Subreddits { get; set; }
         public ObservableCollection<string> SubscribedSubreddits { get; set; }
-
-        public bool IsUserLoggedIn
-        {
-            get { return _IsUserLoggedIn; }
-            set
-            {
-                _IsUserLoggedIn = value; RaisePropertyChanged();
-                foreach (var item in Subreddits)
-                    item.IsUserLoggedIn = value;
-                if (!value)
-                    SubredditComboboxLayout.SubscribedSubreddits.Clear();
-            }
-        }
         public string SelectedSubreddit
         {
             get { return _SubredditName; }
@@ -148,8 +135,6 @@ namespace RedditBrowser.ViewModel
 
         public class SubredditComboboxLayout : INotifyPropertyChanged
         {
-            private bool isUserLoggedIn;
-
             public static ObservableCollection<string> SubscribedSubreddits { get; private set; } = new ObservableCollection<string>();
             public bool NeedsUpdate
             {
@@ -157,14 +142,6 @@ namespace RedditBrowser.ViewModel
                 {
                     if (value)
                         SubUnsubButtonPropsChanged();
-                }
-            }
-            public bool IsUserLoggedIn
-            {
-                get => isUserLoggedIn; set
-                {
-                    isUserLoggedIn = value; OnPropertyChanged();
-                    SubUnsubButtonPropsChanged();
                 }
             }
 
@@ -195,8 +172,8 @@ namespace RedditBrowser.ViewModel
                                                                              SubUnsubButtonPropsChanged();
                                                                          }, (sub) => CanSubscribe, true);
 
-            public bool IsSubscribed { get => SubscribedSubreddits.Contains(Name) && IsUserLoggedIn; }
-            public bool CanSubscribe { get => !SubscribedSubreddits.Contains(Name) && Name != "all" && IsUserLoggedIn; }
+            public bool IsSubscribed { get => SubscribedSubreddits.Contains(Name) && SessionContext.IsUserLoggedIn; }
+            public bool CanSubscribe { get => !SubscribedSubreddits.Contains(Name) && Name != "all" && SessionContext.IsUserLoggedIn; }
 
             public event PropertyChangedEventHandler PropertyChanged;
             private void OnPropertyChanged([CallerMemberName] string propertyName = null)

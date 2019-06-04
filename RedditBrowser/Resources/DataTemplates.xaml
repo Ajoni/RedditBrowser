@@ -6,8 +6,8 @@
                     xmlns:r="clr-namespace:RedditSharp.Things;assembly=RedditSharp"
                      xmlns:user="clr-namespace:UserControls;assembly=UserControls"
                     xmlns:vms="clr-namespace:RedditBrowser.ViewModel"
+                    xmlns:classes="clr-namespace:RedditBrowser.Classes"
                     xmlns:pages="clr-namespace:RedditBrowser.Pages"
-                   
                     xmlns:fa="http://schemas.fontawesome.io/icons/"
                     xmlns:converters="clr-namespace:RedditBrowser.Converters">
     <ResourceDictionary.MergedDictionaries>
@@ -28,7 +28,7 @@
         <pages:ListView />
     </DataTemplate>
 
-    <DataTemplate x:Key="ListPostItem">
+    <DataTemplate x:Key="ListPostItem" DataType="{x:Type classes:LoadedPost}">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="40"/>

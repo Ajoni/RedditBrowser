@@ -161,8 +161,8 @@ namespace RedditBrowser.Classes
                 }
                 , (post) =>
                 {
-                    return post.CanShowFullResolutionImage;
-                });
+                    return CanShowFullResolutionImage;
+                },true);
             }
         }
 
