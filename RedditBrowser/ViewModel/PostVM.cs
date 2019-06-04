@@ -13,7 +13,6 @@ namespace RedditBrowser.ViewModel
 {
     public class PostVM : ViewModelBase, IViewModel
     {
-        private AuthenticatedUser _user;
         private string _comment;
 
 
@@ -26,10 +25,9 @@ namespace RedditBrowser.ViewModel
             }
         }
 
-        public PostVM(LoadedPost post, AuthenticatedUser user)
+        public PostVM(LoadedPost post)
         {
             Post = post;
-            User = user;
         }
 
         public ICommand SubredditNameClick
