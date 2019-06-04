@@ -124,6 +124,7 @@
     </ApplicationDefinition>
     <Compile Include="Classes\LoadedComment.cs" />
     <Compile Include="Classes\LoadedPost.cs" />
+    <Compile Include="Classes\SessionContext.cs" />
     <Compile Include="Classes\UserLoginResult.cs" />
     <Compile Include="Config\GlobalConfig.cs" />
     <Compile Include="Config\GlobalKeys.cs" />

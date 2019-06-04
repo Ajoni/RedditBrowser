@@ -32,22 +32,20 @@ namespace RedditBrowser.ViewModel
 				_busy = value; RaisePropertyChanged();
 			}
 		}
-		public Reddit Reddit { get; set; }
 		/// <summary>
 		/// currenlty loaded subbreddit, instance needed to search posts
 		/// </summary>
 		public Subreddit Subreddit { get; set; }
 
-		public SearchResultVM(ListVM listVM, string query, Reddit reddit, Subreddit subreddit)
+		public SearchResultVM(ListVM listVM, string query, Subreddit subreddit)
 		{
 			ListVM = listVM;
 			ListVM.LoadNextPost = new RelayCommand(() => LoadNextPostMethod(), canExecute: () => Subreddit != null);
 			Query = query;
-			Reddit = reddit;
 			Subreddit = subreddit;
 
-            if(Reddit.User != null)
-                foreach (var sub in Reddit.User.SubscribedSubreddits)
+            if(SessionContext.Reddit.User != null)
+                foreach (var sub in SessionContext.Reddit.User.SubscribedSubreddits)
                     SubscribedSubreddits.Add(sub.Name);
 
 			Task.Run(() =>InitSubs());
@@ -71,7 +69,7 @@ namespace RedditBrowser.ViewModel
 				try
 				{
                     
-                    subs = this.Reddit.SearchSubreddits(Query).Skip(toSkip).Take(toTake).ToList();
+                    subs = SessionContext.Reddit.SearchSubreddits(Query).Skip(toSkip).Take(toTake).ToList();
 				}
 				catch (Exception)
 				{
@@ -121,7 +119,7 @@ namespace RedditBrowser.ViewModel
                     this.MousedOverSubreddit.Subscribe();
                     this.SubscribedSubreddits.Add(sub.Name);
 					Messenger.Default.Send(new SubredditSubscribedMessage(sub.Name));
-				},(sub) => this.Reddit.User != null && !IsSubscribed(sub));
+				},(sub) => SessionContext.Reddit.User != null && !IsSubscribed(sub));
 			}
 		}
         private bool IsSubscribed(Subreddit subreddit) => SubscribedSubreddits.Contains(subreddit.Name);
@@ -134,7 +132,7 @@ namespace RedditBrowser.ViewModel
                 {
                     this.MousedOverSubreddit.Unsubscribe();
                     this.SubscribedSubreddits.Remove(sub.Name);
-                }, (sub) => this.Reddit.User != null && !IsSubscribed(sub));
+                }, (sub) => SessionContext.Reddit.User != null && !IsSubscribed(sub));
             }
         }
         public ICommand LoadNextSubreddit
@@ -145,7 +143,7 @@ namespace RedditBrowser.ViewModel
 				return new RelayCommand(async () =>
 				{
 					await LoadSubs(this.Subreddits.Count, 5);
-				}, () => this.Reddit != null);
+				});
 			}
 		}
 

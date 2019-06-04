@@ -10,7 +10,7 @@ namespace RedditBrowser.ViewModel.Messages
     {
 		public string Name { get; set; }
         public bool Reload { get; set; }
-        public ChangeSubredditMessage(string name, bool reload = false)
+        public ChangeSubredditMessage(string name, bool reload = true)
 		{
 			Name = name;
             Reload = reload;

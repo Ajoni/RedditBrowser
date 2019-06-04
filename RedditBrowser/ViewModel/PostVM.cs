@@ -46,6 +46,7 @@ namespace RedditBrowser.ViewModel
 				});
 			}
 		}
+
 		public ICommand UpvoteClick
 		{
 			get

@@ -1,4 +1,7 @@
-﻿using GalaSoft.MvvmLight.Command;
+﻿using GalaSoft.MvvmLight.CommandWpf;
+using GalaSoft.MvvmLight.Messaging;
+using RedditBrowser.ViewModel;
+using RedditBrowser.ViewModel.Messages;
 using RedditSharp;
 using RedditSharp.Things;
 using System;
@@ -93,7 +96,76 @@ namespace RedditBrowser.Classes
                 });
             }
         }
+        public ICommand ItemClick
+        {
+            get
+            {
+                return new RelayCommand(() =>
+                {
+                    throw new NotImplementedException();
+                    //Messenger.Default.Send(new GoToPageMessage(new PostVM(this));
+                    //ItemClickAction.Invoke();
+                });
+            }
+        }
 
+        public ICommand LinkClick
+        {
+            get
+            {
+                return new RelayCommand<MouseButtonEventArgs>((args) =>
+                {
+                    var post = (LoadedPost)((System.Windows.Controls.TextBlock)args.Source).DataContext;
+                    System.Diagnostics.Process.Start(post.Url.ToString());
+                    args.Handled = true;
+                });
+            }
+        }
+
+        public ICommand UpvoteClick
+        {
+            get
+            {
+                return new RelayCommand(() =>
+                {
+                    if (Liked.HasValue && Liked.Value) ClearVote(); else Upvote();
+                }
+                , () =>
+                {
+                    return SessionContext.Reddit.User != null;
+                }, true);
+            }
+        }
+
+        public ICommand DownvoteClick
+        {
+            get
+            {
+                return new RelayCommand(() =>
+                {
+                    if (Liked.HasValue && !Liked.Value) ClearVote(); else Downvote();
+                }
+                , () =>
+                {
+                    return SessionContext.Reddit.User != null;
+                });
+            }
+        }
+
+        public ICommand ShowFullResolutionImageChange
+        {
+            get
+            {
+                return new RelayCommand<LoadedPost>((post) =>
+                {
+                    post.ShowFullResolutionImage = !post.ShowFullResolutionImage;
+                }
+                , (post) =>
+                {
+                    return post.CanShowFullResolutionImage;
+                });
+            }
+        }
 
         public void Downvote()
         {
@@ -115,11 +187,6 @@ namespace RedditBrowser.Classes
             Post.ClearVote();
             UpdateVoteProps();
         }
-        private void UpdateVoteProps()
-        {
-            Score = Post.Score;
-            Liked = Post.Liked;
-        }
 
         public bool CanShowFullResolutionImage
         {
@@ -137,13 +204,17 @@ namespace RedditBrowser.Classes
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-
         private void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChangedEventHandler handler = PropertyChanged;
             if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        private void UpdateVoteProps()
+        {
+            Score = Post.Score;
+            Liked = Post.Liked;
+        }
         private void Save(Uri uri, string fileName)
         {
             using (WebClient webClient = new WebClient())

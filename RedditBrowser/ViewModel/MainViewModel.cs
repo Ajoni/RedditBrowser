@@ -26,7 +26,6 @@ namespace RedditBrowser.ViewModel
 		public ListVM ListVM { get; set; }
 		public LoginVM LoginVM { get; set; }
 		public Subreddit Subreddit { get; set; }
-		public Reddit Reddit { get; set; }
 		public bool Busy { get => _busy; set { _busy = value; RaisePropertyChanged(); } }
         private WebAgent WebAgent { get; set; }
 
@@ -38,7 +37,6 @@ namespace RedditBrowser.ViewModel
                 LoadNextPost = new RelayCommand(() => LoadNextPostMethod(), canExecute: () => Subreddit != null)
             };
 			this.LoginVM = new LoginVM();
-			this.Reddit = new Reddit();
 		}
 
 		public async Task Init()
@@ -81,21 +79,21 @@ namespace RedditBrowser.ViewModel
         }
 
 		private void ReceiveMessage(GoToPageMessage message) => this.CurrentPage = message.Page;
-
+		private void ReceiveMessage(SearchMessage message) => this.CurrentPage = new SearchResultVM(new ListVM(SessionContext.Reddit.User, false),message.Query,this.Subreddit);
 		private async void ReceiveMessage(ChangeSubredditMessage message)
 		{
 			if (string.IsNullOrEmpty(message.Name))
 				return;
 			this.CurrentPage = this.ListVM;
-			//if (message.Name == this.Subreddit?.Name)
-			//	return;
+            if (!message.Reload)
+                return;
 
-			if (message.Name == "all")
-				this.Subreddit = this.Reddit.RSlashAll;
+            if (message.Name == "all")
+				this.Subreddit = SessionContext.Reddit.RSlashAll;
 			else
 				try
 				{
-					this.Subreddit = await this.Reddit.GetSubredditAsync(message.Name);
+					this.Subreddit = await SessionContext.Reddit.GetSubredditAsync(message.Name);
 					if (this.Subreddit == null)
 						throw new Exception();
 				}
@@ -108,18 +106,17 @@ namespace RedditBrowser.ViewModel
 				}
 			await this.Init();
 		}
-        
 		private async void ReceiveMessage(LoginChangeMessage message)
 		{
 			if (message.UserLoginResult != null)
-				this.Reddit = new Reddit(message.UserLoginResult.WebAgent, true);
+                SessionContext.Reddit = new Reddit(message.UserLoginResult.WebAgent, true);
 			else
-				this.Reddit = new Reddit();
-			this.ListVM.User = this.Reddit.User;
+                SessionContext.Reddit = new Reddit();
+			this.ListVM.User = SessionContext.Reddit.User;
 
-            if (Reddit.User != null)
+            if (SessionContext.Reddit.User != null)
             {
-                foreach (var item in this.Reddit.User.SubscribedSubreddits)
+                foreach (var item in SessionContext.Reddit.User.SubscribedSubreddits)
                 {
                     if (!this.TopPanel.Subreddits.Any(s => s.Name == item.Name))
                         this.TopPanel.Subreddits.Add(new TopPanelVM.SubredditComboboxLayout(item.Name));
@@ -129,19 +126,18 @@ namespace RedditBrowser.ViewModel
 
 			this.CurrentPage = this.ListVM;
 			if (this.Subreddit != null)
-                Messenger.Default.Send(new ChangeSubredditMessage(this.Subreddit.Name,true)); //reload needed to update webAgents with user acces token
+                Messenger.Default.Send(new ChangeSubredditMessage(this.Subreddit.Name)); //reload needed to update webAgents with user acces token
 
-            TopPanel.IsUserLoggedIn = Reddit.User != null;
+            TopPanel.IsUserLoggedIn = SessionContext.Reddit.User != null;
 		}
-		private void ReceiveMessage(SearchMessage message) => this.CurrentPage = new SearchResultVM(new ListVM(this.Reddit.User, false),message.Query,this.Reddit,this.Subreddit);
         private async void ReceiveMessage(SubscribeMessage message)
         {
-            var sub = await this.Reddit.GetSubredditAsync(message.Name);
+            var sub = await SessionContext.Reddit.GetSubredditAsync(message.Name);
             await Task.Run(()=>sub.Subscribe());
         }
         private async void ReceiveMessage(UnsubscribeMessage message)
         {
-            var sub = await this.Reddit.GetSubredditAsync(message.Name);
+            var sub = await SessionContext.Reddit.GetSubredditAsync(message.Name);
             await Task.Run(() => sub.Unsubscribe());
         }
         
