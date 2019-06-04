@@ -48,7 +48,7 @@ namespace RedditBrowser.ViewModel
 			this.Busy = true;
 			await Task.Run(() =>
 			{
-				posts = LoadPosts(0, 5);
+				posts = LoadPosts(0, 3);
 			});
 			IObservable<LoadedPost> postsToLoad = posts.ToObservable();
 			postsToLoad.Subscribe(p =>
@@ -101,7 +101,8 @@ namespace RedditBrowser.ViewModel
 				}
 				catch (Exception)
 				{
-					this.TopPanel.Subreddits.Remove(message.Name);
+                    var sub = this.TopPanel.Subreddits.SingleOrDefault(s => s.Name == message.Name);
+                    this.TopPanel.Subreddits.Remove(sub);
 					MessageBox.Show($"Subreddit: '{message.Name}' does not exist or there is something wrong with your connection or reddit.");
 					return;
 				}
@@ -119,8 +120,11 @@ namespace RedditBrowser.ViewModel
             if (Reddit.User != null)
             {
                 foreach (var item in this.Reddit.User.SubscribedSubreddits)
-                    if (!this.TopPanel.Subreddits.Any(s => s == item.Name))
-                        this.TopPanel.Subreddits.Add(item.Name);
+                {
+                    if (!this.TopPanel.Subreddits.Any(s => s.Name == item.Name))
+                        this.TopPanel.Subreddits.Add(new TopPanelVM.SubredditComboboxLayout(item.Name));
+                    TopPanelVM.SubredditComboboxLayout.SubscribedSubreddits.Add(item.Name);
+                }
             }
 
 			this.CurrentPage = this.ListVM;
@@ -130,6 +134,16 @@ namespace RedditBrowser.ViewModel
             TopPanel.IsUserLoggedIn = Reddit.User != null;
 		}
 		private void ReceiveMessage(SearchMessage message) => this.CurrentPage = new SearchResultVM(new ListVM(this.Reddit.User, false),message.Query,this.Reddit,this.Subreddit);
+        private async void ReceiveMessage(SubscribeMessage message)
+        {
+            var sub = await this.Reddit.GetSubredditAsync(message.Name);
+            await Task.Run(()=>sub.Subscribe());
+        }
+        private async void ReceiveMessage(UnsubscribeMessage message)
+        {
+            var sub = await this.Reddit.GetSubredditAsync(message.Name);
+            await Task.Run(() => sub.Unsubscribe());
+        }
         
 		private void RegisterMessages()
 		{
@@ -137,6 +151,8 @@ namespace RedditBrowser.ViewModel
 			Messenger.Default.Register<ChangeSubredditMessage>  (this, (message) => ReceiveMessage(message));
 			Messenger.Default.Register<LoginChangeMessage>      (this, (message) => ReceiveMessage(message));
 			Messenger.Default.Register<SearchMessage>			(this, (message) => ReceiveMessage(message));
+			Messenger.Default.Register<SubscribeMessage>			(this, (message) => ReceiveMessage(message));
+			Messenger.Default.Register<UnsubscribeMessage>			(this, (message) => ReceiveMessage(message));
 		}
 
 	}

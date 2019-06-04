@@ -119,8 +119,7 @@ namespace RedditBrowser.ViewModel
                 }
 				, (post) =>
 				{
-                    var formats = new List<string>() { ".png", ".jpg", ".jpeg", ".gif" };
-                    return formats.Any(f => post.Url.ToString().Contains(f));
+                    return post.CanShowFullResolutionImage;
 				});
 			}
 		}

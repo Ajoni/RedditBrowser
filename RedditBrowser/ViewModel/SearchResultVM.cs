@@ -124,8 +124,7 @@ namespace RedditBrowser.ViewModel
 				},(sub) => this.Reddit.User != null && !IsSubscribed(sub));
 			}
 		}
-        public bool _isSubscribed = false;
-        public bool IsSubscribed(Subreddit subreddit) => SubscribedSubreddits.Contains(subreddit.Name);
+        private bool IsSubscribed(Subreddit subreddit) => SubscribedSubreddits.Contains(subreddit.Name);
        
         public ICommand SubredditUnsubscribeClick
         {
