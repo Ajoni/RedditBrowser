@@ -106,7 +106,11 @@ namespace RedditBrowser.ViewModel
                 this.SelectedSubreddit = message.Name;
 
             if (Subreddits.Where(s => s.Name == this.SelectedSubreddit).ToList().Count == 0)
+            {
                 Subreddits.Add(new SubredditComboboxLayout(this.SelectedSubreddit));
+                foreach (var sub in Subreddits)
+                    sub.NeedsUpdate = true;
+            }
 
         }
         private void ReceiveMessage(SubredditSubscribedMessage message)
@@ -132,7 +136,14 @@ namespace RedditBrowser.ViewModel
         {
             private bool isUserLoggedIn;
 
-            public static ObservableCollection<string> SubscribedSubreddits { get; set; } = new ObservableCollection<string>();
+            public static ObservableCollection<string> SubscribedSubreddits { get; private set; } = new ObservableCollection<string>();
+            public bool NeedsUpdate
+            {
+                set
+                {
+                    if (value)
+                        SubUnsubButtonPropsChanged();
+                } }
             public bool IsUserLoggedIn
             {
                 get => isUserLoggedIn; set

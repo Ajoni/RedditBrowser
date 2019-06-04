@@ -129,7 +129,7 @@ namespace RedditBrowser.ViewModel
 
 			this.CurrentPage = this.ListVM;
 			if (this.Subreddit != null)
-                Messenger.Default.Send(new ChangeSubredditMessage(this.Subreddit.Name)); //reload needed to update webAgents with user acces token
+                Messenger.Default.Send(new ChangeSubredditMessage(this.Subreddit.Name,true)); //reload needed to update webAgents with user acces token
 
             TopPanel.IsUserLoggedIn = Reddit.User != null;
 		}

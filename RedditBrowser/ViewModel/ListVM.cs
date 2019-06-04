@@ -130,8 +130,11 @@ namespace RedditBrowser.ViewModel
 
 		private void ReceiveMessage(ChangeSubredditMessage message)
 		{
-			this.MousedOverPost = null;
-            this.Posts.Clear();
+            if (message.Reload)
+            {
+                this.MousedOverPost = null;
+                this.Posts.Clear(); 
+            }
 		}
 
         private void RegisterMessages()

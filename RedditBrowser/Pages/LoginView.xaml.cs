@@ -24,42 +24,37 @@ namespace RedditBrowser.Pages
     /// </summary>
     public partial class LoginView : UserControl
     {
-		public LoginVM LoginVM{ get; set; }
+        public LoginVM LoginVM { get; set; }
 
-		public LoginView()
+        public LoginView()
         {
             InitializeComponent();
 
-			LoginVM = new LoginVM();
-			DataContext = LoginVM;
-		}
+            LoginVM = new LoginVM();
+            DataContext = LoginVM;
+        }
 
-		private async void ButtonLogin_Click(object sender, RoutedEventArgs e)
-		{
-			this.LoginVM.Busy = true;
-			var user = await Task.Run( () => LoginHelper.LoginUser(this.LoginVM.Username, this.watermarkpasswordboxPasswordd.Password));
-			this.LoginVM.Busy = false;
-			if (user == null)
-				MessageBox.Show("Could not login");
-			else
-			{
-				Messenger.Default.Send(new LoginChangeMessage(user));
+        private async void ButtonLogin_Click(object sender, RoutedEventArgs e)
+        {
+            this.LoginVM.Busy = true;
+            var user = await Task.Run(() => LoginHelper.LoginUser(this.LoginVM.Username, this.watermarkpasswordboxPasswordd.Password));
+            this.LoginVM.Busy = false;
+            if (user == null)
+                MessageBox.Show("Could not login");
+            else
+            {
+                Messenger.Default.Send(new LoginChangeMessage(user));
                 this.watermarkpasswordboxPasswordd.Password = "";
                 this.LoginVM.WindowState = Xceed.Wpf.Toolkit.WindowState.Closed;
-			}
-		}
+            }
+        }
 
         private void Hyperlink_Click(object sender, RoutedEventArgs e)
         {
             Hyperlink source = sender as Hyperlink;
 
             if (source != null)
-
-            {
-
                 System.Diagnostics.Process.Start(source.NavigateUri.ToString());
-
-            }
         }
     }
 }
