@@ -143,7 +143,7 @@ namespace RedditBrowser.ViewModel
         {
             ChangeToViewCommand = this.ChangeToViewCommand
         };
-		private void ReceiveMessage(SearchMessage message) => this.CurrentPage = new SearchResultVM(new ListVM(this.Reddit.User, false),message.Query,this.Reddit,this.Subreddit);
+
         private async void ReceiveMessage(SubscribeMessage message)
         {
             var sub = await this.Reddit.GetSubredditAsync(message.Name);
