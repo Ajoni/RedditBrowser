@@ -82,6 +82,15 @@ namespace RedditBrowser.ViewModel
                 Messenger.Default.Send(new SearchMessage(Query));
         });
         #endregion
+        public void PopulateCombobox(IEnumerable<Subreddit> subscribedSubreddits)
+        {
+            foreach (var item in subscribedSubreddits)
+            {
+                if (!Subreddits.Any(s => s.Name == item.Name))
+                    Subreddits.Add(new SubredditComboboxLayout(item.Name));
+                SubredditComboboxLayout.SubscribedSubreddits.Add(item.Name);
+            }
+        }
 
         /// <summary>
         /// update selected sub when user clicks on subreddit link
@@ -110,22 +119,10 @@ namespace RedditBrowser.ViewModel
             if (!SubredditComboboxLayout.SubscribedSubreddits.Contains(message.Name))
                 SubredditComboboxLayout.SubscribedSubreddits.Add(message.Name);
         }
-
-        public void AddToCombobox(IEnumerable<Subreddit> subscribedSubreddits)
-        {
-            foreach (var item in subscribedSubreddits)
-            {
-                if (!Subreddits.Any(s => s.Name == item.Name))
-                    Subreddits.Add(new SubredditComboboxLayout(item.Name));
-                SubredditComboboxLayout.SubscribedSubreddits.Add(item.Name);
-            }
-        }
-
         private void ReceiveMessage(SubredditUnsubscribedMessage message)
         {
             SubredditComboboxLayout.SubscribedSubreddits.Remove(message.Name);
         }
-
         private void RegisterMessages()
         {
             Messenger.Default.Register<ChangeSubredditMessage>(this, (message) => ReceiveMessage(message));

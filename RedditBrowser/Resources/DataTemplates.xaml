@@ -98,7 +98,10 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock FontWeight="Bold" Grid.Column="0" Text="{Binding Author.Name, StringFormat=Posted by {0}}"/>
+                    <WrapPanel Orientation="Horizontal">
+                        <TextBlock Grid.Column="0" Text="Posted by "/>
+                        <TextBlock FontWeight="Bold" Grid.Column="0" Text="{Binding Author.Name}"/>
+                    </WrapPanel>
                 </Grid>
             </Grid>
             <Image Grid.ColumnSpan="3" Grid.Row="1" x:Name="imageFullResolution" Source="{Binding Url}" 

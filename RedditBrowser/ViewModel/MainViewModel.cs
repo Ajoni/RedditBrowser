@@ -120,7 +120,7 @@ namespace RedditBrowser.ViewModel
             SessionContext.Update(message.UserLoginResult);
 
             if (SessionContext.IsUserLoggedIn)
-                this.TopPanel.AddToCombobox(SessionContext.Reddit.User.SubscribedSubreddits);
+                this.TopPanel.PopulateCombobox(SessionContext.Reddit.User.SubscribedSubreddits);
 
 			this.CurrentPage = this.ListVM;
 			if (this.Subreddit != null)
