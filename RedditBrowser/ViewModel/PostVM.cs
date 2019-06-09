@@ -5,8 +5,10 @@ using RedditBrowser.Classes;
 using RedditBrowser.ViewModel.Messages;
 using RedditSharp.Things;
 using System;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms;
 using System.Windows.Input;
 using Xceed.Wpf.Toolkit;
 
@@ -58,6 +60,14 @@ namespace RedditBrowser.ViewModel
         public ICommand ReturnClick
         {
             get => new RelayCommand(Return);
+        }
+
+        public ICommand SaveImageCommand
+        {
+            get
+            {
+                return Post.SaveImageCommand;
+            }
         }
 
         public Action ReturnToPreviousViewAction { get; set; }
