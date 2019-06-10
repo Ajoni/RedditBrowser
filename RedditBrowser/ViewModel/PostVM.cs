@@ -50,7 +50,7 @@ namespace RedditBrowser.ViewModel
                     Post.Comment(Comment);
                 }, () =>
                  {
-                     return !string.IsNullOrEmpty(this.Comment) && SessionContext.IsUserLoggedIn;
+                     return !string.IsNullOrEmpty(this.Comment) && SessionContext.Context.IsUserLoggedIn;
                  });
             }
         }

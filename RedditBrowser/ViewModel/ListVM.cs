@@ -25,23 +25,9 @@ namespace RedditBrowser.ViewModel
         {
 			if(goTo)
 				Messenger.Default.Send(new GoToPageMessage(this));
-
-            RegisterMessages();
         }
 
         public RelayCommand LoadNextPost { get; set; }
 
-		private void ReceiveMessage(ChangeSubredditMessage message)
-		{
-            if (message.Reload)
-            {
-                this.Posts.Clear(); 
-            }
-		}
-
-        private void RegisterMessages()
-        {
-            Messenger.Default.Register<ChangeSubredditMessage>(this, (message) => ReceiveMessage(message));
-        }
     }
 }

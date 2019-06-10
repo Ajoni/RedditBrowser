@@ -44,8 +44,8 @@ namespace RedditBrowser.ViewModel
 			Query = query;
 			Subreddit = subreddit;
 
-            if(SessionContext.Reddit.User != null)
-                foreach (var sub in SessionContext.Reddit.User.SubscribedSubreddits)
+            if(SessionContext.Context.Reddit.User != null)
+                foreach (var sub in SessionContext.Context.Reddit.User.SubscribedSubreddits)
                     SubscribedSubreddits.Add(sub.Name);
 
 			Task.Run(() =>InitSubs());
@@ -68,7 +68,7 @@ namespace RedditBrowser.ViewModel
 			{
 				try
 				{
-                    subs = SessionContext.Reddit.SearchSubreddits(Query).Skip(toSkip).Take(toTake).ToList();
+                    subs = SessionContext.Context.Reddit.SearchSubreddits(Query).Skip(toSkip).Take(toTake).ToList();
 				}
 				catch (Exception)
 				{
@@ -118,7 +118,7 @@ namespace RedditBrowser.ViewModel
                     this.MousedOverSubreddit.Subscribe();
                     this.SubscribedSubreddits.Add(sub.Name);
 					Messenger.Default.Send(new SubredditSubscribedMessage(sub.Name));
-				},(sub) => SessionContext.Reddit.User != null && !IsSubscribed(sub));
+				},(sub) => SessionContext.Context.Reddit.User != null && !IsSubscribed(sub));
 			}
 		}
         private bool IsSubscribed(Subreddit subreddit) => SubscribedSubreddits.Contains(subreddit.Name);
@@ -131,7 +131,7 @@ namespace RedditBrowser.ViewModel
                 {
                     this.MousedOverSubreddit.Unsubscribe();
                     this.SubscribedSubreddits.Remove(sub.Name);
-                }, (sub) => SessionContext.Reddit.User != null && !IsSubscribed(sub));
+                }, (sub) => SessionContext.Context.Reddit.User != null && !IsSubscribed(sub));
             }
         }
         public ICommand LoadNextSubreddit

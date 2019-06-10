@@ -131,7 +131,7 @@ namespace RedditBrowser.Classes
                 }
                 , () =>
                 {
-                    return SessionContext.Reddit.User != null;
+                    return SessionContext.Context.Reddit.User != null;
                 }, true);
             }
         }
@@ -146,7 +146,7 @@ namespace RedditBrowser.Classes
                 }
                 , () =>
                 {
-                    return SessionContext.Reddit.User != null;
+                    return SessionContext.Context.Reddit.User != null;
                 });
             }
         }
