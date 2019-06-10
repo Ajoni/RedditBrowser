@@ -79,7 +79,13 @@
                     TextWrapping="Wrap"/>
                 <TextBlock Grid.Row="2" Grid.Column="1" x:Name="textblockText" Text="{Binding Post.SelfText}"
                     TextWrapping="Wrap"/>
-                <Image Grid.Row="3" Grid.Column="1" x:Name="image" Source="{Binding Post.Url}"/>
+                <Image Grid.Row="3" Grid.Column="1" x:Name="image" Source="{Binding Post.Url}">
+                    <Image.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Save..." Command="{Binding SaveImageCommand}"/>
+                        </ContextMenu>
+                    </Image.ContextMenu>
+                </Image>
             </Grid>
 
             <Grid Grid.Row="2" x:Name="gridComment" Margin="5">

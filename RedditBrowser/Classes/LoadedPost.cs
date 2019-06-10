@@ -89,7 +89,7 @@ namespace RedditBrowser.Classes
                     dialog.Filter = "A media file | *." + extension;
                     dialog.ShowDialog();
                     var fileName = dialog.FileName;
-                    if (fileName != null)
+                    if (!String.IsNullOrEmpty(fileName))
                     {
                         Task.Run(() => { Save(Url, fileName); });
                     }
