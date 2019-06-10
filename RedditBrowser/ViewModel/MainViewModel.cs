@@ -38,16 +38,16 @@ namespace RedditBrowser.ViewModel
 			this.RegisterMessages();
             this.ListVM = new ListVM()
             {
-                LoadNextPost = new RelayCommand(() => LoadNextPostMethod(), canExecute: () => Subreddit != null)
+                LoadNextPost = new RelayCommand(() => LoadNextPostMethod(), canExecute: () => Subreddit != null && !ListVM.Busy)
             };
 			this.LoginVM = new LoginVM();
 		}
 
 		public async Task Init()
 		{
+			this.ListVM.Busy = true;
 			this.ListVM.Posts.Clear();
 			List<LoadedPost> posts = new List<LoadedPost>();
-			this.Busy = true;
 			await Task.Run(() =>
 			{
 				posts = LoadPosts(0, 3);
@@ -58,7 +58,7 @@ namespace RedditBrowser.ViewModel
 				Application.Current.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Background, new Action<LoadedPost>((post) => this.ListVM.Posts.Add(post)), p);
 			}, () =>
 			{
-				this.Busy = false;
+				this.ListVM.Busy = false;
 			});
 		}
 
@@ -98,11 +98,11 @@ namespace RedditBrowser.ViewModel
                 return;
 
             if (message.Name == "all")
-				this.Subreddit = SessionContext.Reddit.RSlashAll;
+				this.Subreddit = SessionContext.Context.Reddit.RSlashAll;
 			else
 				try
 				{
-					this.Subreddit = await SessionContext.Reddit.GetSubredditAsync(message.Name);
+					this.Subreddit = await SessionContext.Context.Reddit.GetSubredditAsync(message.Name);
 					if (this.Subreddit == null)
 						throw new Exception();
 				}
@@ -117,10 +117,10 @@ namespace RedditBrowser.ViewModel
 		}
 		private async void ReceiveMessage(LoginChangeMessage message)
 		{
-            SessionContext.Update(message.UserLoginResult);
+            SessionContext.Context.Update(message.UserLoginResult);
 
-            if (SessionContext.IsUserLoggedIn)
-                this.TopPanel.PopulateCombobox(SessionContext.Reddit.User.SubscribedSubreddits);
+            if (SessionContext.Context.IsUserLoggedIn)
+                this.TopPanel.PopulateCombobox(SessionContext.Context.Reddit.User.SubscribedSubreddits);
 
 			this.CurrentPage = this.ListVM;
 			if (this.Subreddit != null)
@@ -134,12 +134,12 @@ namespace RedditBrowser.ViewModel
 
         private async void ReceiveMessage(SubscribeMessage message)
         {
-            var sub = await SessionContext.Reddit.GetSubredditAsync(message.Name);
+            var sub = await SessionContext.Context.Reddit.GetSubredditAsync(message.Name);
             await Task.Run(()=>sub.Subscribe());
         }
         private async void ReceiveMessage(UnsubscribeMessage message)
         {
-            var sub = await SessionContext.Reddit.GetSubredditAsync(message.Name);
+            var sub = await SessionContext.Context.Reddit.GetSubredditAsync(message.Name);
             await Task.Run(() => sub.Unsubscribe());
         }
         
