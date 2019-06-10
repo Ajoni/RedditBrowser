@@ -11,7 +11,7 @@
         <ResourceDictionary Source="/Resources/Merged.xaml"/>
     </UserControl.Resources>
     <xctk:BusyIndicator IsBusy="{Binding Busy}" BusyContentTemplate="{StaticResource Busy}">
-        <xctk:ChildWindow IsModal="True" WindowState="{Binding WindowState}" WindowStartupLocation="Center">
+        <xctk:ChildWindow IsModal="True" WindowState="{Binding WindowState}" WindowStartupLocation="Center" Caption="Login">
             <Grid Width="200">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto" />

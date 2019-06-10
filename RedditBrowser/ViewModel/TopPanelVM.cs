@@ -92,6 +92,17 @@ namespace RedditBrowser.ViewModel
             }
         }
 
+        public ICommand SubredditSelectionChange => new RelayCommand<System.Windows.Controls.SelectionChangedEventArgs>((e) =>
+        {
+            if (e.AddedItems.Count != 1)
+                return;
+            var subreddit = e.AddedItems[0] as SubredditComboboxLayout;
+            if (subreddit == null)
+                return;
+            SelectedSubreddit = subreddit.Name;
+            Messenger.Default.Send(new ChangeSubredditMessage(subreddit.Name));
+        }, true);
+
         /// <summary>
         /// update selected sub when user clicks on subreddit link
         /// </summary>
@@ -169,8 +180,8 @@ namespace RedditBrowser.ViewModel
                                                                              SubUnsubButtonPropsChanged();
                                                                          }, (sub) => CanSubscribe, true);
 
-            public bool IsSubscribed { get => SubscribedSubreddits.Contains(Name) && SessionContext.IsUserLoggedIn; }
-            public bool CanSubscribe { get => !SubscribedSubreddits.Contains(Name) && Name != "all" && SessionContext.IsUserLoggedIn; }
+            public bool IsSubscribed { get => SubscribedSubreddits.Contains(Name) && SessionContext.Context.IsUserLoggedIn; }
+            public bool CanSubscribe { get => !SubscribedSubreddits.Contains(Name) && Name != "all" && SessionContext.Context.IsUserLoggedIn; }
 
             public event PropertyChangedEventHandler PropertyChanged;
             private void OnPropertyChanged([CallerMemberName] string propertyName = null)

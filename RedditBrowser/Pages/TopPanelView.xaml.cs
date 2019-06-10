@@ -11,10 +11,5 @@ namespace RedditBrowser.Pages
         {
             InitializeComponent();
         }
-
-        private void WatermarkcomboboxSubredditName_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
     }
 }
