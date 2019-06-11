@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -19,7 +20,8 @@ namespace RedditBrowser.ViewModel
 {
 	public class MainViewModel : ViewModelBase
 	{
-		private IViewModel _currentPage;
+        private const int AmountForInitialLoad = 3;
+        private IViewModel _currentPage;
 		private bool _busy;
 
 		public IViewModel CurrentPage { get => _currentPage; set { _currentPage = value; RaisePropertyChanged(); } }
@@ -33,34 +35,42 @@ namespace RedditBrowser.ViewModel
             get => new RelayCommand<IViewModel>((page) => this.CurrentPage = page);
         }
 
-		public MainViewModel()
+        private CancellationTokenSource TokenSource = new CancellationTokenSource();
+        private CancellationToken LoadNextPostToken;
+        private CancellationToken InitToken;
+        private bool firtsLoad = true;
+
+        public MainViewModel()
 		{
 			this.RegisterMessages();
             this.ListVM = new ListVM()
             {
-                LoadNextPost = new RelayCommand(() => LoadNextPostMethod(), canExecute: () => Subreddit != null && !ListVM.Busy)
+                LoadNextPost = new RelayCommand(() => LoadNextPostMethod(LoadNextPostToken), canExecute: () => Subreddit != null && !ListVM.Busy)
             };
 			this.LoginVM = new LoginVM();
 		}
 
-		public async Task Init()
+		public async Task Init(CancellationToken cancellationToken)
 		{
-			this.ListVM.Busy = true;
-			this.ListVM.Posts.Clear();
+            this.ListVM.Posts.Clear();
 			List<LoadedPost> posts = new List<LoadedPost>();
-			await Task.Run(() =>
-			{
-				posts = LoadPosts(0, 3);
-			});
-			IObservable<LoadedPost> postsToLoad = posts.ToObservable();
+            await Task.Factory.StartNew(stateObject =>
+            {
+                var castedToken = (CancellationToken)stateObject;
+                posts = LoadPosts(0, AmountForInitialLoad);
+                if (castedToken.IsCancellationRequested)
+                    posts.Clear();
+            }, cancellationToken);
+            IObservable<LoadedPost> postsToLoad = posts.ToObservable();
 			postsToLoad.Subscribe(p =>
 			{
 				Application.Current.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Background, new Action<LoadedPost>((post) => this.ListVM.Posts.Add(post)), p);
-			}, () =>
-			{
-				this.ListVM.Busy = false;
 			});
-		}
+            if (cancellationToken.IsCancellationRequested)
+                foreach (var item in posts)
+                    this.ListVM.Posts.Remove(item);
+            var a = cancellationToken.Equals(this.InitToken);
+        }
 
 		private List<LoadedPost> LoadPosts(int from, int amount) => Subreddit.Posts.Skip(from).Select(
                 post => {
@@ -70,52 +80,84 @@ namespace RedditBrowser.ViewModel
                 }
             ).Take(amount).ToList();
 
-        private async void LoadNextPostMethod()
+        private async void LoadNextPostMethod(CancellationToken cancellationToken)
+            //wyœcig tu jest chwilowo
         {
-            if (ListVM.Busy)
+            if (ListVM.Busy || 
+                ListVM.Posts.Count < 3) // chwilowe rozwiazanie które dzia³a tylko dla pierwszego load
                 return;
             ListVM.Busy = true;
             {
+                LoadNextPostToken = TokenSource.Token;
                 var newPosts =  await Task.Run(() =>
                 {
+                    if (LoadNextPostToken.IsCancellationRequested)
+                        return new List<LoadedPost>();
                     var currentPostCount = ListVM.Posts.Count;
                     return LoadPosts(currentPostCount, 3);
                 });
-                foreach(var post in newPosts)
+
+                if (LoadNextPostToken.IsCancellationRequested)
+                {
+                    ListVM.Busy = false;
+                    return;
+                }
+                foreach (var post in newPosts)
                     ListVM.Posts.Add(post);
                 ListVM.RaisePropertyChanged("Posts");
+
+                if (LoadNextPostToken.IsCancellationRequested)
+                    foreach (var post in newPosts)
+                        ListVM.Posts.Remove(post);
             }
             ListVM.Busy = false;
         }
 
 		private void ReceiveMessage(GoToPageMessage message) => this.CurrentPage = message.Page;
 		private async void ReceiveMessage(ChangeSubredditMessage message)
-		{
-			if (string.IsNullOrEmpty(message.Name))
-				return;
-			this.CurrentPage = this.ListVM;
+        {
+            if (string.IsNullOrEmpty(message.Name))
+                return;
+            this.CurrentPage = this.ListVM;
             if (!message.Reload)
                 return;
+            this.ListVM.Busy = true;
+
+            changeTokenSource();
 
             if (message.Name == "all")
-				this.Subreddit = SessionContext.Context.Reddit.RSlashAll;
-			else
-				try
-				{
-					this.Subreddit = await SessionContext.Context.Reddit.GetSubredditAsync(message.Name);
-					if (this.Subreddit == null)
-						throw new Exception();
-				}
-				catch (Exception)
-				{
+                this.Subreddit = SessionContext.Context.Reddit.RSlashAll;
+            else
+                try
+                {
+                    this.Subreddit = await SessionContext.Context.Reddit.GetSubredditAsync(message.Name);
+                    if (this.Subreddit == null)
+                        throw new Exception();
+                }
+                catch (Exception)
+                {
                     var sub = this.TopPanel.Subreddits.SingleOrDefault(s => s.Name == message.Name);
                     this.TopPanel.Subreddits.Remove(sub);
-					MessageBox.Show($"Subreddit: '{message.Name}' does not exist or there is something wrong with your connection or reddit.");
-					return;
-				}
-			await this.Init();
-		}
-		private async void ReceiveMessage(LoginChangeMessage message)
+                    MessageBox.Show($"Subreddit: '{message.Name}' does not exist or there is something wrong with your connection or reddit.");
+                    return;
+                }
+            await this.Init(InitToken);
+            this.ListVM.Busy = false;
+        }
+
+        private void changeTokenSource()
+        {
+            if (!firtsLoad)
+            {
+                TokenSource.Cancel();
+                TokenSource.Dispose();
+            }
+            firtsLoad = false;
+            TokenSource = new CancellationTokenSource();
+            InitToken = TokenSource.Token;
+        }
+
+        private async void ReceiveMessage(LoginChangeMessage message)
 		{
             SessionContext.Context.Update(message.UserLoginResult);
 

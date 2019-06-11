@@ -51,7 +51,6 @@ namespace RedditBrowser.ViewModel
         public RelayCommand GoToRAll => new RelayCommand(() =>
         {
             this.SelectedSubreddit = "all";
-            ChangeSubredditExec();
         });
 
         public ICommand ChangeSubreddit => new RelayCommand(() =>
