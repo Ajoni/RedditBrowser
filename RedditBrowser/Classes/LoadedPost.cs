@@ -108,7 +108,7 @@ namespace RedditBrowser.Classes
             }
         }
 
-        public ICommand LinkClick
+        public ICommand ImageLinkClick
         {
             get
             {
@@ -116,6 +116,18 @@ namespace RedditBrowser.Classes
                 {
                     var post = (LoadedPost)((System.Windows.Controls.TextBlock)args.Source).DataContext;
                     System.Diagnostics.Process.Start(post.Url.ToString());
+                    args.Handled = true;
+                });
+            }
+        }
+        public ICommand AuthorNameLinkClick
+        {
+            get
+            {
+                return new RelayCommand<MouseButtonEventArgs>((args) =>
+                {
+                    var post = (LoadedPost)((System.Windows.Controls.TextBlock)args.Source).DataContext;
+                    System.Diagnostics.Process.Start($"https://www.reddit.com/user/{post.Author.Name}/");
                     args.Handled = true;
                 });
             }

@@ -89,7 +89,7 @@
                     <TextBlock Grid.Row="1" Text="{Binding Url}" TextWrapping="Wrap" TextBlock.FontSize="12" Style="{StaticResource LinkTextStyle}">
 		  <i:Interaction.Triggers>
 			<i:EventTrigger EventName="MouseLeftButtonUp">
-			<cmd:EventToCommand Command="{Binding LinkClick}" PassEventArgsToCommand="True"/>
+			<cmd:EventToCommand Command="{Binding ImageLinkClick}" PassEventArgsToCommand="True"/>
 		  </i:EventTrigger>
 		</i:Interaction.Triggers>
                     </TextBlock>
@@ -100,7 +100,13 @@
                     </Grid.ColumnDefinitions>
                     <WrapPanel Orientation="Horizontal">
                         <TextBlock Grid.Column="0" Text="Posted by "/>
-                        <TextBlock FontWeight="Bold" Grid.Column="0" Text="{Binding Author.Name}"/>
+                        <TextBlock Grid.Column="0" Text="{Binding Author.Name}" Style="{StaticResource LinkTextStyle}">
+		                  <i:Interaction.Triggers>
+			                <i:EventTrigger EventName="MouseLeftButtonUp">
+			                <cmd:EventToCommand Command="{Binding AuthorNameLinkClick}" PassEventArgsToCommand="True"/>
+		                  </i:EventTrigger>
+		                </i:Interaction.Triggers>
+                        </TextBlock>
                     </WrapPanel>
                 </Grid>
             </Grid>

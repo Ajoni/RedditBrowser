@@ -3,8 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              xmlns:local="clr-namespace:RedditBrowser.Pages"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:cmd="http://www.galasoft.ch/mvvmlight"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
@@ -41,7 +43,13 @@
                     <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
                 <WrapPanel  Grid.Row="0" Grid.ColumnSpan="2" Orientation="Horizontal">
-                    <TextBlock FontWeight="Bold" x:Name="textblockAuthorName" Text="{Binding AuthorName}" />
+                    <TextBlock x:Name="textblockAuthorName" Text="{Binding AuthorName}" Style="{StaticResource LinkTextStyle}">
+		                  <i:Interaction.Triggers>
+			                <i:EventTrigger EventName="MouseLeftButtonUp">
+			                <cmd:EventToCommand Command="{Binding AuthorNameLinkClick}" PassEventArgsToCommand="True"/>
+		                  </i:EventTrigger>
+		                </i:Interaction.Triggers>
+                    </TextBlock>
                     <TextBlock x:Name="textblockAuthorFlairText" Text="{Binding AuthorFlairText}" />
                     <TextBlock x:Name="textblockScore"  Text="{Binding Score, StringFormat='{} {0} points • '}"/>
                     <TextBlock HorizontalAlignment="Right" x:Name="textblockDate" Text="{Binding Created, Converter={StaticResource DateToHowLongAgoConverter}}" />

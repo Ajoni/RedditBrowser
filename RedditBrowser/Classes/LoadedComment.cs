@@ -57,6 +57,7 @@ namespace RedditBrowser.Classes
             this.AuthorFlairText = comment.AuthorFlairText;
             this.Score = comment.Score;
             this.Liked = comment.Liked;
+            this.Created = comment.Created;
             foreach (var reply in comment.Comments)
                 this.Comments.Add(new LoadedComment(reply));
         }
@@ -90,6 +91,19 @@ namespace RedditBrowser.Classes
                 {
                     Reply(ReplyText);
                     ReplyText = "";
+                });
+            }
+        }
+
+        public ICommand AuthorNameLinkClick
+        {
+            get
+            {
+                return new RelayCommand<MouseButtonEventArgs>((args) =>
+                {
+                    var comment = (LoadedComment)((System.Windows.Controls.TextBlock)args.Source).DataContext;
+                    System.Diagnostics.Process.Start($"https://www.reddit.com/user/{comment.Comment.AuthorName}/");
+                    args.Handled = true;
                 });
             }
         }
