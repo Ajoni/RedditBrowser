@@ -70,7 +70,7 @@ namespace RedditBrowser.Classes
                 {
                     if (Liked.HasValue && Liked.Value) ClearVote(); else Upvote();
                 }
-                , true);
+                ,() => SessionContext.Context.IsUserLoggedIn, true);
             }
         }
         public ICommand DownvoteCommentClick
@@ -80,7 +80,7 @@ namespace RedditBrowser.Classes
                 return new RelayCommand(() =>
                 {
                     if (Liked.HasValue && !Liked.Value) ClearVote(); else Downvote();
-                });
+                }, () => SessionContext.Context.IsUserLoggedIn, true);
             }
         }
         public ICommand PostComment
@@ -91,7 +91,7 @@ namespace RedditBrowser.Classes
                 {
                     Reply(ReplyText);
                     ReplyText = "";
-                });
+                }, () => SessionContext.Context.IsUserLoggedIn, true);
             }
         }
 

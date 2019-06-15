@@ -81,10 +81,9 @@ namespace RedditBrowser.ViewModel
             ).Take(amount).ToList();
 
         private async void LoadNextPostMethod(CancellationToken cancellationToken)
-            //wyœcig tu jest chwilowo
         {
             if (ListVM.Busy || 
-                ListVM.Posts.Count < 3) // chwilowe rozwiazanie które dzia³a tylko dla pierwszego load
+                ListVM.Posts.Count < 3)
                 return;
             ListVM.Busy = true;
             {

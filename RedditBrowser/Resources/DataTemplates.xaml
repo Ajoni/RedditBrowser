@@ -84,14 +84,19 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
                     </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0" Text="{Binding Title}" TextWrapping="Wrap"/>
-                    <TextBlock Grid.Row="1" Text="{Binding Url}" TextWrapping="Wrap" TextBlock.FontSize="12" Style="{StaticResource LinkTextStyle}">
-		  <i:Interaction.Triggers>
-			<i:EventTrigger EventName="MouseLeftButtonUp">
-			<cmd:EventToCommand Command="{Binding ImageLinkClick}" PassEventArgsToCommand="True"/>
-		  </i:EventTrigger>
-		</i:Interaction.Triggers>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding Title}" TextWrapping="Wrap"/>
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding Url}" TextWrapping="Wrap" TextBlock.FontSize="12" Style="{StaticResource LinkTextStyle}">
+		              <i:Interaction.Triggers>
+			            <i:EventTrigger EventName="MouseLeftButtonUp">
+			            <cmd:EventToCommand Command="{Binding AuthorNameLinkClick}" PassEventArgsToCommand="True"/>
+		              </i:EventTrigger>
+		            </i:Interaction.Triggers>
                     </TextBlock>
                 </Grid>
                 <Grid Grid.Row="1">
@@ -107,6 +112,7 @@
 		                  </i:EventTrigger>
 		                </i:Interaction.Triggers>
                         </TextBlock>
+                        <TextBlock Text="{Binding Created, Converter={StaticResource DateToHowLongAgoConverter}, StringFormat=' {0}'}"/>
                     </WrapPanel>
                 </Grid>
             </Grid>

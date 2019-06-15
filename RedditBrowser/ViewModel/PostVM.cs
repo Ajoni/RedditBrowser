@@ -27,6 +27,7 @@ namespace RedditBrowser.ViewModel
                 _comment = value; RaisePropertyChanged(); RaisePropertyChanged("CommentButtonEnabled");
             }
         }
+        public bool CommentButtonEnabled { get { return !string.IsNullOrEmpty(this.Comment) && SessionContext.Context.IsUserLoggedIn; } }
 
         public PostVM(LoadedPost post)
         {

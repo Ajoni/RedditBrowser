@@ -54,15 +54,15 @@
 
                 <Grid Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Margin="0, 0, 5, 0" 
 			  DataContext="{Binding Post}">
-                    <!--buttons styles are refering to the post and i dont know any better way-->
+                    <!--buttons styles are refering to the post-->
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="auto"/>
                     </Grid.RowDefinitions>
-                    <Button Grid.Row="0" x:Name="buttonUpVote" Content="{StaticResource UpvoteArrow}" Style="{StaticResource VoteButtonStyle}" Command="{Binding ElementName=root, Path=DataContext.UpvoteClick}"/>
+                    <Button Grid.Row="0" x:Name="buttonUpVote" Content="{StaticResource UpvoteArrow}" Style="{StaticResource VoteButtonStyle}" Command="{Binding UpvoteClick}"/>
                     <TextBlock Grid.Row="1" x:Name="textblockVotes" Text="{Binding Score}" VerticalAlignment="Center" HorizontalAlignment="Center" Style="{StaticResource VoteTextBlockStyle}"/>
-                    <Button Grid.Row="2" x:Name="buttonDownVote" Content="{StaticResource DownvoteArrow}" Style="{StaticResource VoteButtonStyle}" Command="{Binding ElementName=root, Path=DataContext.DownvoteClick}"/>
+                    <Button Grid.Row="2" x:Name="buttonDownVote" Content="{StaticResource DownvoteArrow}" Style="{StaticResource VoteButtonStyle}" Command="{Binding DownvoteClick}"/>
                 </Grid>
                 <WrapPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
                     <TextBlock x:Name="textblockSubredditName" Text="{Binding Post.Post.Subreddit.Name}" Style="{StaticResource LinkTextStyle}">
@@ -72,7 +72,14 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
                     </TextBlock>
-                    <TextBlock FontWeight="Bold" x:Name="textblockPosterName" Text="{Binding Post.Author.Name, StringFormat='{} • Posted by {0} '}"/>
+                    <TextBlock Text=" • Posted by "/>
+                    <TextBlock FontWeight="Bold" x:Name="textblockPosterName" Text="{Binding Post.Author.Name, StringFormat='{}{0} '}">
+		              <i:Interaction.Triggers>
+			            <i:EventTrigger EventName="MouseLeftButtonUp">
+			            <cmd:EventToCommand Command="{Binding AuthorNameLinkClick}" PassEventArgsToCommand="True"/>
+		              </i:EventTrigger>
+		            </i:Interaction.Triggers>
+                    </TextBlock>
                     <TextBlock x:Name="textblockCreatedDate" Text="{Binding Post.Created, Converter={StaticResource DateToHowLongAgoConverter}}"/>
                 </WrapPanel>
                 <TextBlock Grid.Row="1" Grid.Column="1" x:Name="textblockTitle" Text="{Binding Post.Title}"
