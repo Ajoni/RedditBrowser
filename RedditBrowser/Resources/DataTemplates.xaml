@@ -108,7 +108,7 @@
                     <TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding Url}" TextWrapping="Wrap" TextBlock.FontSize="12" Style="{StaticResource LinkTextStyle}">
 		              <i:Interaction.Triggers>
 			            <i:EventTrigger EventName="MouseLeftButtonUp">
-			            <cmd:EventToCommand Command="{Binding AuthorNameLinkClick}" PassEventArgsToCommand="True"/>
+			            <cmd:EventToCommand Command="{Binding ImageLinkClick}" PassEventArgsToCommand="True"/>
 		              </i:EventTrigger>
 		            </i:Interaction.Triggers>
                     </TextBlock>
