@@ -58,6 +58,7 @@ namespace RedditBrowser.Classes
             }
         }
         public Post Post { get; set; }
+        public bool IsShouldBlur => Post.NSFW || Post.IsSpoiler;
 
         public LoadedPost(Post post)
         {
@@ -203,7 +204,7 @@ namespace RedditBrowser.Classes
         {
             get
             {
-                var formats = new List<string>() { ".png", ".jpg", ".jpeg", ".gif" };
+                var formats = new List<string>() { ".png", ".jpg", ".jpeg" };
                 return formats.Any(f => this.Url.ToString().Contains(f));
             }
         }

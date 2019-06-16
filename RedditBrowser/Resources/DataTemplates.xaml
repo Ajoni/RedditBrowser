@@ -53,7 +53,21 @@
                 <Button Grid.Row="2" Height="auto" Width="auto" Content="{StaticResource DownvoteArrow}"
                                             Command="{Binding DownvoteClick}" Style="{StaticResource VoteButtonStyle}"/>
             </Grid>
-            <Image Grid.Column="1" Source="{Binding Thumbnail, Converter={StaticResource ImgConverter},  IsAsync=True}" MaxHeight="80" MaxWidth="100"  Margin="5,1"/>
+            <Image Grid.Column="1" Source="{Binding Thumbnail, Converter={StaticResource ImgConverter},  IsAsync=True}" MaxHeight="80" MaxWidth="100"  Margin="5,1">
+                <Image.Style>
+                    <Style>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsShouldBlur}" Value="True">
+                                <Setter Property="Image.Effect">
+                                    <Setter.Value>
+                                        <BlurEffect Radius="10"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Image.Style>
+            </Image>
             <Button Grid.Column="1" x:Name="buttonShowFullResolutionImage" 
                     Command="{Binding ShowFullResolutionImageChange}"
                     CommandParameter="{Binding}"
