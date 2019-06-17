@@ -117,8 +117,7 @@ namespace RedditBrowser.ViewModel
             if (Subreddits.Where(s => s.Name == this.SelectedSubreddit).ToList().Count == 0)
             {
                 Subreddits.Add(new SubredditComboboxLayout(this.SelectedSubreddit));
-                foreach (var sub in Subreddits)
-                    sub.NeedsUpdate = true;
+                updateComboboxLayouts();
             }
 
         }
@@ -128,16 +127,24 @@ namespace RedditBrowser.ViewModel
                 Subreddits.Add(new SubredditComboboxLayout(this.SelectedSubreddit));
             if (!SubredditComboboxLayout.SubscribedSubreddits.Contains(message.Name))
                 SubredditComboboxLayout.SubscribedSubreddits.Add(message.Name);
+            updateComboboxLayouts();
         }
         private void ReceiveMessage(SubredditUnsubscribedMessage message)
         {
             SubredditComboboxLayout.SubscribedSubreddits.Remove(message.Name);
+            updateComboboxLayouts();
         }
         private void ReceiveMessage(SessionContextUpdatedMessage message)
         {
-            foreach(var sub in Subreddits)
+            updateComboboxLayouts();
+        }
+
+        private void updateComboboxLayouts()
+        {
+            foreach (var sub in Subreddits)
                 sub.NeedsUpdate = true;
         }
+
         private void RegisterMessages()
         {
             Messenger.Default.Register<ChangeSubredditMessage>(this, (message) => ReceiveMessage(message));

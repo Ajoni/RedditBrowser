@@ -50,7 +50,7 @@ namespace RedditBrowser.ViewModel
             {
                 return new RelayCommand(() =>
                 {
-                    Post.Comment(Comment);
+                    Post.Comment(Comment); this.Comment = "";
                 }, () =>
                  {
                      return !string.IsNullOrEmpty(this.Comment) && SessionContext.Context.IsUserLoggedIn;
