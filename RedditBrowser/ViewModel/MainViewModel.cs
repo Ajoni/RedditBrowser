@@ -156,10 +156,8 @@ namespace RedditBrowser.ViewModel
             InitToken = TokenSource.Token;
         }
 
-        private async void ReceiveMessage(LoginChangeMessage message)
+        private async void ReceiveMessage(SessionContextUpdatedMessage message)
 		{
-            SessionContext.Context.Update(message.UserLoginResult);
-
             if (SessionContext.Context.IsUserLoggedIn)
                 this.TopPanel.PopulateCombobox(SessionContext.Context.Reddit.User.SubscribedSubreddits);
 
@@ -188,7 +186,7 @@ namespace RedditBrowser.ViewModel
 		{
 			Messenger.Default.Register<GoToPageMessage>         (this, (message) => ReceiveMessage(message));
 			Messenger.Default.Register<ChangeSubredditMessage>  (this, (message) => ReceiveMessage(message));
-			Messenger.Default.Register<LoginChangeMessage>      (this, (message) => ReceiveMessage(message));
+			Messenger.Default.Register<SessionContextUpdatedMessage>      (this, (message) => ReceiveMessage(message));
 			Messenger.Default.Register<SearchMessage>			(this, (message) => ReceiveMessage(message));
 			Messenger.Default.Register<SubscribeMessage>			(this, (message) => ReceiveMessage(message));
 			Messenger.Default.Register<UnsubscribeMessage>			(this, (message) => ReceiveMessage(message));

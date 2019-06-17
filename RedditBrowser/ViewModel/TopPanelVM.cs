@@ -133,11 +133,17 @@ namespace RedditBrowser.ViewModel
         {
             SubredditComboboxLayout.SubscribedSubreddits.Remove(message.Name);
         }
+        private void ReceiveMessage(SessionContextUpdatedMessage message)
+        {
+            foreach(var sub in Subreddits)
+                sub.NeedsUpdate = true;
+        }
         private void RegisterMessages()
         {
             Messenger.Default.Register<ChangeSubredditMessage>(this, (message) => ReceiveMessage(message));
             Messenger.Default.Register<SubredditSubscribedMessage>(this, (message) => ReceiveMessage(message));
             Messenger.Default.Register<SubredditUnsubscribedMessage>(this, (message) => ReceiveMessage(message));
+            Messenger.Default.Register<SessionContextUpdatedMessage>(this, (message) => ReceiveMessage(message));
         }
 
         public class SubredditComboboxLayout : INotifyPropertyChanged

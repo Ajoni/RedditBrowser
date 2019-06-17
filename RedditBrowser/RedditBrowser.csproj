@@ -160,6 +160,7 @@
     <Compile Include="ViewModel\Messages\GoToListViewMessage.cs" />
     <Compile Include="ViewModel\Messages\LoginChangeMessage.cs" />
     <Compile Include="ViewModel\Messages\SearchMessage.cs" />
+    <Compile Include="ViewModel\Messages\SessionContextUpdatedMessage.cs" />
     <Compile Include="ViewModel\Messages\ShowLoginMessage.cs" />
     <Compile Include="ViewModel\Messages\ShowPostMessage.cs" />
     <Compile Include="ViewModel\Messages\SubredditSubscribedMessage.cs" />

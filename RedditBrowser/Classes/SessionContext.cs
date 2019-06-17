@@ -1,4 +1,6 @@
-﻿using RedditSharp;
+﻿using GalaSoft.MvvmLight.Messaging;
+using RedditBrowser.ViewModel.Messages;
+using RedditSharp;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,6 +17,22 @@ namespace RedditBrowser.Classes
         public Reddit Reddit { get; set; } = new Reddit();
         public bool IsUserLoggedIn { get => Reddit.User != null; }
 
+        public SessionContext()
+        {
+            RegisterMesssages();
+        }
+
+        private void ReceiveMessage(LoginChangeMessage message)
+        {
+            Update(message.UserLoginResult);
+            Messenger.Default.Send(new SessionContextUpdatedMessage());
+        }
+
+        private void RegisterMesssages()
+        {
+            Messenger.Default.Register<LoginChangeMessage>(this, (message) => ReceiveMessage(message));
+        }
+
         internal void Update(UserLoginResult userLoginResult)
         {
             if (userLoginResult != null)
@@ -24,6 +42,7 @@ namespace RedditBrowser.Classes
             OnPropertyChanged(nameof(Reddit));
             OnPropertyChanged(nameof(IsUserLoggedIn));
         }
+
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged([CallerMemberName] string propertyName = null)
