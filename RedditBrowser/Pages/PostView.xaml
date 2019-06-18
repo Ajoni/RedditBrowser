@@ -73,7 +73,7 @@
                 </i:Interaction.Triggers>
                     </TextBlock>
                     <TextBlock Text=" • Posted by "/>
-                    <TextBlock FontWeight="Bold" x:Name="textblockPosterName" Text="{Binding Post.Author.Name, StringFormat='{}{0} '}">
+                    <TextBlock  x:Name="textblockPosterName" Text="{Binding Post.Author.Name, StringFormat='{}{0} '}" Style="{StaticResource LinkTextStyle}">
 		              <i:Interaction.Triggers>
 			            <i:EventTrigger EventName="MouseLeftButtonUp">
 			            <cmd:EventToCommand Command="{Binding AuthorNameLinkClick}" PassEventArgsToCommand="True"/>

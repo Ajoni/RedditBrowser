@@ -58,6 +58,18 @@ namespace RedditBrowser.ViewModel
             }
         }
 
+        public ICommand AuthorNameLinkClick
+        {
+            get
+            {
+                return new RelayCommand<MouseButtonEventArgs>((args) =>
+                {
+                    System.Diagnostics.Process.Start($"https://www.reddit.com/user/{Post.Author.Name}/");
+                    args.Handled = true;
+                });
+            }
+        }
+
         public ICommand ReturnClick
         {
             get => new RelayCommand(Return);
