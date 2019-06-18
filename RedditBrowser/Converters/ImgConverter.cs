@@ -19,7 +19,7 @@ namespace RedditBrowser.Converters
                 bi.BeginInit();
                 try
                 {
-                    bi.UriSource = new Uri(value.ToString(), UriKind.Absolute);
+                    bi.UriSource = (Uri)value;
                 }
                 catch (UriFormatException)
                 {

@@ -98,6 +98,7 @@ namespace RedditBrowser.ViewModel
             var subreddit = e.AddedItems[0] as SubredditComboboxLayout;
             if (subreddit == null)
                 return;
+
             SelectedSubreddit = subreddit.Name;
             Messenger.Default.Send(new ChangeSubredditMessage(subreddit.Name));
         }, true);
